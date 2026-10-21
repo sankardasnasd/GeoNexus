@@ -1,0 +1,203 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+/* Scoped to .pr-wrap and prefixed pr- so nothing collides with the base template. */
+.pr-wrap{
+    --pr-navy:var(--night,#071326);
+    --pr-navy2:var(--plum,#10294a);
+    --pr-blue:var(--violet,#2b7fe0);
+    --pr-blue2:var(--fuchsia,#4aa3ff);
+    --pr-ink:var(--ink,#0e1c30);
+    --pr-muted:var(--muted,#5f7591);
+    --pr-line:var(--line,#dce6f2);
+    --pr-ok:#127a3d;
+    --pr-bad:#b8321f;
+    padding:28px 30px 40px;
+}
+.pr-wrap *{box-sizing:border-box}
+.pr-container{max-width:1100px;margin:0 auto}
+
+/* Banner */
+.pr-banner{
+    position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;margin-bottom:22px;color:#fff;
+    background:linear-gradient(115deg,var(--pr-navy) 0%,var(--pr-navy2) 55%,#17497f 100%);
+    box-shadow:0 18px 40px rgba(16,41,74,.22);
+}
+.pr-banner::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,163,255,.38),rgba(43,127,224,.14) 50%,transparent 70%)}
+.pr-banner > *{position:relative;z-index:2}
+.pr-banner h3{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.pr-banner p{margin:0;max-width:640px;color:#cfe0f2;font-size:14.5px;line-height:1.7}
+
+/* Cards */
+.pr-card{position:relative;overflow:hidden;margin-bottom:22px;padding:28px;border-radius:20px;background:#fff;border:1px solid var(--pr-line);box-shadow:0 10px 28px rgba(16,41,74,.05)}
+.pr-card.pr-main::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pr-blue)}
+
+.pr-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.pr-head{display:flex;align-items:center;gap:15px}
+.pr-head-icon{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:rgba(43,127,224,.12);color:var(--pr-blue)}
+.pr-head h5{margin:0 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--pr-ink)}
+.pr-head p{margin:0;font-size:13px;color:var(--pr-muted)}
+
+/* Result badge */
+.pr-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:99px;font-size:15px;font-weight:700}
+.pr-badge.ok{background:rgba(34,197,94,.14);color:var(--pr-ok)}
+.pr-badge.bad{background:rgba(255,93,77,.13);color:var(--pr-bad)}
+
+.pr-sub{display:flex;align-items:center;gap:9px;margin:28px 0 14px;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;color:var(--pr-ink)}
+.pr-sub i{color:var(--pr-blue)}
+
+/* Grids */
+.pr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pr-grid.pr-4{grid-template-columns:repeat(4,1fr)}
+.pr-box{padding:18px;border-radius:14px;background:#f5f9fe;border:1px solid #e3ecf6;transition:border-color .2s,transform .2s}
+.pr-box:hover{border-color:var(--lav,#7cc4ff);transform:translateY(-2px)}
+.pr-box-icon{width:38px;height:38px;margin-bottom:12px;border-radius:10px;display:grid;place-items:center;font-size:16px;background:rgba(43,127,224,.12);color:var(--pr-blue)}
+.pr-label{margin-bottom:4px;font-size:12.5px;color:var(--pr-muted)}
+.pr-value{font-size:18px;font-weight:700;color:var(--pr-ink);word-break:break-word}
+.pr-sub-first{margin-top:0}
+
+/* Actions */
+.pr-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.pr-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:12px;font-size:14px;font-weight:700;transition:transform .2s,box-shadow .2s,background .2s}
+.pr-btn.primary{color:#fff;background:linear-gradient(135deg,var(--pr-blue),var(--pr-blue2));box-shadow:0 8px 18px rgba(43,127,224,.3)}
+.pr-btn.primary:hover{color:#fff;transform:translateY(-2px);box-shadow:0 12px 24px rgba(43,127,224,.42)}
+.pr-btn.ghost{color:var(--pr-navy2);background:#fff;border:1px solid var(--pr-line)}
+.pr-btn.ghost:hover{color:var(--pr-navy2);background:#f3f8fe}
+.pr-btn:focus-visible{outline:3px solid var(--amber,#f5a524);outline-offset:2px}
+
+@media(max-width:1000px){.pr-grid.pr-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.pr-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+    .pr-wrap{padding:18px 14px 32px}
+    .pr-banner{padding:24px 20px}
+    .pr-banner h3{font-size:22px}
+    .pr-card{padding:20px}
+    .pr-top{align-items:flex-start;flex-direction:column}
+    .pr-badge{width:100%;justify-content:center}
+}
+@media(max-width:560px){.pr-grid,.pr-grid.pr-4{grid-template-columns:1fr}}
+</style>
+
+<div class="pr-wrap">
+<div class="pr-container">
+
+    <div class="pr-banner">
+        <h3><i class="bi bi-graph-up-arrow me-2"></i>Prediction Result</h3>
+        <p>Environmental risk analysis for the selected location.</p>
+    </div>
+
+    <!-- RESULT -->
+    <div class="pr-card pr-main">
+
+        <div class="pr-top">
+            <div class="pr-head">
+                <div class="pr-head-icon"><i class="bi bi-cpu-fill"></i></div>
+                <div>
+                    <h5>Disaster risk assessment</h5>
+                    <p>Machine learning prediction result</p>
+                </div>
+            </div>
+
+            {% if val == 'Non-Disaster' %}
+                <span class="pr-badge ok"><i class="bi bi-check-circle-fill"></i> {{ val }}</span>
+            {% else %}
+                <span class="pr-badge bad"><i class="bi bi-exclamation-triangle-fill"></i> {{ val }}</span>
+            {% endif %}
+        </div>
+
+        <div class="pr-sub"><i class="bi bi-globe-asia-australia"></i> Environmental information</div>
+
+        <div class="pr-grid">
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-flower1"></i></div>
+                <div class="pr-label">Soil type</div>
+                <div class="pr-value">{% if st %}{{ st }}{% else %}Unknown{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-water"></i></div>
+                <div class="pr-label">Distance to river</div>
+                <div class="pr-value">{% if river %}{{ river }} km{% else %}N/A{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-triangle-fill"></i></div>
+                <div class="pr-label">Elevation</div>
+                <div class="pr-value">{% if altitude %}{{ altitude }} m{% else %}0 m{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-graph-down-arrow"></i></div>
+                <div class="pr-label">Slope angle</div>
+                <div class="pr-value">{% if slope %}{{ slope }}°{% else %}0°{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-cloud-rain-fill"></i></div>
+                <div class="pr-label">Rainfall</div>
+                <div class="pr-value">{% if rainfall %}{{ rainfall }} mm{% else %}0 mm{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                <div class="pr-label">Location</div>
+                <div class="pr-value">{% if city_name %}{{ city_name }}{% else %}Selected location{% endif %}</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- WEATHER -->
+    {% if weather_data %}
+    <div class="pr-card">
+
+        <div class="pr-sub pr-sub-first"><i class="bi bi-cloud-sun-fill"></i> Current weather</div>
+
+        <div class="pr-grid pr-4">
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-thermometer-half"></i></div>
+                <div class="pr-label">Temperature</div>
+                <div class="pr-value">{% if temperature %}{{ temperature }} °C{% else %}N/A{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-droplet-fill"></i></div>
+                <div class="pr-label">Humidity</div>
+                <div class="pr-value">{% if humidity %}{{ humidity }}%{% else %}N/A{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-wind"></i></div>
+                <div class="pr-label">Wind speed</div>
+                <div class="pr-value">{% if weather_data.data.0.wind_spd %}{{ weather_data.data.0.wind_spd }} m/s{% else %}N/A{% endif %}</div>
+            </div>
+
+            <div class="pr-box">
+                <div class="pr-box-icon"><i class="bi bi-cloudy-fill"></i></div>
+                <div class="pr-label">Condition</div>
+                <div class="pr-value">{% if weather_data.data.0.weather.description %}{{ weather_data.data.0.weather.description }}{% else %}N/A{% endif %}</div>
+            </div>
+
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ACTIONS -->
+    <div class="pr-actions">
+        <a href="/myapp/webmap_start/" class="pr-btn primary">
+            <i class="bi bi-arrow-left"></i> Predict another location
+        </a>
+        <a href="/myapp/admin_home/" class="pr-btn ghost">
+            <i class="bi bi-grid-1x2-fill"></i> Back to home
+        </a>
+    </div>
+
+</div>
+</div>
+
+{% endblock %}

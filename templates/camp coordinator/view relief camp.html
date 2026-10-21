@@ -1,0 +1,1761 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+/* =========================================================
+   RELIEF CAMP MANAGEMENT
+========================================================= */
+
+:root {
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+    --navy-soft: #eef4f8;
+
+    --bg: #f5f7fb;
+    --white: #ffffff;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e6edf3;
+
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+
+    --danger: #dc3545;
+    --danger-dark: #b42333;
+    --danger-light: #fff5f5;
+
+    --inventory: #2563eb;
+    --inventory-light: #eff6ff;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.relief-page {
+    width: 100%;
+    max-width: 1450px;
+
+    margin: 0 auto;
+
+    padding: 42px 35px 60px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.relief-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+.relief-header-content {
+    min-width: 0;
+}
+
+
+.relief-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--navy);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 9px;
+}
+
+
+.relief-label i {
+    font-size: 15px;
+}
+
+
+.relief-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 34px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -.6px;
+}
+
+
+.relief-description {
+
+    margin: 10px 0 0;
+
+    color: var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ADD CAMP BUTTON
+========================================================= */
+
+.add-camp-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+
+    padding: 13px 21px;
+
+    border-radius: 11px;
+
+    background: #102a43;
+
+    border: none;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 18px rgba(16, 42, 67, .14);
+
+    transition: .2s ease;
+}
+
+
+.add-camp-btn:hover {
+
+    background: #1d6fa5;
+
+    color: white;
+
+    transform: translateY(-1px);
+
+}
+
+
+.add-camp-btn i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.camp-summary {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    padding: 17px 20px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 4px 16px rgba(15, 23, 42, .025);
+}
+
+
+.summary-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.summary-icon {
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 11px;
+
+    background: var(--navy-soft);
+
+    color: var(--navy);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+
+.summary-text strong {
+
+    display: block;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+
+.summary-text span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+.summary-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 13px;
+
+    border-radius: 20px;
+
+    background: var(--green-light);
+
+    border: 1px solid #dcfce7;
+
+    color: #166534;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.summary-status i {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CAMP GRID
+========================================================= */
+
+.camp-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+}
+
+
+/* =========================================================
+   CAMP CARD
+========================================================= */
+
+.camp-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, .035);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.camp-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #d5dee7;
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, .08);
+}
+
+
+/* =========================================================
+   CAMP TOP
+========================================================= */
+
+.camp-top {
+
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #102a43,
+            #163b68
+        );
+
+    color: white;
+
+    overflow: hidden;
+}
+
+
+.camp-top::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    right: -75px;
+    top: -90px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.055);
+}
+
+
+.camp-top::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 115px;
+    height: 115px;
+
+    right: 80px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(29,111,165,.15);
+}
+
+
+.camp-content {
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   CAMP ICON
+========================================================= */
+
+.camp-icon {
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.11);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 22px;
+
+    margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   CAMP TITLE
+========================================================= */
+
+.camp-top h3 {
+
+    margin: 0;
+
+    padding-right: 90px;
+
+    color: white;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   CAMP LOCATION
+========================================================= */
+
+.camp-location {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+.camp-location i {
+
+    margin-top: 2px;
+
+    color: #8fb9d8;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.camp-date {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 20px;
+
+    z-index: 3;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+.camp-date i {
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CAMP BODY
+========================================================= */
+
+.camp-body {
+
+    padding: 24px;
+}
+
+
+/* =========================================================
+   INFORMATION ITEM
+========================================================= */
+
+.info-item {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding-bottom: 17px;
+
+    margin-bottom: 17px;
+
+    border-bottom:
+        1px solid #f1f5f9;
+}
+
+
+.info-icon {
+
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #eef2f7;
+
+    color: var(--navy);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+
+.info-content {
+    min-width: 0;
+}
+
+
+.info-label {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    margin-bottom: 4px;
+}
+
+
+.info-value {
+
+    display: block;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    line-height: 1.6;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.details-box {
+
+    padding: 15px 16px;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #eef2f7;
+
+    margin-top: 4px;
+}
+
+
+.details-label {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+}
+
+
+.details-text {
+
+    margin: 6px 0 0;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    line-height: 1.75;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   COORDINATES
+========================================================= */
+
+.coordinates {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.coordinate-box {
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    border:
+        1px solid var(--border);
+}
+
+
+.coordinate-box span {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .6px;
+
+    margin-bottom: 5px;
+}
+
+
+.coordinate-box strong {
+
+    display: block;
+
+    color: var(--navy);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    word-break: break-all;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.card-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   ADD INVENTORY BUTTON
+========================================================= */
+
+.btn-inventory {
+
+    border: 1px solid #dbeafe;
+
+    padding: 12px 14px;
+
+    min-height: 45px;
+
+    border-radius: 10px;
+
+    background: var(--inventory-light);
+
+    color: var(--inventory);
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+}
+
+
+.btn-inventory:hover {
+
+    background: var(--inventory);
+
+    border-color: var(--inventory);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.btn-inventory i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   REQUIREMENTS BUTTON
+========================================================= */
+
+.btn-view {
+
+    border: 1px solid #dbe5ed;
+
+    padding: 12px 14px;
+
+    min-height: 45px;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #102a43;
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+}
+
+
+.btn-view:hover {
+
+    background: #eef4f8;
+
+    border-color: #cbd8e2;
+
+    color: #1d6fa5;
+
+    transform: translateY(-1px);
+}
+
+
+.btn-view i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   EDIT BUTTON
+========================================================= */
+
+.btn-edit {
+
+    border: none;
+
+    padding: 12px 14px;
+
+    min-height: 45px;
+
+    border-radius: 10px;
+
+    background: #102a43;
+
+    color: white;
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+}
+
+
+.btn-edit:hover {
+
+    background: #1d6fa5;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.btn-edit i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   DELETE FORM
+========================================================= */
+
+.delete-form {
+
+    margin: 0;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.btn-delete {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    border: 1px solid #f1c6cb;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background: #fff7f7;
+
+    color: #c92a3a;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    cursor: pointer;
+}
+
+
+.btn-delete:hover {
+
+    background: var(--danger);
+
+    border-color: var(--danger);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.btn-delete i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    background: white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 70px 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,.03);
+}
+
+
+.empty-icon {
+
+    width: 75px;
+    height: 75px;
+
+    margin:
+        0 auto 18px;
+
+    border-radius: 18px;
+
+    background:
+        var(--navy-soft);
+
+    color:
+        #6b8ba6;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 32px;
+}
+
+
+.empty-state h3 {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 21px;
+
+    font-weight: 800;
+}
+
+
+.empty-state p {
+
+    margin:
+        8px 0 22px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   EMPTY BUTTON
+========================================================= */
+
+.empty-add-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        13px 20px;
+
+    border-radius: 10px;
+
+    background:
+        #102a43;
+
+    border: none;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        .2s ease;
+}
+
+
+.empty-add-btn:hover {
+
+    background:
+        #1d6fa5;
+
+    color: white;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.relief-footer {
+
+    text-align: center;
+
+    margin-top: 42px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .camp-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .relief-page {
+
+        padding:
+            30px 20px 48px;
+    }
+
+    .relief-header {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+    .add-camp-btn {
+
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .camp-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .relief-title {
+
+        font-size:
+            28px;
+    }
+
+    .relief-description {
+
+        font-size: 13px;
+    }
+
+    .camp-summary {
+
+        align-items:
+            flex-start;
+
+        gap: 13px;
+
+        flex-direction:
+            column;
+    }
+
+    .summary-status {
+
+        align-self:
+            flex-start;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .relief-page {
+
+        padding:
+            24px 14px 40px;
+    }
+
+    .camp-top {
+
+        padding:
+            21px;
+    }
+
+    .camp-top h3 {
+
+        font-size: 19px;
+    }
+
+    .camp-body {
+
+        padding:
+            19px;
+    }
+
+    .coordinates {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .card-actions {
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .btn-inventory,
+    .btn-view,
+    .btn-edit,
+    .btn-delete {
+
+        font-size: 11px;
+
+        padding-left: 8px;
+
+        padding-right: 8px;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     MAIN PAGE
+========================================================= -->
+
+<div class="relief-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="relief-header">
+
+
+        <div class="relief-header-content">
+
+            <div class="relief-label">
+
+                <i class="bi bi-house-heart-fill"></i>
+
+                CAMP OPERATIONS
+
+            </div>
+
+
+            <h1 class="relief-title">
+
+                Relief Camp Management
+
+            </h1>
+
+
+            <p class="relief-description">
+
+                Add, view, update and delete relief camps assigned to you.
+
+            </p>
+
+        </div>
+
+
+        <!-- ADD CAMP -->
+
+        <a
+            href="/myapp/add_relief_camp/"
+            class="add-camp-btn">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add Relief Camp
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY BAR
+    ====================================================== -->
+
+    <div class="camp-summary">
+
+
+        <div class="summary-left">
+
+
+            <div class="summary-icon">
+
+                <i class="bi bi-building-fill"></i>
+
+            </div>
+
+
+            <div class="summary-text">
+
+                <strong>
+
+                    Relief Camp Records
+
+                </strong>
+
+
+                <span>
+
+                    Manage camps registered under your coordination
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="summary-status">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            Coordinator Access Active
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CAMP LIST
+    ====================================================== -->
+
+    {% if data %}
+
+
+        <div class="camp-grid">
+
+
+            {% for camp in data %}
+
+
+                <div class="camp-card">
+
+
+                    <!-- =================================================
+                         CAMP HEADER
+                    ================================================== -->
+
+                    <div class="camp-top">
+
+
+                        <!-- DATE -->
+
+                        <div class="camp-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            {{ camp.date|date:"d M Y" }}
+
+                        </div>
+
+
+                        <div class="camp-content">
+
+
+                            <!-- ICON -->
+
+                            <div class="camp-icon">
+
+                                <i class="bi bi-house-heart-fill"></i>
+
+                            </div>
+
+
+                            <!-- CAMP NAME -->
+
+                            <h3>
+
+                                {{ camp.campname }}
+
+                            </h3>
+
+
+                            <!-- LOCATION -->
+
+                            <div class="camp-location">
+
+                                <i class="bi bi-geo-alt-fill"></i>
+
+                                <span>
+
+                                    {{ camp.place }}, {{ camp.district }}
+
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         CAMP BODY
+                    ================================================== -->
+
+                    <div class="camp-body">
+
+
+                        <!-- CAPACITY -->
+
+                        <div class="info-item">
+
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-people-fill"></i>
+
+                            </div>
+
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+
+                                    CAMP CAPACITY
+
+                                </span>
+
+
+                                <strong class="info-value">
+
+                                    {{ camp.capacity }} people
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- LOCATION -->
+
+                        <div class="info-item">
+
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-pin-map-fill"></i>
+
+                            </div>
+
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+
+                                    LOCATION
+
+                                </span>
+
+
+                                <strong class="info-value">
+
+                                    {{ camp.place }}, {{ camp.district }}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- DETAILS -->
+
+                        <div class="details-box">
+
+
+                            <span class="details-label">
+
+                                CAMP DETAILS
+
+                            </span>
+
+
+                            <p class="details-text">
+
+                                {{ camp.details }}
+
+                            </p>
+
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             COORDINATES
+                        ================================================== -->
+
+                        <div class="coordinates">
+
+
+                            <div class="coordinate-box">
+
+                                <span>
+
+                                    LATITUDE
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ camp.latitude }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="coordinate-box">
+
+                                <span>
+
+                                    LONGITUDE
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ camp.longitude }}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             ACTION BUTTONS
+                        ================================================== -->
+
+                        <div class="card-actions">
+
+
+                            <!-- ROW 1 : ADD INVENTORY -->
+
+                            <a
+                                href="/myapp/add_inventory/{{ camp.id }}/"
+                                class="btn-inventory">
+
+                                <i class="bi bi-box-seam-fill"></i>
+
+                                Add Inventory
+
+                            </a>
+
+
+                            <!-- ROW 1 : REQUIREMENTS -->
+
+                            <a
+                                href="/myapp/add_requirements/{{ camp.id }}/"
+                                class="btn-view">
+
+                                <i class="bi bi-list-check"></i>
+
+                                Requirements
+
+                            </a>
+
+
+                            <!-- ROW 2 : EDIT -->
+
+                            <a
+                                href="/myapp/edit_relief_camp/{{ camp.id }}/"
+                                class="btn-edit">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                                Edit Camp
+
+                            </a>
+
+
+                            <!-- ROW 2 : DELETE -->
+
+                          <a
+    href="/myapp/delete_camp/{{ camp.id }}/"
+    class="btn-delete"
+    onclick="return confirmDelete('{{ camp.campname|escapejs }}');">
+
+    <i class="bi bi-trash3-fill"></i>
+
+    Delete Camp
+
+</a>
+
+
+
+<a href="/myapp/coordinator_generate_camp_report/{{ camp.id }}"
+   class="btn"
+   style="
+       background:linear-gradient(110deg,#09203f,#163b68);
+       color:white;
+       border-radius:10px;
+       padding:9px 14px;
+       font-size:13px;
+       font-weight:800;
+       text-decoration:none;
+   ">
+
+    <i class="bi bi-file-earmark-bar-graph"></i>
+    Generate Report
+
+</a>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div class="empty-state">
+
+
+            <div class="empty-icon">
+
+                <i class="bi bi-house-heart"></i>
+
+            </div>
+
+
+            <h3>
+
+                No Relief Camps Added
+
+            </h3>
+
+
+            <p>
+
+                You have not added any relief camps yet.
+                Start by adding your first relief camp.
+
+            </p>
+
+
+            <a
+                href="/myapp/add_relief_camp/"
+                class="empty-add-btn">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add First Camp
+
+            </a>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="relief-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     DELETE CONFIRMATION
+========================================================= -->
+
+<script>
+
+
+
+</script>
+
+
+{% endblock %}

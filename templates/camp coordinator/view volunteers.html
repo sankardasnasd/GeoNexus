@@ -1,0 +1,583 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+    :root {
+        --primary: #09203f;
+        --primary-dark: #061a33;
+        --primary-light: #163b68;
+        --background: #f4f7fb;
+        --white: #ffffff;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --success: #16a34a;
+        --success-dark: #15803d;
+        --danger: #ef4444;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text-dark);
+    }
+
+    .content-wrapper {
+        padding: 30px;
+        width: 100%;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(110deg, #09203f, #163b68);
+        border-radius: 18px;
+        padding: 28px 30px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(9, 32, 63, 0.15);
+    }
+
+    .page-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .page-title-section {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .page-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 15px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        margin: 5px 0 0;
+        color: rgba(255,255,255,0.78);
+        font-size: 14px;
+    }
+
+    /* Summary */
+    .summary-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px 22px;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .summary-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 13px;
+        background: rgba(9, 32, 63, 0.08);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .summary-info h4 {
+        margin: 0;
+        font-size: 23px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .summary-info span {
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* Table Card */
+    .table-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .table-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .table-card-header h3 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .table-card-header p {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .volunteer-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 950px;
+    }
+
+    .volunteer-table thead {
+        background: #f8fafc;
+    }
+
+    .volunteer-table th {
+        padding: 16px 18px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .volunteer-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #edf1f5;
+        font-size: 14px;
+        color: #334155;
+        vertical-align: middle;
+    }
+
+    .volunteer-table tbody tr {
+        transition: .2s ease;
+    }
+
+    .volunteer-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .volunteer-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Volunteer Profile */
+    .volunteer-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .volunteer-photo {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e2e8f0;
+        background: #f1f5f9;
+    }
+
+    .volunteer-name {
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 3px;
+    }
+
+    .volunteer-email {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    /* Camp Badge */
+    .camp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(9, 32, 63, 0.08);
+        color: var(--primary);
+        padding: 7px 11px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* Status */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-assigned {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #a16207;
+    }
+
+    .status-other {
+        background: #e2e8f0;
+        color: #475569;
+    }
+
+    /* Chat Button */
+    .chat-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: linear-gradient(110deg, #09203f, #163b68);
+        color: white !important;
+        text-decoration: none !important;
+        padding: 9px 15px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        transition: .2s ease;
+        white-space: nowrap;
+    }
+
+    .chat-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(9, 32, 63, 0.22);
+        color: white !important;
+    }
+
+    .chat-icon {
+        font-size: 13px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 60px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        border-radius: 18px;
+        background: rgba(9, 32, 63, 0.07);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .empty-state h4 {
+        color: var(--primary);
+        font-size: 18px;
+        margin-bottom: 7px;
+    }
+
+    .empty-state p {
+        color: var(--text-muted);
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+
+        .content-wrapper {
+            padding: 18px;
+        }
+
+        .page-header {
+            padding: 22px;
+        }
+
+        .page-header-content {
+            align-items: flex-start;
+        }
+
+        .page-header h2 {
+            font-size: 22px;
+        }
+
+        .page-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+        }
+
+        .table-card-header {
+            padding: 17px;
+        }
+    }
+</style>
+
+
+<div class="content-wrapper">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+
+            <div class="page-title-section">
+
+                <div class="page-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+
+                <div>
+                    <h2>Assigned Volunteers</h2>
+                    <p>View volunteers assigned to your relief camps</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Count Card -->
+    <div class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-users"></i>
+        </div>
+
+        <div class="summary-info">
+            <h4>{{ data|length }}</h4>
+            <span>Assigned Volunteers</span>
+        </div>
+
+    </div>
+
+
+    <!-- Volunteer Table -->
+    <div class="table-card">
+
+        <div class="table-card-header">
+
+            <div>
+                <h3>Volunteer List</h3>
+                <p>Volunteers assigned to camps managed by you</p>
+            </div>
+
+        </div>
+
+
+        {% if data %}
+
+        <div class="table-responsive">
+
+            <table class="volunteer-table">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Volunteer</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>District</th>
+                        <th>Camp</th>
+                        <th>Assignment Status</th>
+                        <th colspan="2" align="center">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for item in data %}
+
+                    <tr>
+
+                        <!-- Number -->
+                        <td>
+                            <strong>{{ forloop.counter }}</strong>
+                        </td>
+
+
+                        <!-- Volunteer -->
+                        <td>
+
+                            <div class="volunteer-profile">
+
+                                {% if item.VOLUNTEER.photo %}
+                                    <img
+                                        src="{{ item.VOLUNTEER.photo.url }}"
+                                        class="volunteer-photo"
+                                        alt="Volunteer">
+                                {% else %}
+                                    <div class="volunteer-photo d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-user" style="color:#64748b;"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div>
+
+                                    <div class="volunteer-name">
+                                        {{ item.VOLUNTEER.name }}
+                                    </div>
+
+                                    <div class="volunteer-email">
+                                        {{ item.VOLUNTEER.email }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Phone -->
+                        <td>
+                            {{ item.VOLUNTEER.phone }}
+                        </td>
+
+
+                        <!-- Gender -->
+                        <td>
+                            {{ item.VOLUNTEER.gender }}
+                        </td>
+
+
+                        <!-- District -->
+                        <td>
+                            {{ item.VOLUNTEER.district }}
+                        </td>
+
+
+                        <!-- Camp -->
+                        <td>
+
+                            <span class="camp-badge">
+                                <i class="fas fa-campground"></i>
+                                {{ item.CAMP.campname }}<br> {{ item.CAMP.place }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Status -->
+                        <td>
+
+                            {% if item.status == "assigned" %}
+                                <span class="status-badge status-assigned">
+                                    <i class="fas fa-check-circle"></i>
+                                    Assigned
+                                </span>
+
+                            {% elif item.status == "pending" %}
+                                <span class="status-badge status-pending">
+                                    <i class="fas fa-clock"></i>
+                                    Pending
+                                </span>
+
+                            {% else %}
+                                <span class="status-badge status-other">
+                                    {{ item.status }}
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Chat -->
+                        <td>
+
+                            <a
+                                href="/myapp/chat2/{{ item.VOLUNTEER.LOGIN.id }}"
+                                class="chat-btn">
+
+                                <i class="fas fa-comment-dots chat-icon"></i>
+                                Chat
+
+                            </a>
+
+                        </td>
+
+
+
+
+                          <td>
+
+                            <a
+                                href="/myapp/coordinator_view_daily_report/{{ item.VOLUNTEER.id }}"
+                                class="chat-btn">
+
+                                <i class="fas fa-comment-dots chat-icon"></i>
+                                Daily Report
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty State -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                <i class="fas fa-users-slash"></i>
+            </div>
+
+            <h4>No Volunteers Assigned</h4>
+
+            <p>
+                No volunteers have been assigned to your relief camps yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

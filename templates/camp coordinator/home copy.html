@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoNexus | Camp Coordinator</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --night:#071326; --plum:#10294a; --violet:#2b7fe0; --fuchsia:#4aa3ff; --lav:#7cc4ff;
+    --coral:#ff5d4d; --amber:#f5a524; --teal:#14b8a6; --green:#22c55e; --purple:#8b5cf6;
+    --bg:#eef4fb; --card:#fff; --ink:#0e1c30; --muted:#5f7591; --line:#dce6f2; --side:272px;
+
+    /* Legacy names, so child pages written for the old layout keep working */
+    --navy:var(--plum); --navy-dark:var(--night); --blue:var(--violet); --blue-light:#eaf3fd;
+    --teal-light:#e3f8f5; --red:var(--coral); --red-light:#fff0ee; --orange:var(--amber); --orange-light:#fff6e5;
+    --green-light:#e8f9ef; --purple-light:#f1ecff; --text:var(--ink); --border:var(--line);
+    --shadow:0 12px 30px rgba(16,41,74,.1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:'Bricolage Grotesque',sans-serif}
+a{text-decoration:none}
+
+/* ================= SIDEBAR ================= */
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--side);z-index:1100;overflow-y:auto;padding:20px 14px 28px;color:#fff;
+    background:linear-gradient(185deg,var(--plum) 0%,var(--night) 100%);scrollbar-width:thin;scrollbar-color:#2c4a78 transparent;transition:transform .3s ease}
+.brand{display:flex;align-items:center;gap:12px;padding:6px 10px 20px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-logo{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:21px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--violet),var(--lav));box-shadow:0 8px 22px rgba(43,127,224,.45)}
+.brand h4{margin:0;font-size:20px;font-weight:700}
+.brand small{display:block;margin-top:3px;font-size:12px;font-weight:500;color:#93a9c4}
+.menu-label{margin:22px 10px 8px;font-size:12px;font-weight:700;color:#8aa2c0}
+.nav-menu{list-style:none;margin:0;padding:0}
+.nav-menu li{margin-bottom:3px}
+.nav-menu a{position:relative;display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 12px;border-radius:12px;color:#cfdcec;font-size:13.5px;font-weight:500;transition:background .2s,color .2s,transform .2s}
+.nav-menu a i{width:22px;text-align:center;font-size:17px;color:var(--lav)}
+.nav-menu a:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(3px)}
+.nav-menu a.active{color:#fff;background:linear-gradient(135deg,var(--violet),var(--fuchsia));box-shadow:0 10px 24px rgba(43,127,224,.38)}
+.nav-menu a.active i{color:#fff}
+.nav-menu a.active::before{content:"";position:absolute;left:-14px;top:50%;width:4px;height:24px;transform:translateY(-50%);border-radius:0 5px 5px 0;background:var(--lav)}
+.nav-menu a.alert-link{color:#ffb4ac}
+.nav-menu a.alert-link i{color:#ff8b80}
+.nav-menu a.alert-link:hover{background:rgba(255,93,77,.16);color:#fff}
+
+/* ================= MAIN + TOPBAR ================= */
+.main{margin-left:var(--side);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:1000;height:76px;padding:0 30px;display:flex;align-items:center;justify-content:space-between;
+    background:rgba(255,255,255,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.mobile-menu{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--plum);font-size:20px;align-items:center;justify-content:center;cursor:pointer}
+.top-heading h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.3px}
+.top-heading p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:12px}
+.top-icon{position:relative;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--plum);font-size:18px;display:grid;place-items:center;transition:background .2s,border-color .2s}
+.top-icon:hover{background:#f1f7fd;border-color:#c5d8ee;color:var(--plum)}
+.notification-dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--coral);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,93,77,.6)}70%,100%{box-shadow:0 0 0 8px rgba(255,93,77,0)}}
+.top-profile{display:flex;align-items:center;gap:12px;color:var(--ink)}
+.top-profile:hover{color:var(--ink)}
+.top-avatar{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--violet),var(--fuchsia))}
+.top-profile strong{display:block;font-size:13px}
+.top-profile span{display:block;margin-top:1px;font-size:11.5px;color:var(--muted)}
+
+.content{padding:28px 30px 24px}
+
+/* ================= SHARED COMPONENTS (used by child pages) ================= */
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:34px;margin-bottom:24px;color:#fff;
+    background:linear-gradient(115deg,var(--night) 0%,var(--plum) 55%,#17497f 100%);box-shadow:0 18px 40px rgba(16,41,74,.22)}
+.hero::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,163,255,.38),rgba(43,127,224,.14) 50%,transparent 70%)}
+.hero > *{position:relative;z-index:2}
+.hero-content{max-width:780px}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;padding:7px 14px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);font-size:13px;font-weight:600}
+.hero-tag i{color:#4ade80}
+.hero h1{margin:0 0 10px;font-size:30px;font-weight:800;line-height:1.25;letter-spacing:-.4px}
+.hero p{margin:0;max-width:720px;font-size:14.5px;line-height:1.75;color:#cfe0f2}
+.hero-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.hero-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-size:14px;font-weight:700;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);transition:transform .2s,background .2s,color .2s}
+.hero-btn:hover{color:var(--plum);background:#fff}
+.hero-btn.primary{border:none;background:linear-gradient(135deg,var(--violet),var(--fuchsia));box-shadow:0 8px 18px rgba(43,127,224,.4)}
+.hero-btn.primary:hover{color:#fff;transform:translateY(-2px)}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:8px}
+.stat-card{position:relative;overflow:hidden;padding:22px;border-radius:18px;background:#fff;border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.stat-icon,.function-icon{display:grid;place-items:center;border-radius:14px}
+.stat-icon{width:50px;height:50px;font-size:21px}
+.blue{background:var(--blue-light);color:var(--violet)}
+.green{background:var(--green-light);color:#16a34a}
+.orange{background:var(--orange-light);color:#c47f0a}
+.red{background:var(--red-light);color:#e0402f}
+.purple{background:var(--purple-light);color:var(--purple)}
+.stat-trend{padding:5px 11px;border-radius:99px;background:var(--green-light);color:#127a3d;font-size:11.5px;font-weight:700}
+.stat-number{margin-bottom:6px;font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;line-height:1;letter-spacing:-1px}
+.stat-label{font-size:13.5px;color:var(--muted)}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:32px 0 16px}
+.section-head h4{margin:0;font-size:19px;font-weight:800}
+.section-head span{display:block;margin-top:3px;font-size:13px;color:var(--muted)}
+
+.function-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.function-card{display:flex;align-items:center;gap:13px;min-height:84px;padding:16px;border-radius:16px;background:#fff;border:1px solid var(--line);color:var(--ink);transition:transform .25s,box-shadow .25s,border-color .25s}
+.function-card:hover{color:var(--ink);transform:translateY(-3px);border-color:#bcd3ec;box-shadow:0 12px 26px rgba(16,41,74,.09)}
+.function-icon{width:46px;height:46px;min-width:46px;font-size:19px}
+.function-card h6{margin:0 0 3px;font-size:14.5px;font-weight:700}
+.function-card p{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.function-arrow{margin-left:auto;font-size:13px;color:#9fb3c9}
+
+.about-layout{margin-top:24px}
+.about-card{position:relative;overflow:hidden;padding:30px;border-radius:20px;background:#fff;border:1px solid var(--line)}
+.about-card::after{content:"";position:absolute;right:-90px;bottom:-110px;width:240px;height:240px;border-radius:50%;background:rgba(43,127,224,.05)}
+.about-card > *{position:relative;z-index:2}
+.about-heading{display:flex;gap:18px;align-items:flex-start}
+.about-main-icon{width:60px;height:60px;min-width:60px;border-radius:16px;display:grid;place-items:center;font-size:27px;background:rgba(43,127,224,.1);color:var(--violet)}
+.about-heading small{display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:var(--violet)}
+.about-heading h3{margin:0;font-size:24px;font-weight:800;line-height:1.3;letter-spacing:-.3px}
+.about-text{max-width:820px;margin:18px 0 0;font-size:14.5px;line-height:1.8;color:var(--muted)}
+.about-points{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+.about-point{display:flex;gap:11px;align-items:flex-start;padding:15px;border-radius:14px;background:#f5f9fe;border:1px solid #e3ecf6;transition:border-color .2s,transform .2s}
+.about-point:hover{border-color:var(--lav);transform:translateY(-2px)}
+.about-point > i{margin-top:1px;font-size:16px;color:var(--teal)}
+.about-point strong{display:block;margin-bottom:3px;font-size:14px}
+.about-point span{display:block;font-size:13px;line-height:1.55;color:var(--muted)}
+
+.camp-status{position:relative;overflow:hidden;padding:24px;border-radius:20px;color:#fff;background:linear-gradient(160deg,var(--plum),var(--night));box-shadow:0 18px 40px rgba(16,41,74,.2)}
+.camp-status-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.camp-status-head > i{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:19px;background:rgba(124,196,255,.18);color:var(--lav)}
+.camp-status-head h5{margin:0;font-size:16px;font-weight:700}
+.camp-status-head span{display:block;margin-top:3px;font-size:12px;color:#93a9c4}
+.capacity{margin-top:18px}
+.capacity-top{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12.5px;color:#cfdcec}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.12)}
+.progress-bar{border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--lav))}
+.status-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.09);font-size:13px}
+.status-row:last-child{border-bottom:none}
+.status-row span{color:#93a9c4}
+.online{color:#4ade80}
+
+.footer{padding:28px 0 6px;text-align:center;font-size:12px;color:#8aa2c0}
+
+/* ================= MOBILE ================= */
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:1050;background:rgba(4,12,24,.55);backdrop-filter:blur(2px)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+@media(max-width:1250px){.function-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){:root{--side:244px}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+    .sidebar{transform:translateX(-100%);width:272px}
+    .sidebar.show{transform:none}
+    .sidebar-overlay.show{display:block}
+    .main{margin-left:0}
+    .mobile-menu{display:flex}
+}
+@media(max-width:700px){
+    .content{padding:18px}
+    .topbar{height:70px;padding:0 18px}
+    .top-heading h2{font-size:18px}
+    .top-heading p,.profile-text{display:none}
+    .hero{padding:24px}
+    .hero h1{font-size:23px}
+    .stats-grid,.function-grid,.about-points{grid-template-columns:1fr}
+    .about-card{padding:22px}
+    .about-heading{flex-direction:column}
+    .about-heading h3{font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo"><i class="bi bi-triangle-half"></i></div>
+        <div>
+            <h4>GeoNexus</h4>
+            <small>Camp coordinator</small>
+        </div>
+    </div>
+
+    <div class="menu-label">Dashboard</div>
+    <ul class="nav-menu">
+        <li><a href="/myapp/camp_coordinator_home/"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a></li>
+        <li><a href="/myapp/camp_coordinator_viewprofile/"><i class="bi bi-person-circle"></i><span>My Profile</span></a></li>
+    </ul>
+
+    <div class="menu-label">Camp operations</div>
+    <ul class="nav-menu">
+        <li><a href="/myapp/manage_relief_camp/"><i class="bi bi-house-heart-fill"></i><span>Relief Camp Management</span></a></li>
+        <li><a href="/myapp/view_requirements/"><i class="bi bi-clipboard2-check-fill"></i><span>Requirements Data</span></a></li>
+        <li><a href="/myapp/view_inventory/"><i class="bi bi-box-seam-fill"></i><span>Inventory Data</span></a></li>
+        <li><a href="/myapp/manage_disaster_victim/"><i class="bi bi-person-vcard-fill"></i><span>Disaster Victim Management</span></a></li>
+{#        <li><a href="/myapp/camp_coordinator_view_blockchain/"><i class="bi bi-wallet2"></i><span>Donations</span></a></li>#}
+        <li><a href="/myapp/view_goods_donations/"><i class="bi bi-gift-fill"></i><span>Goods Donations</span></a></li>
+    </ul>
+
+    <div class="menu-label">Emergency response</div>
+    <ul class="nav-menu">
+        <li><a href="/myapp/coordinator_view_volunteers/"><i class="bi bi-people-fill"></i><span>View Volunteers</span></a></li>
+        <li><a href="/myapp/coordinator_view_ert/"><i class="bi bi-life-preserver"></i><span>ERT View</span></a></li>
+    </ul>
+
+    <div class="menu-label">Account</div>
+    <ul class="nav-menu">
+        <li><a href="/myapp/change_password/"><i class="bi bi-key-fill"></i><span>Change Password</span></a></li>
+        <li><a href="/myapp/logout/" class="alert-link"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></li>
+    </ul>
+
+</aside>
+
+<!-- ================= MAIN ================= -->
+<main class="main">
+
+    <header class="topbar">
+        <div class="d-flex align-items-center gap-3">
+            <button class="mobile-menu" onclick="openSidebar()" aria-label="Open menu"><i class="bi bi-list"></i></button>
+            <div class="top-heading">
+                <h2>Camp Coordinator Dashboard</h2>
+                <p>Relief camp operations and emergency coordination</p>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <a href="/myapp/view_emergency_alerts/" class="top-icon" aria-label="Emergency alerts">
+                <i class="bi bi-bell"></i><span class="notification-dot"></span>
+            </a>
+            <a href="/myapp/camp_coordinator_viewprofile/" class="top-profile">
+                <div class="top-avatar">CC</div>
+                <div class="profile-text">
+                    <strong>Camp Coordinator</strong>
+                    <span>Coordinator</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <section class="content">
+
+        {% block body %}
+        {% endblock %}
+
+    </section>
+</main>
+
+<script>
+function openSidebar(){
+    document.getElementById("sidebar").classList.add("show");
+    document.getElementById("sidebarOverlay").classList.add("show");
+}
+function closeSidebar(){
+    document.getElementById("sidebar").classList.remove("show");
+    document.getElementById("sidebarOverlay").classList.remove("show");
+}
+
+/* Highlight the sidebar link that matches the current URL; close the drawer on mobile. */
+document.addEventListener("DOMContentLoaded", function(){
+    const current = window.location.pathname.replace(/\/$/, "");
+    document.querySelectorAll(".nav-menu a").forEach(function(link){
+        const path = new URL(link.href, window.location.origin).pathname.replace(/\/$/, "");
+        if (path === current && link.getAttribute("href") !== "#") link.classList.add("active");
+        link.addEventListener("click", function(){
+            if (window.innerWidth <= 900) closeSidebar();
+        });
+    });
+});
+</script>
+
+</body>
+</html>

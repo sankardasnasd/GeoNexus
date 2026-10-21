@@ -1,0 +1,787 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+
+    --white: #ffffff;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --danger: #dc3545;
+    --danger-light: #fff5f5;
+
+}
+
+
+/* PAGE */
+
+.warning-page {
+
+    width: 100%;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 40px 35px 60px;
+}
+
+
+/* HEADER */
+
+.warning-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 28px;
+}
+
+.header-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    margin-bottom: 7px;
+}
+
+.header-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+.header-description {
+
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* ADD BUTTON */
+
+.add-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+.add-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* SUMMARY */
+
+.summary {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 16px 20px;
+
+    margin-bottom: 22px;
+}
+
+.summary-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.summary-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #eef4f8;
+
+    color: var(--navy);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+.summary-title {
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.summary-text {
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 3px;
+}
+
+.summary-count {
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #dcfce7;
+
+    color: #166534;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* GRID */
+
+.warning-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 22px;
+}
+
+
+/* CARD */
+
+.warning-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,.035);
+
+    transition: .2s ease;
+}
+
+.warning-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 30px rgba(15,23,42,.08);
+}
+
+
+/* CARD TOP */
+
+.card-top {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.alert-icon {
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 11px;
+
+    background: #eef4f8;
+
+    color: var(--navy);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+.alert-date {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 9px;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* TITLE */
+
+.alert-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* DESCRIPTION */
+
+.alert-description {
+
+    margin: 12px 0 0;
+
+    padding: 14px;
+
+    min-height: 90px;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf2f7;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    word-break: break-word;
+}
+
+
+/* ACTIONS */
+
+.card-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 18px;
+}
+
+.edit-btn,
+.delete-btn {
+
+    min-height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+
+    background: var(--navy);
+
+    color: white;
+}
+
+.edit-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* DELETE */
+
+.delete-form {
+
+    margin: 0;
+}
+
+.delete-btn {
+
+    width: 100%;
+
+    border: 1px solid #f3c5ca;
+
+    background: var(--danger-light);
+
+    color: #c92a3a;
+}
+
+.delete-btn:hover {
+
+    background: var(--danger);
+
+    border-color: var(--danger);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* EMPTY */
+
+.empty-state {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 70px 25px;
+
+    text-align: center;
+}
+
+.empty-icon {
+
+    width: 70px;
+    height: 70px;
+
+    margin: auto auto 17px;
+
+    border-radius: 18px;
+
+    background: #eef4f8;
+
+    color: #6b8ba6;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+.empty-state h3 {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.empty-state p {
+
+    margin: 8px 0 20px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* FOOTER */
+
+.warning-footer {
+
+    margin-top: 40px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .warning-grid {
+
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px) {
+
+    .warning-page {
+
+        padding: 25px 15px 45px;
+    }
+
+    .warning-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .add-btn {
+
+        width: 100%;
+    }
+
+    .warning-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .summary {
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+        flex-direction: column;
+    }
+}
+
+</style>
+
+
+<div class="warning-page">
+
+
+    <!-- HEADER -->
+
+    <div class="warning-header">
+
+        <div>
+
+            <div class="header-label">
+
+                <i class="bi bi-broadcast-pin me-1"></i>
+
+                EARLY WARNING SYSTEM
+
+            </div>
+
+            <h1 class="header-title">
+
+                Warning Alerts
+
+            </h1>
+
+            <p class="header-description">
+
+                Create and manage disaster early warning notifications.
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="/myapp/admin_add_notification/"
+            class="add-btn">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add Warning Alert
+
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-left">
+
+            <div class="summary-icon">
+
+                <i class="bi bi-bell-fill"></i>
+
+            </div>
+
+            <div>
+
+                <div class="summary-title">
+
+                    Early Warning Notifications
+
+                </div>
+
+                <div class="summary-text">
+
+                    Manage alerts that provide important disaster information.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-count">
+
+            {{ data|length }} Alert{{ data|length|pluralize }}
+
+        </div>
+
+    </div>
+
+
+    {% if data %}
+
+
+        <div class="warning-grid">
+
+
+            {% for item in data %}
+
+
+                <div class="warning-card">
+
+
+                    <div class="card-top">
+
+                        <div class="alert-icon">
+
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        </div>
+
+                        <div class="alert-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            {{ item.date|date:"d M Y" }}
+
+                        </div>
+
+                    </div>
+
+
+                    <h3 class="alert-title">
+
+                        {{ item.title }}
+
+                    </h3>
+
+
+                    <div class="alert-description">
+
+                        {{ item.description }}
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+
+                        <a
+                            href="/myapp/admin_edit_notification/{{ item.id }}/"
+                            class="edit-btn">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            Edit
+
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="/myapp/admin_delete_notification/{{ item.id }}/"
+                            class="delete-form"
+                            onsubmit="return confirm('Are you sure you want to delete this warning alert?');">
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="delete-btn">
+
+                                <i class="bi bi-trash3-fill"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-bell-slash"></i>
+
+            </div>
+
+            <h3>
+
+                No Warning Alerts
+
+            </h3>
+
+            <p>
+
+                No early warning notifications have been created yet.
+
+            </p>
+
+            <a
+                href="/myapp/admin_add_notification/"
+                class="add-btn">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add First Alert
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="warning-footer">
+
+        © 2026 DisasterSafe · Early Warning Management
+
+    </div>
+
+
+</div>
+
+{% endblock %}

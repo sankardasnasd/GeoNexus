@@ -1,0 +1,230 @@
+{% extends "camp coordinator/home copy.html" %}
+{% block body %}
+
+<style>
+:root{
+    --primary:#09203F;
+    --primary2:#163B68;
+    --danger:#EF4444;
+    --bg:#F4F7FB;
+    --text:#0F172A;
+    --muted:#64748B;
+    --border:#E2E8F0;
+}
+body{
+    background:var(--bg);
+    font-family:'Inter',sans-serif;
+}
+.page{
+    padding:30px;
+}
+.banner{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:25px;
+}
+.banner h2{
+    font-size:30px;
+    font-weight:800;
+}
+.banner p{
+    color:#DCE7F3;
+    margin-top:8px;
+    font-size:15px;
+}
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+    margin-bottom:25px;
+}
+.card-box{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    border:1px solid var(--border);
+}
+.card-box h3{
+    color:var(--primary);
+    font-size:32px;
+    font-weight:800;
+}
+.card-box span{
+    color:var(--muted);
+    font-weight:600;
+}
+.table-card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+.table-head{
+    padding:22px 28px;
+    border-bottom:1px solid var(--border);
+}
+.table-head h4{
+    font-size:22px;
+    font-weight:800;
+    color:var(--text);
+}
+.table{
+    margin:0;
+}
+.table thead{
+    background:#F8FAFC;
+}
+.table th{
+    padding:18px;
+    font-size:13px;
+    font-weight:800;
+    color:#475569;
+    text-transform:uppercase;
+}
+.table td{
+    padding:18px;
+    vertical-align:middle;
+    font-size:15px;
+}
+.badge-status{
+    padding:8px 16px;
+    border-radius:30px;
+    font-weight:700;
+}
+.pending{
+    background:#FEF3C7;
+    color:#92400E;
+}
+.completed{
+    background:#DCFCE7;
+    color:#166534;
+}
+.btn-assign{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:700;
+    text-decoration:none;
+}
+.btn-assign:hover{
+    color:#fff;
+}
+</style>
+
+<div class="page">
+
+    <div class="banner">
+        <h2>Goods Donation Management</h2>
+        <p>View all donated goods received for your relief camps and assign volunteers for delivery.</p>
+    </div>
+
+    <div class="stats">
+        <div class="card-box">
+            <h3>{{ data|length }}</h3>
+            <span>Total Donations</span>
+        </div>
+        <div class="card-box">
+            <h3>Active</h3>
+            <span>Goods Transfer Requests</span>
+        </div>
+        <div class="card-box">
+            <h3>Camp</h3>
+            <span>Coordinator Dashboard</span>
+        </div>
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-head">
+            <h4>Received Goods Donations</h4>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle">
+
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Requirement</th>
+                    <th>Donor</th>
+                    <th>Camp</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Assign</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                {% for i in data %}
+                <tr>
+
+                    <td><b>{{ forloop.counter }}</b></td>
+
+                    <td>
+                        <b>{{ i.title }}</b><br>
+                        <small class="text-muted">{{ i.details }}</small>
+                    </td>
+
+                    <td>
+                        User #{{ i.username }}<br>{{i.email }}
+                    </td>
+
+                    <td>
+                        <b>{{ i.campname }}</b><br>
+                        <small>{{ i.place }}</small>
+                    </td>
+
+                    <td>{{ i.quantity }}</td>
+
+                    <td>{{ i.date }}</td>
+
+                    <td>
+                        {% if i.status == "Completed" %}
+                        <span class="badge-status completed">{{ i.status }}</span>
+                        {% else %}
+                        <span class="badge-status pending">{{ i.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+
+                        {% if i.dstatus == 'Task Assigned' %}
+
+ {{ i.volunteer }}<br>{{ i.phone }}<br>
+                        {{ i.dstatus }}
+                        
+
+                        {% elif i.dstatus == 'Collected' %}
+                            <span>{{ i.dstatus }}</span>
+                            {% else %}
+                        <a href="/myapp/coordinator_assigntask_volunteer/{{ i.id }}" class="btn-assign">
+                            Assign Volunteer
+                        </a>
+                       {% endif %}
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5">
+                        <h5>No Goods Donations Found</h5>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

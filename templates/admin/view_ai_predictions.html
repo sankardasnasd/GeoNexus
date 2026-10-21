@@ -1,0 +1,271 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+/* Scoped to .pa-wrap and prefixed pa- so nothing collides with the base template. */
+.pa-wrap{
+    --pa-navy:var(--night,#071326);
+    --pa-navy2:var(--plum,#10294a);
+    --pa-blue:var(--violet,#2b7fe0);
+    --pa-ink:var(--ink,#0e1c30);
+    --pa-muted:var(--muted,#5f7591);
+    --pa-line:var(--line,#dce6f2);
+    --pa-bad:var(--coral,#ff5d4d);
+    --pa-ok:var(--green,#22c55e);
+    padding:28px 30px 40px;
+}
+.pa-wrap *{box-sizing:border-box}
+
+/* Banner */
+.pa-banner{
+    position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;margin-bottom:22px;color:#fff;
+    background:linear-gradient(115deg,var(--pa-navy) 0%,var(--pa-navy2) 55%,#17497f 100%);
+    box-shadow:0 18px 40px rgba(16,41,74,.22);
+}
+.pa-banner::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,163,255,.38),rgba(43,127,224,.14) 50%,transparent 70%)}
+.pa-banner > *{position:relative;z-index:2}
+.pa-banner h3{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.pa-banner p{margin:0;max-width:640px;color:#cfe0f2;font-size:14.5px;line-height:1.7}
+
+/* Summary cards */
+.pa-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px}
+.pa-stat{display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;padding:20px 22px;border-radius:18px;background:#fff;border:1px solid var(--pa-line)}
+.pa-stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--pa-blue))}
+.pa-stat.s-bad{--accent:var(--pa-bad)}.pa-stat.s-ok{--accent:var(--pa-ok)}
+.pa-stat-icon{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:21px;
+    background:color-mix(in srgb,var(--accent,var(--pa-blue)) 13%,white);color:var(--accent,var(--pa-blue))}
+.pa-stat strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800;line-height:1.1}
+.pa-stat span{display:block;margin-top:2px;font-size:13.5px;color:var(--pa-muted)}
+
+/* Cards */
+.pa-card{margin-bottom:22px;border-radius:20px;background:#fff;border:1px solid var(--pa-line);overflow:hidden;box-shadow:0 10px 28px rgba(16,41,74,.05)}
+.pa-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px;border-bottom:1px solid var(--pa-line)}
+.pa-card-head h5{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;color:var(--pa-ink)}
+.pa-card-head p{margin:3px 0 0;font-size:13px;color:var(--pa-muted)}
+.pa-card-head > i{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:rgba(43,127,224,.12);color:var(--pa-blue)}
+
+/* Map */
+#prediction-map{height:480px;width:100%;background:#e5ecf4}
+.pa-legend{display:flex;gap:18px;flex-wrap:wrap;padding:12px 24px;border-top:1px solid var(--pa-line);font-size:13px;color:var(--pa-muted)}
+.pa-legend span{display:inline-flex;align-items:center;gap:7px}
+.pa-legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.leaflet-popup-content{font-family:'Manrope',sans-serif;font-size:13px;line-height:1.6}
+
+/* Table */
+.pa-table-wrap{overflow-x:auto}
+.pa-table{margin:0;min-width:1100px;width:100%;border-collapse:collapse}
+.pa-table thead th{padding:15px 18px;background:#f3f8fe;color:var(--pa-muted);font-size:13px;font-weight:700;text-align:left;white-space:nowrap;border-bottom:1px solid var(--pa-line)}
+.pa-table tbody td{padding:16px 18px;font-size:14px;color:#2c3e57;vertical-align:middle;border-bottom:1px solid #edf2f8}
+.pa-table tbody tr:hover{background:#f6faff}
+.pa-table tbody tr:last-child td{border-bottom:none}
+.pa-river{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;color:var(--pa-ink)}
+.pa-coord{white-space:nowrap;color:var(--pa-muted);font-size:13px}
+
+.pa-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap}
+.pa-badge.disaster{background:rgba(255,93,77,.13);color:#b8321f}
+.pa-badge.safe{background:rgba(34,197,94,.14);color:#127a3d}
+
+.pa-empty{text-align:center;padding:55px 20px;color:var(--pa-muted)}
+.pa-empty i{display:block;margin-bottom:12px;font-size:48px;color:#b9cde4}
+
+@media(max-width:900px){.pa-summary{grid-template-columns:1fr}}
+@media(max-width:700px){
+    .pa-wrap{padding:18px 14px 32px}
+    .pa-banner{padding:24px 20px}
+    .pa-banner h3{font-size:22px}
+    #prediction-map{height:360px}
+}
+</style>
+
+<div class="pa-wrap">
+
+    <div class="pa-banner">
+        <h3><i class="bi bi-cpu-fill me-2"></i>AI Flood Risk Predictions</h3>
+        <p>Review model predictions for river locations and see which areas are at risk.</p>
+    </div>
+
+    <!-- SUMMARY (filled from the data by JS so counts are always correct) -->
+    <div class="pa-summary">
+        <div class="pa-stat">
+            <div class="pa-stat-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div><strong id="countTotal">{{ predictions|length }}</strong><span>Total predictions</span></div>
+        </div>
+        <div class="pa-stat s-bad">
+            <div class="pa-stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            <div><strong id="countDisaster">0</strong><span>At risk</span></div>
+        </div>
+        <div class="pa-stat s-ok">
+            <div class="pa-stat-icon"><i class="bi bi-shield-check"></i></div>
+            <div><strong id="countSafe">0</strong><span>Safe</span></div>
+        </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="pa-card">
+        <div class="pa-card-head">
+            <div>
+                <h5>Prediction map</h5>
+                <p>Click a marker to see its river, date and risk.</p>
+            </div>
+            <i class="bi bi-map-fill"></i>
+        </div>
+        <div id="prediction-map"></div>
+        <div class="pa-legend">
+            <span><i style="background:#ff5d4d"></i> At risk</span>
+            <span><i style="background:#22c55e"></i> Safe</span>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="pa-card">
+        <div class="pa-card-head">
+            <div>
+                <h5>Prediction details</h5>
+                <p>Environmental readings used for each prediction.</p>
+            </div>
+            <i class="bi bi-table"></i>
+        </div>
+
+        <div class="pa-table-wrap">
+            <table class="pa-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>River</th>
+                        <th>Risk</th>
+                        <th>Predicted value</th>
+                        <th>Soil type</th>
+                        <th>Slope</th>
+                        <th>Altitude</th>
+                        <th>Rainfall</th>
+                        <th>Humidity</th>
+                        <th>Temperature</th>
+                        <th>Coordinates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for p in predictions %}
+                    {% with risk_lower=p.risk|lower value_lower=p.value|lower %}
+                    <tr>
+                        <td>{{ p.date }}</td>
+                        <td class="pa-river">{{ p.river }}</td>
+                        <td>
+                            {% if 'non' in risk_lower or 'non' in value_lower or 'safe' in risk_lower or 'safe' in value_lower or risk_lower == 'low' %}
+                                <span class="pa-badge safe"><i class="bi bi-check-circle-fill"></i> {{ p.risk }}</span>
+                            {% else %}
+                                <span class="pa-badge disaster"><i class="bi bi-exclamation-triangle-fill"></i> {{ p.risk }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ p.value }}</td>
+                        <td>{{ p.soil_type }}</td>
+                        <td>{{ p.slope }}</td>
+                        <td>{{ p.altitude }}</td>
+                        <td>{{ p.rainfall }}</td>
+                        <td>{{ p.humidity }}</td>
+                        <td>{{ p.temperature }}</td>
+                        <td class="pa-coord">{{ p.latitude }}, {{ p.longitude }}</td>
+                    </tr>
+                    {% endwith %}
+                {% empty %}
+                    <tr>
+                        <td colspan="11">
+                            <div class="pa-empty">
+                                <i class="bi bi-cpu"></i>
+                                No predictions yet. Run a disaster prediction to see results here.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const predictionData = JSON.parse('{{ map_data_json|escapejs }}');
+
+/* Same rule as the table: unknown values count as at risk, safe words win. */
+function isDisaster(p){
+    const text = ((p.risk || '') + ' ' + (p.value || '')).toLowerCase();
+    if (text.includes('non') || text.includes('safe') || (p.risk || '').toLowerCase() === 'low') return false;
+    return true;
+}
+
+function esc(value){
+    const d = document.createElement('div');
+    d.textContent = value == null ? '' : String(value);
+    return d.innerHTML;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const map = L.map('prediction-map');
+
+    // Esri is the default; CARTO and OSM are optional layers.
+    const esri = L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+        { attribution: 'Tiles &copy; Esri', maxZoom: 19, maxNativeZoom: 17 }
+    );
+    const carto = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap contributors &copy; <a href="https://carto.com/attributions">CARTO</a>', subdomains: 'abcd', maxZoom: 19 }
+    );
+    const osm = L.tileLayer(
+        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19 }
+    );
+
+    esri.addTo(map);
+    L.control.layers({ 'Esri Streets': esri, 'CARTO Voyager': carto, 'OpenStreetMap': osm }).addTo(map);
+
+    const markers = [];
+    let disasterCount = 0, safeCount = 0;
+
+    predictionData.forEach(function (p) {
+        const lat = parseFloat(p.lat);
+        const lng = parseFloat(p.lng);
+        if (isNaN(lat) || isNaN(lng)) return;
+
+        const disaster = isDisaster(p);
+        disaster ? disasterCount++ : safeCount++;
+        const color = disaster ? '#ff5d4d' : '#22c55e';
+
+        const marker = L.circleMarker([lat, lng], {
+            radius: disaster ? 10 : 7,
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup(
+            '<strong>' + esc(p.river) + '</strong><br>' +
+            'Date: ' + esc(p.date) + '<br>' +
+            'Risk: <b>' + esc(p.risk) + '</b><br>' +
+            'Value: ' + esc(p.value)
+        );
+
+        marker.addTo(map);
+        markers.push(marker);
+    });
+
+    document.getElementById('countDisaster').textContent = disasterCount;
+    document.getElementById('countSafe').textContent = safeCount;
+
+    if (markers.length === 1) {
+        map.setView(markers[0].getLatLng(), 12);
+    } else if (markers.length > 1) {
+        map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2), { maxZoom: 14 });
+    } else {
+        map.setView([11.25, 75.78], 10);   // Kozhikode area
+    }
+
+    setTimeout(function () { map.invalidateSize(); }, 200);
+});
+</script>
+
+{% endblock %}

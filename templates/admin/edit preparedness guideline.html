@@ -1,0 +1,342 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --navy: #102a43;
+    --blue: #1d6fa5;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+.edit-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 35px 60px;
+}
+
+.header {
+    margin-bottom: 28px;
+}
+
+.label {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    margin-bottom: 7px;
+}
+
+.title {
+    margin: 0;
+    color: var(--navy);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.description {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full {
+    grid-column: 1/-1;
+}
+
+label {
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+label i {
+    color: var(--blue);
+    margin-right: 5px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    background: #f8fafc;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    background: white;
+    border-color: var(--blue);
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 22px;
+    border-top: 1px solid #edf2f7;
+}
+
+.btn {
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cancel {
+    background: white;
+    color: var(--navy);
+    border: 1px solid var(--border);
+}
+
+.save {
+    background: var(--navy);
+    color: white;
+    border: none;
+}
+
+.save:hover {
+    background: var(--blue);
+}
+
+@media(max-width:700px) {
+
+    .edit-page {
+        padding: 25px 15px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="edit-page">
+
+
+    <div class="header">
+
+        <div class="label">
+            <i class="bi bi-pencil-square"></i>
+            DISASTER MANAGEMENT
+        </div>
+
+        <h1 class="title">
+            Edit Preparedness Guideline
+        </h1>
+
+        <p class="description">
+            Update the disaster preparedness and emergency safety information.
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <form
+            method="POST"
+            action="/myapp/admin_edit_preparedness_guideline_post/">
+
+            {% csrf_token %}
+
+            <div class="grid">
+
+
+                <div class="group">
+
+                    <label>
+                        <i class="bi bi-card-heading"></i>
+                        Guideline Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ data.title }}"
+                        required>
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        <i class="bi bi-tags-fill"></i>
+                        Category
+                    </label>
+
+                    <select
+                        name="category"
+                        required>
+
+                        <option value="Flood"
+                            {% if data.category == "Flood" %}selected{% endif %}>
+                            Flood
+                        </option>
+
+                        <option value="Earthquake"
+                            {% if data.category == "Earthquake" %}selected{% endif %}>
+                            Earthquake
+                        </option>
+
+                        <option value="Landslide"
+                            {% if data.category == "Landslide" %}selected{% endif %}>
+                            Landslide
+                        </option>
+
+                        <option value="Cyclone"
+                            {% if data.category == "Cyclone" %}selected{% endif %}>
+                            Cyclone
+                        </option>
+
+                        <option value="Fire"
+                            {% if data.category == "Fire" %}selected{% endif %}>
+                            Fire
+                        </option>
+
+                        <option value="General"
+                            {% if data.category == "General" %}selected{% endif %}>
+                            General Disaster Preparedness
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="group full">
+
+                    <label>
+                        <i class="bi bi-info-circle-fill"></i>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        required>{{ data.description }}</textarea>
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        <i class="bi bi-shield-fill-check"></i>
+                        Precautions
+                    </label>
+
+                    <textarea
+                        name="precautions"
+                        required>{{ data.precautions }}</textarea>
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Emergency Steps
+                    </label>
+
+                    <textarea
+                        name="emergency_steps"
+                        required>{{ data.emergency_steps }}</textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="actions">
+
+                <a
+                    href="/myapp/admin_view_preparedness_guidelines/"
+                    class="btn cancel">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn save">
+
+                    <i class="bi bi-check-lg"></i>
+                    Update Guideline
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

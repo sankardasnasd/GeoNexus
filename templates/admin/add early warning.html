@@ -1,0 +1,1083 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="">
+
+<style>
+:root {
+    --primary: #09203f;
+    --primary-dark: #061a33;
+    --primary-light: #163b68;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    --background: #f4f7fb;
+    --white: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+}
+
+.notification-page {
+    min-height: calc(100vh - 70px);
+    background: var(--background);
+    padding: 32px;
+}
+
+.page-banner {
+    background: linear-gradient(110deg, var(--primary), var(--primary-light));
+    border-radius: 20px;
+    padding: 27px 30px;
+    margin-bottom: 25px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(9,32,63,.15);
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.banner-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 17px;
+    background: rgba(255,255,255,.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.banner-text h2 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.banner-text p {
+    margin: 6px 0 0;
+    color: rgba(255,255,255,.72);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.notification-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 310px minmax(0,1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.info-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    height: fit-content;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+.info-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: #fef2f2;
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 18px;
+}
+
+.info-card h3 {
+    margin: 0 0 8px;
+    color: var(--text-dark);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.info-card > p {
+    margin: 0 0 22px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.info-item {
+    display: flex;
+    gap: 11px;
+    margin-top: 17px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
+}
+
+.info-item-icon {
+    width: 37px;
+    height: 37px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #eef4fb;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.info-item strong {
+    display: block;
+    color: var(--text-dark);
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.info-item span {
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.form-card {
+    min-width: 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+.form-header {
+    padding: 22px 25px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-header-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #eef4fb;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-header h3 {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 17px;
+}
+
+.form-header p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.form-body {
+    padding: 28px;
+}
+
+.form-group {
+    margin-bottom: 21px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.required {
+    color: var(--danger);
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0 15px 0 42px;
+    outline: none;
+    background: #fff;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 13px;
+    transition: all .2s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(22,59,104,.10);
+}
+
+textarea.form-control {
+    height: 145px;
+    resize: vertical;
+    padding-top: 13px;
+    line-height: 1.6;
+}
+
+textarea + .input-icon {
+    top: 22px;
+    transform: none;
+}
+
+.form-control[readonly] {
+    background: #f8fafc;
+    color: #334155;
+}
+
+.description-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.location-search-row {
+    display: flex;
+    gap: 9px;
+}
+
+.location-search-row .input-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.location-search-row .form-control {
+    padding-right: 12px;
+}
+
+.search-btn {
+    height: 48px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.search-btn:hover {
+    background: var(--primary-light);
+}
+
+.search-btn:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+.search-help {
+    display: block;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+.location-results {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+.location-result {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+    background: #fff;
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.location-result:hover,
+.location-result:focus {
+    background: #eef4fb;
+    border-color: var(--primary-light);
+}
+
+#locationStatus {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    min-height: 1.2em;
+}
+
+#locationStatus.error {
+    color: var(--danger-dark);
+}
+
+#locationStatus.success {
+    color: var(--success);
+}
+
+.map-wrapper {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+#notificationMap {
+    width: 100%;
+    height: 340px;
+    background: #e2e8f0;
+    z-index: 1;
+}
+
+.map-footer {
+    padding: 11px 13px;
+    background: #f8fafc;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.selected-location {
+    display: none;                 /* hidden until a location is chosen */
+    align-items: flex-start;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 13px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
+
+.selected-location.visible {
+    display: flex;
+}
+
+.selected-location i {
+    color: #15803d;
+    margin-top: 3px;
+}
+
+.selected-location strong {
+    display: block;
+    color: #166534;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.selected-location span {
+    color: #166534;
+    font-size: 11px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.coordinate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+}
+
+.warning-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px 14px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 11px;
+    margin-top: 3px;
+    margin-bottom: 22px;
+}
+
+.warning-box i {
+    color: #ea580c;
+    font-size: 17px;
+    margin-top: 2px;
+}
+
+.warning-box span {
+    color: #9a3412;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.button-section {
+    padding-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 11px;
+}
+
+.btn {
+    min-height: 47px;
+    border-radius: 11px;
+    padding: 0 24px;
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+
+.btn-cancel {
+    color: var(--text-muted);
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+    color: var(--text-dark);
+}
+
+.btn-submit {
+    min-width: 175px;
+    color: white;
+    background: linear-gradient(110deg, var(--primary), var(--primary-light));
+    box-shadow: 0 6px 15px rgba(9,32,63,.18);
+}
+
+.btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 9px 20px rgba(9,32,63,.25);
+}
+
+.btn-submit:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+
+@media (max-width: 950px) {
+    .notification-layout {
+        grid-template-columns: 1fr;
+    }
+    .info-card { order: 2; }
+    .form-card { order: 1; }
+}
+
+@media (max-width: 600px) {
+    .notification-page { padding: 16px; }
+    .page-banner { padding: 21px; }
+    .banner-text h2 { font-size: 20px; }
+    .banner-icon { width: 50px; height: 50px; font-size: 22px; }
+    .form-body { padding: 19px; }
+    .location-search-row { flex-direction: column; }
+    .search-btn { width: 100%; justify-content: center; }
+    #notificationMap { height: 290px; }
+    .coordinate-grid { grid-template-columns: 1fr; gap: 0; }
+    .button-section { flex-direction: column-reverse; }
+    .btn { width: 100%; box-sizing: border-box; }
+}
+</style>
+
+<div class="notification-page">
+
+    <!-- PAGE HEADER -->
+    <div class="page-banner">
+        <div class="banner-content">
+            <div class="banner-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="banner-text">
+                <h2>Add Early Warning</h2>
+                <p>Create and publish an emergency warning notification for users and disaster response teams.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification-layout">
+
+        <!-- INFORMATION CARD -->
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+            <h3>Emergency Warning</h3>
+            <p>Publish important disaster alerts and early warning messages with the correct geographical location.</p>
+
+            <div class="info-item">
+                <div class="info-item-icon"><i class="fas fa-heading"></i></div>
+                <div>
+                    <strong>Warning Title</strong>
+                    <span>Enter a short and clear warning title.</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-icon"><i class="fas fa-align-left"></i></div>
+                <div>
+                    <strong>Description</strong>
+                    <span>Explain the emergency and necessary precautions.</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-icon"><i class="fas fa-calendar-days"></i></div>
+                <div>
+                    <strong>Warning Date</strong>
+                    <span>Select the date on which the warning is issued.</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-icon"><i class="fas fa-map-location-dot"></i></div>
+                <div>
+                    <strong>Location Search</strong>
+                    <span>Search for a district or place and select the correct map result.</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-icon"><i class="fas fa-crosshairs"></i></div>
+                <div>
+                    <strong>Exact Coordinates</strong>
+                    <span>Latitude and longitude are filled automatically from the selected map location.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="form-card">
+            <div class="form-header">
+                <div class="form-header-icon">
+                    <i class="fas fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h3>Notification Details</h3>
+                    <p>Enter the warning information and select its location.</p>
+                </div>
+            </div>
+
+            <form method="POST"
+                  action="{% url 'admin_add_notification_post' %}"
+                  class="form-body"
+                  id="notificationForm"
+                  novalidate
+                  onsubmit="return validateNotification();">
+                {% csrf_token %}
+
+                <!-- TITLE -->
+                <div class="form-group">
+                    <label class="form-label" for="title">
+                        Warning Title <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-heading input-icon"></i>
+                        <input type="text"
+                               name="title"
+                               id="title"
+                               class="form-control"
+                               placeholder="Enter warning title"
+                               maxlength="150"
+                               required>
+                    </div>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="form-group">
+                    <label class="form-label" for="description">
+                        Warning Description <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-align-left input-icon"></i>
+                        <textarea name="description"
+                                  id="description"
+                                  class="form-control"
+                                  placeholder="Enter the emergency warning message..."
+                                  maxlength="300"
+                                  required></textarea>
+                    </div>
+                    <div class="description-footer">
+                        <span>Maximum 300 characters</span>
+                        <span id="characterCount">0 / 300</span>
+                    </div>
+                </div>
+
+                <!-- DATE -->
+                <div class="form-group">
+                    <label class="form-label" for="date">
+                        Warning Date <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-calendar-days input-icon"></i>
+                        <input type="date"
+                               name="date"
+                               id="date"
+                               class="form-control"
+                               required>
+                    </div>
+                </div>
+
+                <!-- LOCATION SEARCH -->
+                <div class="form-group">
+                    <label class="form-label" for="locationSearch">
+                        Search District / Place <span class="required">*</span>
+                    </label>
+                    <div class="location-search-row">
+                        <div class="input-wrapper">
+                            <i class="fas fa-search input-icon"></i>
+                            <input type="text"
+                                   id="locationSearch"
+                                   class="form-control"
+                                   placeholder="Example: Kozhikode Beach"
+                                   autocomplete="off">
+                        </div>
+                        <button type="button" id="searchLocation" class="search-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <span class="search-help">
+                        Search a place, town, village or district in Kerala. Select the correct result below.
+                    </span>
+                    <div id="locationStatus" role="status" aria-live="polite"></div>
+                    <div id="locationResults" class="location-results"></div>
+                </div>
+
+                <!-- MAP -->
+                <div class="form-group">
+                    <label class="form-label">
+                        Select Exact Location <span class="required">*</span>
+                    </label>
+                    <div class="map-wrapper">
+                        <div id="notificationMap"></div>
+                        <div class="map-footer">
+                            <i class="fas fa-hand-pointer"></i>
+                            Search and select a result first. Then click the map or drag the marker to adjust the exact coordinates.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SELECTED LOCATION (hidden until selection) -->
+                <div class="selected-location" id="selectedLocationBox">
+                    <i class="fas fa-circle-check"></i>
+                    <div>
+                        <strong>Selected Location</strong>
+                        <span id="selectedLocationText">No location selected.</span>
+                    </div>
+                </div>
+
+                <!-- PLACE -->
+                <div class="form-group">
+                    <label class="form-label" for="place">
+                        Place <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-location-dot input-icon"></i>
+                        <input type="text"
+                               name="place"
+                               id="place"
+                               class="form-control"
+                               placeholder="Selected place"
+                               maxlength="150"
+                               required
+                               readonly>
+                    </div>
+                </div>
+
+                <!-- DISTRICT -->
+                <div class="form-group">
+                    <label class="form-label" for="district">
+                        District <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-map input-icon"></i>
+                        <input type="text"
+                               name="district"
+                               id="district"
+                               class="form-control"
+                               placeholder="Selected district"
+                               maxlength="150"
+                               required
+                               readonly>
+                    </div>
+                </div>
+
+                <!-- COORDINATES -->
+                <div class="coordinate-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="latitude">
+                            Latitude <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-globe input-icon"></i>
+                            <input type="number"
+                                   name="latitude"
+                                   id="latitude"
+                                   class="form-control"
+                                   placeholder="Auto-filled"
+                                   step="any"
+                                   min="-90"
+                                   max="90"
+                                   required
+                                   readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="longitude">
+                            Longitude <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-globe input-icon"></i>
+                            <input type="number"
+                                   name="longitude"
+                                   id="longitude"
+                                   class="form-control"
+                                   placeholder="Auto-filled"
+                                   step="any"
+                                   min="-180"
+                                   max="180"
+                                   required
+                                   readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WARNING -->
+                <div class="warning-box">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span>
+                        Verify the warning details and selected location before publishing.
+                        The map coordinates should correspond to the affected area.
+                    </span>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="button-section">
+                    <a href="{% url 'admin_view_notifications' %}" class="btn btn-cancel">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-submit" id="publishButton">
+                        <i class="fas fa-paper-plane"></i> Publish Warning
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ---------- Date (today + min) ----------
+    const dateInput = document.getElementById("date");
+    const now = new Date();
+    const localToday = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+    ].join("-");
+    dateInput.value = localToday;
+    dateInput.min = localToday;
+
+    // ---------- Character counter ----------
+    const descriptionInput = document.getElementById("description");
+    const characterCount = document.getElementById("characterCount");
+    function updateCharCount() {
+        characterCount.textContent = descriptionInput.value.length + " / 300";
+    }
+    descriptionInput.addEventListener("input", updateCharCount);
+    updateCharCount();
+
+    // ---------- Map ----------
+
+// ---------- Initialize Map ----------
+const map = L.map("notificationMap").setView(
+    [10.8505, 76.2711],
+    7
+);
+
+// ---------- Map Tiles ----------
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+    {
+        maxZoom: 19,
+        attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank" rel="noopener">Humanitarian OpenStreetMap Team</a>'
+    }
+).addTo(map);
+
+// ---------- Existing Variables ----------
+let marker = null;
+let selectedLocation = null;
+let searchSequence = 0;
+
+{#    const map = L.map("notificationMap").setView([10.8505, 76.2711], 7);#}
+{#    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {#}
+{#        maxZoom: 19,#}
+{#        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'#}
+{#    }).addTo(map);#}
+{##}
+{#    let marker = null;#}
+{#    let selectedLocation = null;#}
+{#    let searchSequence = 0;#}
+
+    const searchInput          = document.getElementById("locationSearch");
+    const searchButton         = document.getElementById("searchLocation");
+    const resultsBox           = document.getElementById("locationResults");
+    const statusBox            = document.getElementById("locationStatus");
+    const placeInput           = document.getElementById("place");
+    const districtInput        = document.getElementById("district");
+    const latitudeInput        = document.getElementById("latitude");
+    const longitudeInput       = document.getElementById("longitude");
+    const selectedLocationText = document.getElementById("selectedLocationText");
+    const selectedLocationBox  = document.getElementById("selectedLocationBox");
+
+    function setStatus(message, type = "") {
+        statusBox.textContent = message;
+        statusBox.className = type;
+    }
+
+    function getDistrict(address) {
+        return address.state_district || address.district || address.county || address.city_district || "";
+    }
+
+    function getPlace(item, address) {
+        return address.amenity || address.building || address.neighbourhood ||
+               address.suburb || address.village || address.town || address.city ||
+               item.name || item.display_name.split(",")[0];
+    }
+
+    function updateCoordinates(lat, lon) {
+        latitudeInput.value  = Number(lat).toFixed(7);
+        longitudeInput.value = Number(lon).toFixed(7);
+    }
+
+    function showSelectedLocation(lat, lon) {
+        updateCoordinates(lat, lon);
+        selectedLocationText.textContent =
+            placeInput.value + ", " + districtInput.value +
+            " | Lat: " + Number(lat).toFixed(6) +
+            ", Lon: " + Number(lon).toFixed(6);
+        selectedLocationBox.classList.add("visible");
+    }
+
+    function updateMarker(lat, lon) {
+        const position = [Number(lat), Number(lon)];
+        if (!marker) {
+            marker = L.marker(position, { draggable: true }).addTo(map);
+            marker.on("dragend", function () {
+                const pos = marker.getLatLng();
+                updateCoordinates(pos.lat, pos.lng);
+                showSelectedLocation(pos.lat, pos.lng);
+                setStatus("Coordinates updated from the moved marker.", "success");
+            });
+        } else {
+            marker.setLatLng(position);
+        }
+        marker.bindPopup("Selected warning location").openPopup();
+        map.setView(position, 15);
+    }
+
+    function selectLocation(item) {
+        const address = item.address || {};
+        const lat = Number(item.lat);
+        const lon = Number(item.lon);
+
+        if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
+            lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+            setStatus("Invalid coordinates returned for this location.", "error");
+            return;
+        }
+
+        const district = getDistrict(address);
+        const place    = getPlace(item, address);
+
+        if (!district) {
+            setStatus("District information was not available for this result. Search for a more specific place or district.", "error");
+            return;
+        }
+
+        selectedLocation = {
+            lat: lat, lon: lon,
+            place: place, district: district,
+            displayName: item.display_name
+        };
+
+        placeInput.value    = place;
+        districtInput.value = district;
+
+        updateCoordinates(lat, lon);
+        updateMarker(lat, lon);
+        showSelectedLocation(lat, lon);
+
+        resultsBox.replaceChildren();
+        setStatus("Location selected successfully. You can adjust the marker on the map.", "success");
+    }
+
+    // ---------- Search ----------
+    async function searchLocations() {
+        const query = searchInput.value.trim();
+        if (!query) {
+            setStatus("Enter a district or place to search.", "error");
+            searchInput.focus();
+            return;
+        }
+
+        const thisSearch = ++searchSequence;
+        searchButton.disabled = true;
+        resultsBox.replaceChildren();
+        setStatus("Searching locations...");
+
+        try {
+            const url = new URL("https://nominatim.openstreetmap.org/search");
+            url.searchParams.set("q", query + ", Kerala, India");
+            url.searchParams.set("format", "jsonv2");
+            url.searchParams.set("addressdetails", "1");
+            url.searchParams.set("limit", "5");
+            url.searchParams.set("countrycodes", "in");
+
+            const response = await fetch(url.toString(), {
+                headers: { "Accept": "application/json" }
+            });
+
+            if (!response.ok) throw new Error("Search service returned an error.");
+
+            const locations = await response.json();
+            if (thisSearch !== searchSequence) return;
+
+            if (!locations.length) {
+                setStatus("No matching locations found. Try a more specific place name.", "error");
+                return;
+            }
+
+            locations.forEach(function (item) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "location-result";
+                button.textContent = item.display_name;
+                button.addEventListener("click", function () {
+                    selectLocation(item);
+                });
+                resultsBox.appendChild(button);
+            });
+
+            setStatus("Select the correct location from the search results.");
+        } catch (error) {
+            if (thisSearch !== searchSequence) return;
+            setStatus("Unable to search locations. Check your internet connection and try again.", "error");
+        } finally {
+            if (thisSearch === searchSequence) {
+                searchButton.disabled = false;
+            }
+        }
+    }
+
+    searchButton.addEventListener("click", searchLocations);
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            searchLocations();
+        }
+    });
+
+    // ---------- Map click (fine-tune after selection) ----------
+    map.on("click", function (event) {
+        if (!selectedLocation) {
+            setStatus("Search and select a place before choosing a map location.", "error");
+            return;
+        }
+        const lat = event.latlng.lat;
+        const lon = event.latlng.lng;
+        selectedLocation.lat = lat;
+        selectedLocation.lon = lon;
+        updateMarker(lat, lon);
+        showSelectedLocation(lat, lon);
+        setStatus("Map location updated. Place and district are retained from the selected search result.", "success");
+    });
+
+    // ---------- Validation ----------
+    window.validateNotification = function () {
+        const title = document.getElementById("title").value.trim();
+        const description = descriptionInput.value.trim();
+        const date = dateInput.value;
+
+        if (!title) {
+            alert("Please enter the warning title.");
+            document.getElementById("title").focus();
+            return false;
+        }
+        if (!description) {
+            alert("Please enter the warning description.");
+            descriptionInput.focus();
+            return false;
+        }
+        if (!date) {
+            alert("Please select the warning date.");
+            dateInput.focus();
+            return false;
+        }
+        if (!selectedLocation) {
+            alert("Please search and select a location on the map.");
+            searchInput.focus();
+            return false;
+        }
+
+        const lat = Number(latitudeInput.value);
+        const lon = Number(longitudeInput.value);
+
+        if (!placeInput.value.trim() || !districtInput.value.trim() ||
+            !Number.isFinite(lat) || !Number.isFinite(lon) ||
+            lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+            alert("Please select a valid location before publishing.");
+            return false;
+        }
+        return true;
+    };
+
+    // Fix Leaflet size after layout settles
+    setTimeout(function () { map.invalidateSize(); }, 300);
+});
+</script>
+
+{% endblock %}

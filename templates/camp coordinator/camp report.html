@@ -1,0 +1,1416 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --primary: #09203f;
+    --primary-dark: #061a33;
+    --primary-light: #163b68;
+
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+
+    --success: #16a34a;
+    --warning: #f59e0b;
+
+    --background: #f4f7fb;
+    --white: #ffffff;
+
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+
+    --border: #e2e8f0;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.report-page {
+    padding: 28px;
+    background: var(--background);
+    min-height: calc(100vh - 76px);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.report-header {
+    background: linear-gradient(
+        110deg,
+        var(--primary),
+        var(--primary-light)
+    );
+
+    border-radius: 20px;
+
+    padding: 28px 30px;
+
+    color: white;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 10px 25px rgba(9, 32, 63, .16);
+}
+
+.report-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.report-title-section {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.report-icon {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.13);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.report-title {
+    margin: 0;
+
+    font-size: 27px;
+
+    font-weight: 800;
+}
+
+.report-subtitle {
+    margin: 6px 0 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 13px;
+}
+
+.report-date {
+    background: rgba(255,255,255,.10);
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    padding: 10px 15px;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stat-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,.04);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.icon-blue {
+    background: #eef4fb;
+    color: var(--primary);
+}
+
+.icon-red {
+    background: #fef2f2;
+    color: var(--danger);
+}
+
+.icon-green {
+    background: #f0fdf4;
+    color: var(--success);
+}
+
+.icon-orange {
+    background: #fffbeb;
+    color: var(--warning);
+}
+
+.stat-label {
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    color: var(--text-dark);
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   CAMP INFORMATION
+========================================================= */
+
+.section-card {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    margin-bottom: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,.04);
+}
+
+.section-header {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.section-header i {
+    color: var(--primary);
+
+    font-size: 20px;
+}
+
+.section-header h3 {
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 750;
+
+    color: var(--text-dark);
+}
+
+.section-body {
+    padding: 20px;
+}
+
+.camp-info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.info-item {
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    padding: 15px;
+}
+
+.info-label {
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.info-value {
+    color: var(--text-dark);
+
+    font-size: 14px;
+
+    font-weight: 650;
+}
+
+/* =========================================================
+   TWO COLUMN
+========================================================= */
+
+.two-column {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 22px;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.report-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.report-table th {
+    background: #f8fafc;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+    padding: 13px;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+.report-table td {
+    padding: 14px 13px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--text-dark);
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+.report-table tr:hover td {
+    background: #fafcff;
+}
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.status {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.status-collected {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-pending {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-other {
+    color: #1e3a8a;
+    background: #dbeafe;
+}
+
+/* =========================================================
+   REPORT SUMMARY
+========================================================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.summary-box {
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+}
+
+.summary-number {
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: var(--primary);
+}
+
+.summary-label {
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   PRINT BUTTON
+========================================================= */
+
+.print-btn {
+    border: none;
+
+    padding: 11px 17px;
+
+    border-radius: 11px;
+
+    background: white;
+
+    color: var(--primary);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.print-btn:hover {
+    background: #f1f5f9;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    padding: 35px;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1100px) {
+
+    .stat-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .camp-info-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width: 800px) {
+
+    .report-page {
+        padding: 18px;
+    }
+
+    .report-header-content {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+@media(max-width: 600px) {
+
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .camp-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-title {
+        font-size: 22px;
+    }
+
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    .report-page {
+        padding: 0;
+    }
+
+    .print-btn {
+        display: none;
+    }
+
+    .section-card,
+    .stat-card,
+    .report-header {
+        box-shadow: none;
+    }
+
+}
+
+</style>
+
+
+<div class="report-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="report-header">
+
+        <div class="report-header-content">
+
+            <div class="report-title-section">
+
+                <div class="report-icon">
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                </div>
+
+                <div>
+
+                    <h1 class="report-title">
+                        Camp Report
+                    </h1>
+
+                    <p class="report-subtitle">
+                        Complete relief camp activity and resource report
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <button
+                    type="button"
+                    class="print-btn"
+                    onclick="window.print()">
+
+                    <i class="bi bi-printer"></i>
+
+                    Print Report
+
+                </button>
+
+                <div
+                    class="report-date"
+                    style="margin-top:10px;">
+
+                    Generated:
+                    {{ generated_date|date:"d M Y" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="stat-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon icon-red">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div>
+
+                <div class="stat-label">
+                    Disaster Victims
+                </div>
+
+                <div class="stat-value">
+                    {{ victim_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon icon-blue">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
+
+            <div>
+
+                <div class="stat-label">
+                    Requirements
+                </div>
+
+                <div class="stat-value">
+                    {{ requirement_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon icon-green">
+                <i class="bi bi-gift-fill"></i>
+            </div>
+
+            <div>
+
+                <div class="stat-label">
+                    Goods Donations
+                </div>
+
+                <div class="stat-value">
+                    {{ donation_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon icon-orange">
+                <i class="bi bi-person-check-fill"></i>
+            </div>
+
+            <div>
+
+                <div class="stat-label">
+                    Volunteers
+                </div>
+
+                <div class="stat-value">
+                    {{ volunteer_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CAMP INFORMATION
+    ====================================================== -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <i class="bi bi-building"></i>
+
+            <h3>
+                Camp Information
+            </h3>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="camp-info-grid">
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Camp Name
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.campname }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Place
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.place }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        District
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.district }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Capacity
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.capacity }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Camp Date
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.date|date:"d M Y" }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Coordinator
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.COORDINATOR.name }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Coordinator Phone
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.COORDINATOR.phone }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Latitude
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.latitude }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Longitude
+                    </div>
+
+                    <div class="info-value">
+                        {{ camp.longitude }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <i class="bi bi-bar-chart-fill"></i>
+
+            <h3>
+                Activity Summary
+            </h3>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="summary-grid">
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ donation_count }}
+                    </div>
+
+                    <div class="summary-label">
+                        Total Goods Donations
+                    </div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ total_donation_quantity|floatformat:0 }}
+                    </div>
+
+                    <div class="summary-label">
+                        Total Donated Quantity
+                    </div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ daily_report_count }}
+                    </div>
+
+                    <div class="summary-label">
+                        Volunteer Activity Reports
+                    </div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ completed_tasks }}
+                    </div>
+
+                    <div class="summary-label">
+                        Completed Donation Tasks
+                    </div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ pending_tasks }}
+                    </div>
+
+                    <div class="summary-label">
+                        Pending Donation Tasks
+                    </div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-number">
+                        {{ requirement_count }}
+                    </div>
+
+                    <div class="summary-label">
+                        Resource Requirements
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         REQUIREMENTS + DONATIONS
+    ====================================================== -->
+
+    <div class="two-column">
+
+
+        <!-- REQUIREMENTS -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <i class="bi bi-clipboard-check"></i>
+
+                <h3>
+                    Camp Requirements
+                </h3>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                {% if recent_requirements %}
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Requirement</th>
+                            <th>Quantity</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for req in recent_requirements %}
+
+                        <tr>
+
+                            <td>
+                                {{ req.date|date:"d M Y" }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ req.title }}
+                                </strong>
+
+                                <br>
+
+                                <small style="color:#64748b;">
+                                    {{ req.details }}
+                                </small>
+                            </td>
+
+                            <td>
+                                {{ req.needquantity }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                    <div class="empty">
+                        No requirements found.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- DONATIONS -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <i class="bi bi-gift"></i>
+
+                <h3>
+                    Goods Donations
+                </h3>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                {% if recent_donations %}
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for donation in recent_donations %}
+
+                        <tr>
+
+                            <td>
+                                {{ donation.date|date:"d M Y" }}
+                            </td>
+
+                            <td>
+                                {{ donation.REQUIREMENTS.title }}
+                            </td>
+
+                            <td>
+                                {{ donation.quantity }}
+                            </td>
+
+                            <td>
+
+                                {% if donation.status|lower == "collected" %}
+
+                                    <span class="status status-collected">
+                                        Collected
+                                    </span>
+
+                                {% elif donation.status|lower == "pending" %}
+
+                                    <span class="status status-pending">
+                                        Pending
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status status-other">
+                                        {{ donation.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                    <div class="empty">
+                        No goods donations found.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VOLUNTEER TASKS
+    ====================================================== -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <i class="bi bi-person-workspace"></i>
+
+            <h3>
+                Volunteer Donation Tasks
+            </h3>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            {% if donation_tasks %}
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Donation</th>
+
+                        <th>Volunteer</th>
+
+                        <th>Phone</th>
+
+                        <th>Quantity</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for task in donation_tasks %}
+
+                    <tr>
+
+                        <td>
+                            {{ task.date|date:"d M Y" }}
+                        </td>
+
+                        <td>
+                            {{ task.DONATE.REQUIREMENTS.title }}
+                        </td>
+
+                        <td>
+                            {{ task.VOLUNTEER.name }}
+                        </td>
+
+                        <td>
+                            {{ task.VOLUNTEER.phone }}
+                        </td>
+
+                        <td>
+                            {{ task.DONATE.quantity }}
+                        </td>
+
+                        <td>
+
+                            {% if task.status|lower == "collected" %}
+
+                                <span class="status status-collected">
+                                    Collected
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-pending">
+                                    {{ task.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No volunteer tasks found.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VOLUNTEER DAILY REPORTS
+    ====================================================== -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <i class="bi bi-journal-text"></i>
+
+            <h3>
+                Volunteer Activity Reports
+            </h3>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            {% if volunteer_reports %}
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Volunteer</th>
+
+                        <th>Activity / Notes</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for report in volunteer_reports %}
+
+                    <tr>
+
+                        <td>
+                            {{ report.date|date:"d M Y" }}
+                        </td>
+
+                        <td>
+                            {{ report.VOLUNTEER.name }}
+                        </td>
+
+                        <td>
+                            {{ report.notes }}
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No volunteer activity reports found.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VICTIM DETAILS
+    ====================================================== -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <i class="bi bi-people-fill"></i>
+
+            <h3>
+                Disaster Victims
+            </h3>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            {% if victims %}
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Gender</th>
+
+                        <th>Date of Birth</th>
+
+                        <th>Place</th>
+
+                        <th>District</th>
+
+                        <th>Phone</th>
+
+                        <th>Disaster Details</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for victim in victims %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ victim.name }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ victim.gender }}
+                        </td>
+
+                        <td>
+                            {{ victim.dob|date:"d M Y" }}
+                        </td>
+
+                        <td>
+                            {{ victim.place }}
+                        </td>
+
+                        <td>
+                            {{ victim.district }}
+                        </td>
+
+                        <td>
+                            {{ victim.phone }}
+                        </td>
+
+                        <td>
+                            {{ victim.disasterdetails }}
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No disaster victims registered for this camp.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1433 @@
+{% extends "camp coordinator/home copy.html" %}
+
+
+
+{% block body %}
+
+<style>
+
+/* =====================================================
+   EDIT PROFILE PAGE
+===================================================== */
+
+.edit-profile-page {
+    padding: 28px 30px 45px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.edit-page-header {
+    margin-bottom: 25px;
+}
+
+.edit-page-header .small-title {
+    color: #dc3545;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.edit-page-header h1 {
+    margin: 0;
+
+    font-family:
+        "Plus Jakarta Sans",
+        sans-serif;
+
+    font-size: 28px;
+    font-weight: 800;
+
+    color: #102a43;
+}
+
+.edit-page-header p {
+    margin: 7px 0 0;
+
+    color: #718096;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   MAIN EDIT CARD
+===================================================== */
+
+.edit-card {
+    background: #ffffff;
+
+    border:
+        1px solid #e6edf3;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(16,42,67,.05);
+}
+
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.edit-card-header {
+    background:
+        linear-gradient(
+            120deg,
+            #102a43,
+            #155d82,
+            #167d83
+        );
+
+    color: white;
+
+    padding: 25px 28px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.edit-card-header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    right: -70px;
+    top: -100px;
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+.edit-card-header-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.edit-header-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.edit-card-header h3 {
+    margin: 0;
+
+    font-family:
+        "Plus Jakarta Sans",
+        sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+.edit-card-header p {
+    margin: 4px 0 0;
+
+    color: #d8e8f2;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   FORM AREA
+===================================================== */
+
+.edit-form {
+    padding: 30px;
+}
+
+
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
+
+.photo-section {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    margin-bottom: 27px;
+
+    border:
+        1px solid #e6edf3;
+
+    background:
+        #f8fafc;
+
+    border-radius: 15px;
+}
+
+.current-photo {
+    width: 90px;
+    height: 90px;
+
+    min-width: 90px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background:
+        #e2e8f0;
+
+    border:
+        4px solid white;
+
+    box-shadow:
+        0 5px 15px rgba(16,42,67,.08);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.current-photo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.current-photo i {
+    font-size: 38px;
+
+    color: #94a3b8;
+}
+
+.photo-info h5 {
+    margin: 0 0 5px;
+
+    color: #102a43;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.photo-info p {
+    margin: 0 0 12px;
+
+    color: #718096;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+.photo-input {
+    position: relative;
+
+    display: inline-flex;
+}
+
+.photo-input input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+}
+
+.photo-input label {
+    cursor: pointer;
+
+    padding:
+        8px 13px;
+
+    border-radius: 8px;
+
+    background:
+        #102a43;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+}
+
+.photo-input label:hover {
+    background:
+        #1d6fa5;
+}
+
+
+/* =====================================================
+   FORM SECTION
+===================================================== */
+
+.form-section-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 10px;
+
+    border-bottom:
+        1px solid #edf2f6;
+}
+
+.form-section-title i {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+
+    background:
+        #e9f5fb;
+
+    color:
+        #1d6fa5;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+}
+
+.form-section-title h5 {
+    margin: 0;
+
+    color: #102a43;
+
+    font-family:
+        "Plus Jakarta Sans",
+        sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.form-section-title span {
+    display: block;
+
+    color: #718096;
+
+    font-size: 9px;
+
+    margin-top: 2px;
+}
+
+
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-label-custom {
+    display: block;
+
+    color: #334155;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.required {
+    color: #dc3545;
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.form-control-custom,
+.form-select-custom {
+    width: 100%;
+
+    min-height: 44px;
+
+    border:
+        1px solid #dce4ec;
+
+    border-radius: 10px;
+
+    background:
+        #ffffff;
+
+    color: #172b3a;
+
+    padding:
+        10px 13px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        .2s ease;
+}
+
+.form-control-custom:focus,
+.form-select-custom:focus {
+    border-color:
+        #1d6fa5;
+
+    box-shadow:
+        0 0 0 3px rgba(29,111,165,.10);
+}
+
+.form-control-custom::placeholder {
+    color: #a0aec0;
+}
+
+
+/* =====================================================
+   TEXTAREA
+===================================================== */
+
+textarea.form-control-custom {
+    min-height: 100px;
+
+    resize: vertical;
+}
+
+
+/* =====================================================
+   GENDER
+===================================================== */
+
+.gender-options {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.gender-option {
+    position: relative;
+}
+
+.gender-option input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.gender-option label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        10px 16px;
+
+    border:
+        1px solid #dce4ec;
+
+    border-radius: 10px;
+
+    background:
+        white;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        .2s ease;
+}
+
+.gender-option label i {
+    font-size: 14px;
+}
+
+.gender-option input:checked + label {
+    border-color:
+        #dc3545;
+
+    background:
+        #fff0f1;
+
+    color:
+        #dc3545;
+}
+
+
+/* =====================================================
+   INPUT WITH ICON
+===================================================== */
+
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon-wrapper > i {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+.input-icon-wrapper .form-control-custom,
+.input-icon-wrapper .form-select-custom {
+    padding-left: 40px;
+}
+
+
+/* =====================================================
+   FORM NOTE
+===================================================== */
+
+.form-note {
+    margin-top: 5px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.form-divider {
+    height: 1px;
+
+    background:
+        #edf2f6;
+
+    margin:
+        10px 0 25px;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 28px;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid #edf2f6;
+}
+
+.btn-save {
+    border: none;
+
+    padding:
+        11px 21px;
+
+    border-radius: 10px;
+
+    background:
+        #dc3545;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        .2s ease;
+}
+
+.btn-save:hover {
+    background:
+        #c82333;
+
+    color: white;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(220,53,69,.18);
+}
+
+.btn-cancel {
+    border:
+        1px solid #dce4ec;
+
+    padding:
+        11px 20px;
+
+    border-radius: 10px;
+
+    background:
+        white;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition:
+        .2s ease;
+}
+
+.btn-cancel:hover {
+    background:
+        #f8fafc;
+
+    color:
+        #102a43;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.edit-footer {
+    text-align: center;
+
+    padding:
+        28px 0 5px;
+
+    color:
+        #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 950px) {
+
+    .edit-profile-page {
+        padding:
+            22px 20px 35px;
+    }
+
+}
+
+
+@media(max-width: 650px) {
+
+    .edit-profile-page {
+        padding:
+            20px 15px 30px;
+    }
+
+    .edit-page-header h1 {
+        font-size: 24px;
+    }
+
+    .edit-page-header p {
+        font-size: 11px;
+    }
+
+    .edit-form {
+        padding: 20px;
+    }
+
+    .edit-card-header {
+        padding: 22px;
+    }
+
+    .photo-section {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+
+        text-align: center;
+    }
+
+}
+
+</style>
+
+
+<div class="edit-profile-page">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="edit-page-header">
+
+        <div class="small-title">
+            Camp Coordinator
+        </div>
+
+        <h1>
+            Edit Profile
+        </h1>
+
+        <p>
+            Update your personal information and coordinator details.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         EDIT CARD
+    ================================================== -->
+
+    <div class="edit-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="edit-card-header">
+
+            <div class="edit-card-header-content">
+
+                <div class="edit-header-icon">
+
+                    <i class="bi bi-person-gear"></i>
+
+                </div>
+
+                <div>
+
+                    <h3>
+                        Update Coordinator Profile
+                    </h3>
+
+                    <p>
+                        Keep your DisasterSafe profile information up to date.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            class="edit-form"
+            method="POST"
+            action="/myapp/camp_coordinator_editprofile_post/"
+            enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 PROFILE PHOTO
+            ================================================= -->
+
+            <div class="photo-section">
+
+
+                <div class="current-photo">
+
+                    {% if data.photo %}
+
+                        <img
+                            src="{{ data.photo.url }}"
+                            alt="Current Profile Photo">
+
+                    {% else %}
+
+                        <i class="bi bi-person-fill"></i>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="photo-info">
+
+                    <h5>
+                        Profile Photo
+                    </h5>
+
+                    <p>
+                        Upload a new profile photo to update your account picture.
+                    </p>
+
+                    <div class="photo-input">
+
+                        <input
+                            type="file"
+                            name="photo"
+                            id="photo"
+                            accept="image/*">
+
+                        <label for="photo">
+
+                            <i class="bi bi-camera me-1"></i>
+
+                            Choose New Photo
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PERSONAL INFORMATION
+            ================================================== -->
+
+            <div class="form-section-title">
+
+                <i class="bi bi-person-vcard-fill"></i>
+
+                <div>
+
+                    <h5>
+                        Personal Information
+                    </h5>
+
+                    <span>
+                        Update your basic personal details
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+
+                <!-- NAME -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="name">
+
+                            Full Name
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-person-fill"></i>
+
+                            <input
+                                type="text"
+                                name="textfield"
+                                id="name"
+                                class="form-control-custom"
+                                value="{{ data.name }}"
+                                pattern="[A-Za-z ]*"
+                                placeholder="Enter your full name"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="email">
+
+                            Email Address
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-envelope-fill"></i>
+
+                            <input
+                                type="email"
+                                name="textfield9"
+                                id="email"
+                                readonly
+                                class="form-control-custom"
+                                value="{{ data.email }}"
+                                placeholder="Enter email address"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="phone">
+
+                            Phone Number
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                            <input
+                                type="tel"
+                                name="textfield8"
+                                id="phone"
+                                class="form-control-custom"
+                                value="{{ data.phone }}"
+                                placeholder="Enter phone number"
+                                maxlength="15"
+                                pattern="[9876][0-9]{9}"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE OF BIRTH -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="dob">
+
+                            Date of Birth
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <input
+                                type="date"
+                                name="dob"
+                                id="dob"
+                                class="form-control-custom"
+                                value="{{ data.dob|date:'Y-m-d' }}"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GENDER -->
+
+                <div class="col-12">
+
+                    <div class="form-group">
+
+                        <label class="form-label-custom">
+
+                            Gender
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="gender-options">
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    name="radiobutton"
+                                    id="male"
+                                    value="Male"
+                                    {% if data.gender == "Male" %}checked{% endif %}
+                                    required>
+
+                                <label for="male">
+
+                                    <i class="bi bi-gender-male"></i>
+
+                                    Male
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    name="radiobutton"
+                                    id="female"
+                                    value="Female"
+                                    {% if data.gender == "Female" %}checked{% endif %}>
+
+                                <label for="female">
+
+                                    <i class="bi bi-gender-female"></i>
+
+                                    Female
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    name="radiobutton"
+                                    id="other"
+                                    value="Other"
+                                    {% if data.gender == "Other" %}checked{% endif %}>
+
+                                <label for="other">
+
+                                    <i class="bi bi-gender-ambiguous"></i>
+
+                                    Other
+
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIVIDER -->
+
+            <div class="form-divider"></div>
+
+
+            <!-- =================================================
+                 ADDRESS INFORMATION
+            ================================================== -->
+
+            <div class="form-section-title">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                <div>
+
+                    <h5>
+                        Address Information
+                    </h5>
+
+                    <span>
+                        Update your registered location details
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+
+                <!-- PLACE -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="place">
+
+                            Place
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <input
+                                type="text"
+                                name="textfield2"
+                                id="place"
+                                class="form-control-custom"
+                                value="{{ data.place }}"
+                                placeholder="Enter place"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- POST -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="post">
+
+                            Post Office
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-mailbox"></i>
+
+                            <input
+                                type="text"
+                                name="textfield3"
+                                id="post"
+                                class="form-control-custom"
+                                value="{{ data.post }}"
+                                placeholder="Enter post office"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DISTRICT -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="district">
+
+                            District
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-map-fill"></i>
+
+                            <select
+                                name="district"
+                                id="district"
+                                class="form-select-custom"
+                                required>
+
+                                <option value="">
+                                    Select District
+                                </option>
+
+                                <option value="Thiruvananthapuram"
+                                    {% if data.district == "Thiruvananthapuram" %}selected{% endif %}>
+                                    Thiruvananthapuram
+                                </option>
+
+                                <option value="Kollam"
+                                    {% if data.district == "Kollam" %}selected{% endif %}>
+                                    Kollam
+                                </option>
+
+                                <option value="Pathanamthitta"
+                                    {% if data.district == "Pathanamthitta" %}selected{% endif %}>
+                                    Pathanamthitta
+                                </option>
+
+                                <option value="Alappuzha"
+                                    {% if data.district == "Alappuzha" %}selected{% endif %}>
+                                    Alappuzha
+                                </option>
+
+                                <option value="Kottayam"
+                                    {% if data.district == "Kottayam" %}selected{% endif %}>
+                                    Kottayam
+                                </option>
+
+                                <option value="Idukki"
+                                    {% if data.district == "Idukki" %}selected{% endif %}>
+                                    Idukki
+                                </option>
+
+                                <option value="Ernakulam"
+                                    {% if data.district == "Ernakulam" %}selected{% endif %}>
+                                    Ernakulam
+                                </option>
+
+                                <option value="Thrissur"
+                                    {% if data.district == "Thrissur" %}selected{% endif %}>
+                                    Thrissur
+                                </option>
+
+                                <option value="Palakkad"
+                                    {% if data.district == "Palakkad" %}selected{% endif %}>
+                                    Palakkad
+                                </option>
+
+                                <option value="Malappuram"
+                                    {% if data.district == "Malappuram" %}selected{% endif %}>
+                                    Malappuram
+                                </option>
+
+                                <option value="Kozhikode"
+                                    {% if data.district == "Kozhikode" %}selected{% endif %}>
+                                    Kozhikode
+                                </option>
+
+                                <option value="Wayanad"
+                                    {% if data.district == "Wayanad" %}selected{% endif %}>
+                                    Wayanad
+                                </option>
+
+                                <option value="Kannur"
+                                    {% if data.district == "Kannur" %}selected{% endif %}>
+                                    Kannur
+                                </option>
+
+                                <option value="Kasaragod"
+                                    {% if data.district == "Kasaragod" %}selected{% endif %}>
+                                    Kasaragod
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PIN -->
+
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label-custom"
+                            for="pin">
+
+                            PIN Code
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-icon-wrapper">
+
+                            <i class="bi bi-pin-map-fill"></i>
+
+                            <input
+                                type="text"
+                                name="textfield4"
+                                id="pin"
+                                class="form-control-custom"
+                                value="{{ data.pin }}"
+                                placeholder="Enter PIN code"
+                                maxlength="6"
+                                pattern="[0-9]{6}"
+                                required>
+
+                        </div>
+
+                        <div class="form-note">
+                            Enter your 6-digit postal PIN code.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM ACTIONS
+            ================================================== -->
+
+            <div class="form-actions">
+
+                <a
+                    href="/myapp/camp_coordinator_viewprofile/"
+                    class="btn-cancel">
+
+                    <i class="bi bi-x-lg me-1"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="bi bi-check2-circle me-1"></i>
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <div class="edit-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

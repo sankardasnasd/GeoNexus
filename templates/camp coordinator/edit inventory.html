@@ -1,0 +1,599 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+    --soft-navy: #eef4f8;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+}
+
+
+/* PAGE */
+
+.inventory-page {
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    margin: auto;
+
+    padding: 42px 35px 60px;
+}
+
+
+/* HEADER */
+
+.inventory-header {
+
+    margin-bottom: 28px;
+}
+
+.header-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    margin-bottom: 8px;
+}
+
+.header-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+.header-description {
+
+    margin: 9px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* CAMP */
+
+.camp-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    margin-bottom: 22px;
+}
+
+.camp-icon {
+
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: var(--soft-navy);
+
+    color: var(--navy);
+
+    font-size: 21px;
+}
+
+.camp-info strong {
+
+    display: block;
+
+    color: var(--navy);
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+.camp-info span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* FORM */
+
+.form-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 7px 25px rgba(15,23,42,.04);
+}
+
+.form-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 23px;
+
+    color: var(--navy);
+
+    font-size: 17px;
+
+    font-weight: 800;
+}
+
+.form-title i {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: var(--soft-navy);
+
+    color: var(--navy);
+}
+
+
+/* GRID */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.form-group.full {
+
+    grid-column: 1 / -1;
+}
+
+
+/* LABEL */
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.form-label span {
+
+    color: #dc3545;
+}
+
+
+/* INPUT */
+
+.form-control {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: .2s ease;
+}
+
+.form-control:focus {
+
+    border-color: var(--navy-light);
+
+    box-shadow:
+        0 0 0 3px rgba(29,111,165,.10);
+}
+
+textarea.form-control {
+
+    min-height: 125px;
+
+    resize: vertical;
+}
+
+
+/* ACTIONS */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 27px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 125px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.cancel-btn {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    color: #475569;
+}
+
+.cancel-btn:hover {
+
+    background: #f8fafc;
+
+    color: var(--navy);
+}
+
+.update-btn {
+
+    border: none;
+
+    background: var(--navy);
+
+    color: white;
+}
+
+.update-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* FOOTER */
+
+.page-footer {
+
+    margin-top: 38px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:700px) {
+
+    .inventory-page {
+
+        padding: 28px 18px 45px;
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+
+        grid-column: auto;
+    }
+
+    .form-card {
+
+        padding: 22px;
+    }
+
+    .form-actions {
+
+        flex-direction: column;
+    }
+
+    .btn {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="inventory-page">
+
+
+    <!-- HEADER -->
+
+    <div class="inventory-header">
+
+        <div class="header-label">
+
+            <i class="bi bi-box-seam-fill"></i>
+
+            CAMP INVENTORY
+
+        </div>
+
+        <h1 class="header-title">
+
+            Edit Inventory
+
+        </h1>
+
+        <p class="header-description">
+
+            Update the inventory information and resource details.
+
+        </p>
+
+    </div>
+
+
+    <!-- CAMP INFO -->
+
+    <div class="camp-info">
+
+        <div class="camp-icon">
+
+            <i class="bi bi-house-heart-fill"></i>
+
+        </div>
+
+        <div>
+
+            <strong>
+
+                {{ data.CAMP.campname }}
+
+            </strong>
+
+            <span>
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                {{ data.CAMP.place }}, {{ data.CAMP.district }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+
+        <div class="form-title">
+
+            <i class="bi bi-pencil-square"></i>
+
+            Update Inventory Information
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="/myapp/edit_inventory_post/">
+
+            {% csrf_token %}
+
+
+            <div class="form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Inventory Name <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        value="{{ data.name }}"
+                        placeholder="Enter inventory name"
+                        required>
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Quantity <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="quantity"
+                        class="form-control"
+                        value="{{ data.quantity }}"
+                        placeholder="Enter quantity"
+                        required>
+
+                </div>
+
+
+                <!-- DETAILS -->
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+
+                        Details <span>*</span>
+
+                    </label>
+
+                    <textarea
+                        name="details"
+                        class="form-control"
+                        placeholder="Enter inventory details..."
+                        required>{{ data.details }}</textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="form-actions">
+
+
+                <a
+                    href="/myapp/view_inventory/"
+                    class="btn cancel-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn update-btn">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Update Inventory
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <div class="page-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

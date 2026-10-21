@@ -1,0 +1,235 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+/* Scoped to .pc-wrap and prefixed pc- so nothing collides with the base template. */
+.pc-wrap{
+    --pc-navy:var(--night,#071326);
+    --pc-navy2:var(--plum,#10294a);
+    --pc-blue:var(--violet,#2b7fe0);
+    --pc-blue2:var(--fuchsia,#4aa3ff);
+    --pc-ink:var(--ink,#0e1c30);
+    --pc-muted:var(--muted,#5f7591);
+    --pc-line:var(--line,#dce6f2);
+    --pc-ok:var(--green,#22c55e);
+    --pc-warn:var(--amber,#f5a524);
+    padding:28px 30px 40px;
+}
+.pc-wrap *{box-sizing:border-box}
+
+/* Banner */
+.pc-banner{
+    position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;margin-bottom:24px;color:#fff;
+    background:linear-gradient(115deg,var(--pc-navy) 0%,var(--pc-navy2) 55%,#17497f 100%);
+    box-shadow:0 18px 40px rgba(16,41,74,.22);
+}
+.pc-banner::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,163,255,.38),rgba(43,127,224,.14) 50%,transparent 70%)}
+.pc-banner > *{position:relative;z-index:2}
+.pc-banner h3{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.pc-banner p{margin:0;max-width:680px;color:#cfe0f2;font-size:14.5px;line-height:1.7}
+
+/* Summary */
+.pc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px}
+.pc-stat{display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;padding:20px 22px;border-radius:18px;background:#fff;border:1px solid var(--pc-line)}
+.pc-stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--pc-blue))}
+.pc-stat.s-warn{--accent:var(--pc-warn)}.pc-stat.s-ok{--accent:var(--pc-ok)}
+.pc-stat-icon{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:21px;
+    background:color-mix(in srgb,var(--accent,var(--pc-blue)) 13%,white);color:var(--accent,var(--pc-blue))}
+.pc-stat strong{display:block;min-height:33px;font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800;line-height:1.1}
+.pc-stat span{display:block;margin-top:2px;font-size:13.5px;color:var(--pc-muted)}
+
+/* Table card */
+.pc-card{border-radius:20px;background:#fff;border:1px solid var(--pc-line);overflow:hidden;box-shadow:0 10px 28px rgba(16,41,74,.05)}
+.pc-card-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 24px;border-bottom:1px solid var(--pc-line)}
+.pc-card-head h5{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--pc-ink)}
+.pc-card-head p{margin:4px 0 0;font-size:14px;color:var(--pc-muted)}
+
+.pc-search{position:relative;width:260px;max-width:100%}
+.pc-search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;color:#8aa2c0}
+.pc-search input{width:100%;height:42px;padding:0 14px 0 38px;border:1px solid var(--pc-line);border-radius:12px;outline:none;font-family:inherit;font-size:14px;color:var(--pc-ink);transition:border-color .2s,box-shadow .2s}
+.pc-search input:focus{border-color:var(--pc-blue);box-shadow:0 0 0 3px rgba(43,127,224,.14)}
+
+.pc-scroll{overflow-x:auto}
+.pc-table{margin:0;min-width:900px;width:100%;border-collapse:collapse}
+.pc-table thead th{padding:16px 20px;background:#f3f8fe;color:var(--pc-muted);font-size:13px;font-weight:700;text-align:left;white-space:nowrap;border-bottom:1px solid var(--pc-line)}
+.pc-table tbody td{padding:18px 20px;font-size:14.5px;color:#2c3e57;vertical-align:middle;border-bottom:1px solid #edf2f8}
+.pc-table tbody tr{transition:background .2s}
+.pc-table tbody tr:hover{background:#f6faff}
+.pc-table tbody tr:last-child td{border-bottom:none}
+
+.pc-user{display:flex;align-items:center;gap:12px}
+.pc-avatar{width:42px;height:42px;min-width:42px;border-radius:12px;display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--pc-blue),var(--pc-blue2))}
+.pc-name{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:var(--pc-ink)}
+.pc-role{display:block;margin-top:2px;font-size:13px;color:var(--pc-muted)}
+.pc-text{max-width:360px;line-height:1.6;color:#475569}
+.pc-date{white-space:nowrap;color:var(--pc-muted)}
+.pc-date i{margin-right:6px;color:var(--pc-blue)}
+
+.pc-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap}
+.pc-badge i{font-size:12px}
+.pc-badge.pending{background:rgba(245,165,36,.15);color:#a15d05}
+.pc-badge.replied{background:rgba(34,197,94,.14);color:#127a3d}
+
+.pc-reply-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:11px;font-size:14px;font-weight:700;color:#fff;white-space:nowrap;
+    background:linear-gradient(135deg,var(--pc-blue),var(--pc-blue2));box-shadow:0 8px 18px rgba(43,127,224,.3);transition:transform .2s,box-shadow .2s}
+.pc-reply-btn:hover{color:#fff;transform:translateY(-2px);box-shadow:0 12px 24px rgba(43,127,224,.42)}
+.pc-reply-btn:focus-visible,.pc-search input:focus-visible{outline:3px solid var(--pc-warn);outline-offset:2px}
+.pc-reply-text{max-width:300px;line-height:1.6;color:#475569}
+
+.pc-empty{text-align:center;padding:65px 20px}
+.pc-empty i{font-size:54px;color:#b9cde4}
+.pc-empty h5{margin:16px 0 6px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--pc-ink)}
+.pc-empty p{margin:0;font-size:14.5px;color:var(--pc-muted)}
+#noMatch{display:none}
+
+@media(max-width:900px){.pc-summary{grid-template-columns:1fr}}
+@media(max-width:700px){
+    .pc-wrap{padding:18px 14px 32px}
+    .pc-banner{padding:24px 20px}
+    .pc-banner h3{font-size:22px}
+    .pc-search{width:100%}
+}
+</style>
+
+<div class="pc-wrap">
+
+    <div class="pc-banner">
+        <h3><i class="bi bi-chat-left-text-fill me-2"></i>User Complaints</h3>
+        <p>Review complaints from registered users, check their status and send replies to resolve them.</p>
+    </div>
+
+    <div class="pc-summary">
+        <div class="pc-stat">
+            <div class="pc-stat-icon"><i class="bi bi-chat-square-text-fill"></i></div>
+            <div><strong>{{ data|length }}</strong><span>Total complaints</span></div>
+        </div>
+        <div class="pc-stat s-warn">
+            <div class="pc-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div><strong id="pendingCount">0</strong><span>Pending complaints</span></div>
+        </div>
+        <div class="pc-stat s-ok">
+            <div class="pc-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+            <div><strong id="repliedCount">0</strong><span>Replied complaints</span></div>
+        </div>
+    </div>
+
+    <div class="pc-card">
+
+        <div class="pc-card-head">
+            <div>
+                <h5>Complaint requests</h5>
+                <p>View and manage all submitted complaints</p>
+            </div>
+            <div class="pc-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Search complaints" aria-label="Search complaints">
+            </div>
+        </div>
+
+        {% if data %}
+        <div class="pc-scroll">
+            <table class="pc-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Complaint</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Reply</th>
+                    </tr>
+                </thead>
+                <tbody id="complaintTable">
+                {% for i in data %}
+                    <tr data-status="{% if i.reply == 'pending' %}pending{% else %}replied{% endif %}">
+
+                        <td><strong>{{ forloop.counter }}</strong></td>
+
+                        <td>
+                            <div class="pc-user">
+                                <div class="pc-avatar">{{ i.USER.name|slice:":1"|upper }}</div>
+                                <div>
+                                    <div class="pc-name">{{ i.USER.name }}</div>
+                                    <span class="pc-role">Registered user</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td><div class="pc-text">{{ i.complaint }}</div></td>
+
+                        <td><div class="pc-date"><i class="bi bi-calendar3"></i>{{ i.date|date:"d M Y" }}</div></td>
+
+                        <td>
+                            {% if i.reply == "pending" %}
+                                <span class="pc-badge pending"><i class="bi bi-clock-fill"></i> Pending</span>
+                            {% else %}
+                                <span class="pc-badge replied"><i class="bi bi-check-circle-fill"></i> Replied</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if i.reply == "pending" %}
+                                <a href="/myapp/send_reply/{{ i.id }}/" class="pc-reply-btn">
+                                    <i class="bi bi-reply-fill"></i> Send reply
+                                </a>
+                            {% else %}
+                                <div class="pc-reply-text">{{ i.reply }}</div>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="pc-empty" id="noMatch">
+                <i class="bi bi-search"></i>
+                <h5>No matching complaints</h5>
+                <p>Try a different name or keyword.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="pc-empty">
+            <i class="bi bi-chat-square-dots"></i>
+            <h5>No complaints yet</h5>
+            <p>Complaints submitted by users will appear here.</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const rows = Array.from(document.querySelectorAll("#complaintTable tr"));
+
+    /* Count from the data-status attribute, not the row text, so a complaint
+       that happens to contain the word "pending" is not miscounted. */
+    let pending = 0, replied = 0;
+    rows.forEach(function(r){
+        r.dataset.status === "pending" ? pending++ : replied++;
+    });
+    document.getElementById("pendingCount").textContent = pending;
+    document.getElementById("repliedCount").textContent = replied;
+
+    const input = document.getElementById("searchInput");
+    const noMatch = document.getElementById("noMatch");
+    if (!input) return;
+
+    input.addEventListener("input", function(){
+        const q = input.value.trim().toLowerCase();
+        let visible = 0;
+        rows.forEach(function(r){
+            const show = r.innerText.toLowerCase().includes(q);
+            r.style.display = show ? "" : "none";
+            if (show) visible++;
+        });
+        noMatch.style.display = visible ? "none" : "block";
+    });
+});
+</script>
+
+{% endblock %}

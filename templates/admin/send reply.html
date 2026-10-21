@@ -1,0 +1,163 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+/* Scoped to .ps-wrap and prefixed ps- so nothing collides with the base template. */
+.ps-wrap{
+    --ps-navy:var(--night,#071326);
+    --ps-navy2:var(--plum,#10294a);
+    --ps-blue:var(--violet,#2b7fe0);
+    --ps-blue2:var(--fuchsia,#4aa3ff);
+    --ps-ink:var(--ink,#0e1c30);
+    --ps-muted:var(--muted,#5f7591);
+    --ps-line:var(--line,#dce6f2);
+    --ps-bad:var(--coral,#ff5d4d);
+    padding:28px 30px 40px;
+}
+.ps-wrap *{box-sizing:border-box}
+.ps-container{max-width:900px;margin:0 auto}
+
+/* Banner */
+.ps-banner{
+    position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;margin-bottom:24px;color:#fff;
+    background:linear-gradient(115deg,var(--ps-navy) 0%,var(--ps-navy2) 55%,#17497f 100%);
+    box-shadow:0 18px 40px rgba(16,41,74,.22);
+}
+.ps-banner::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,163,255,.38),rgba(43,127,224,.14) 50%,transparent 70%)}
+.ps-banner > *{position:relative;z-index:2}
+.ps-banner h3{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.ps-banner p{margin:0;max-width:680px;color:#cfe0f2;font-size:14.5px;line-height:1.7}
+
+/* Card */
+.ps-card{padding:30px;border-radius:20px;background:#fff;border:1px solid var(--ps-line);box-shadow:0 10px 28px rgba(16,41,74,.05)}
+.ps-head{display:flex;align-items:center;gap:15px;padding-bottom:22px;margin-bottom:24px;border-bottom:1px solid var(--ps-line)}
+.ps-head-icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:rgba(43,127,224,.12);color:var(--ps-blue)}
+.ps-head h5{margin:0 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--ps-ink)}
+.ps-head p{margin:0;font-size:14px;color:var(--ps-muted)}
+
+.ps-label{display:block;margin-bottom:9px;font-size:14px;font-weight:700;color:var(--ps-ink)}
+.ps-label span{color:var(--ps-bad)}
+.ps-textarea{
+    width:100%;min-height:220px;resize:vertical;padding:16px 17px;border:1px solid var(--ps-line);border-radius:14px;
+    font-family:inherit;font-size:15px;line-height:1.7;color:var(--ps-ink);background:#fbfdff;outline:none;
+    transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.ps-textarea::placeholder{color:#8aa2c0}
+.ps-textarea:focus{border-color:var(--ps-blue);background:#fff;box-shadow:0 0 0 4px rgba(43,127,224,.14)}
+.ps-textarea.invalid{border-color:var(--ps-bad);box-shadow:0 0 0 4px rgba(255,93,77,.12)}
+.ps-count{margin-top:7px;text-align:right;font-size:12.5px;color:var(--ps-muted)}
+.ps-error{display:none;margin-top:8px;font-size:13px;font-weight:600;color:#b8321f}
+
+.ps-note{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:13px 15px;border-radius:12px;background:#f3f8fe;border:1px solid #e3ecf6;font-size:13px;line-height:1.6;color:var(--ps-muted)}
+.ps-note i{margin-top:2px;font-size:15px;color:var(--ps-blue)}
+
+/* Actions */
+.ps-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:26px;padding-top:22px;border-top:1px solid var(--ps-line)}
+.ps-cancel,.ps-send{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s,transform .2s,box-shadow .2s}
+.ps-cancel{color:var(--ps-navy2);background:#fff;border:1px solid var(--ps-line)}
+.ps-cancel:hover{color:var(--ps-navy2);background:#f3f8fe}
+.ps-send{min-width:160px;border:none;color:#fff;background:linear-gradient(135deg,var(--ps-blue),var(--ps-blue2));box-shadow:0 8px 18px rgba(43,127,224,.3)}
+.ps-send:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(43,127,224,.42)}
+.ps-send:disabled{opacity:.6;cursor:wait;transform:none}
+.ps-cancel:focus-visible,.ps-send:focus-visible{outline:3px solid var(--amber,#f5a524);outline-offset:2px}
+
+@media(max-width:700px){
+    .ps-wrap{padding:18px 14px 32px}
+    .ps-banner{padding:24px 20px}
+    .ps-banner h3{font-size:22px}
+    .ps-card{padding:22px}
+    .ps-actions{flex-direction:column-reverse}
+    .ps-cancel,.ps-send{width:100%}
+}
+</style>
+
+<div class="ps-wrap">
+<div class="ps-container">
+
+    <div class="ps-banner">
+        <h3><i class="bi bi-reply-fill me-2"></i>Respond to Complaint</h3>
+        <p>Write a clear, helpful reply. The user will see it in the DisasterSafe app.</p>
+    </div>
+
+    <div class="ps-card">
+
+        <div class="ps-head">
+            <div class="ps-head-icon"><i class="bi bi-pencil-square"></i></div>
+            <div>
+                <h5>Write your reply</h5>
+                <p>Enter the response you want to send to the user.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="/myapp/send_reply_post/" id="replyForm" novalidate>
+            {% csrf_token %}
+
+            <label class="ps-label" for="reply">Reply message <span>*</span></label>
+
+            <textarea
+                name="reply"
+                id="reply"
+                class="ps-textarea"
+                placeholder="Write your response to the complaint here..."
+                maxlength="1000"
+                required></textarea>
+
+            <div class="ps-error" id="replyError" role="alert">Enter a reply before sending.</div>
+            <div class="ps-count"><span id="charCount">0</span> / 1000 characters</div>
+
+            <div class="ps-note">
+                <i class="bi bi-info-circle-fill"></i>
+                <div>Keep the reply professional, clear and relevant to the complaint.</div>
+            </div>
+
+            <div class="ps-actions">
+                <a href="/myapp/admin_view_complaints/" class="ps-cancel">
+                    <i class="bi bi-x-lg"></i> Cancel
+                </a>
+                <button type="submit" class="ps-send" id="sendBtn">
+                    <i class="bi bi-send-fill"></i> Send reply
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+    const form = document.getElementById("replyForm");
+    const textarea = document.getElementById("reply");
+    const counter = document.getElementById("charCount");
+    const error = document.getElementById("replyError");
+    const btn = document.getElementById("sendBtn");
+
+    function update(){
+        counter.textContent = textarea.value.length;
+        if (textarea.value.trim()){
+            textarea.classList.remove("invalid");
+            error.style.display = "none";
+        }
+    }
+    textarea.addEventListener("input", update);
+    update();
+
+    form.addEventListener("submit", function(event){
+        // "required" accepts spaces only, so check the trimmed text too.
+        if (!textarea.value.trim()){
+            event.preventDefault();
+            textarea.classList.add("invalid");
+            error.style.display = "block";
+            textarea.focus();
+            return;
+        }
+        btn.disabled = true;   // prevent double submits
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+    });
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,1264 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --primary: #09203f;
+    --primary-dark: #061a33;
+    --primary-light: #163b68;
+
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+
+    --success: #16a34a;
+    --warning: #f59e0b;
+
+    --background: #f4f7fb;
+    --white: #ffffff;
+
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --shadow:
+        0 10px 30px rgba(15, 23, 42, 0.07);
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.donation-page {
+    padding: 28px;
+    background: var(--background);
+    min-height: calc(100vh - 76px);
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-banner {
+    width: 100%;
+    padding: 30px 32px;
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            110deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
+    color: white;
+
+    box-shadow:
+        0 12px 30px rgba(9, 32, 63, 0.18);
+
+    margin-bottom: 25px;
+}
+
+.page-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.banner-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.banner-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,0.13);
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+}
+
+.banner-icon i {
+    font-size: 30px;
+}
+
+.banner-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.banner-subtitle {
+    margin: 6px 0 0;
+    color: rgba(255,255,255,0.72);
+    font-size: 14px;
+}
+
+.banner-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    color: var(--primary);
+
+    background: white;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+.banner-button:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 20px;
+
+    box-shadow: var(--shadow);
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.summary-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        #eef4fb;
+
+    color: var(--primary);
+
+    font-size: 23px;
+}
+
+.summary-card.amount .summary-icon {
+    background: #ecfdf5;
+    color: var(--success);
+}
+
+.summary-card.requirement .summary-icon {
+    background: #fff7ed;
+    color: var(--warning);
+}
+
+.summary-info span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+}
+
+.summary-info strong {
+    color: var(--text-dark);
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.section-title i {
+    color: var(--primary);
+
+    font-size: 22px;
+}
+
+.section-title h3 {
+    margin: 0;
+
+    color: var(--text-dark);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.section-count {
+    background: #eaf0f7;
+
+    color: var(--primary);
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+/* =========================================================
+   DONATION GRID
+========================================================= */
+
+.donation-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+/* =========================================================
+   DONATION CARD
+========================================================= */
+
+.donation-card {
+    background: white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.donation-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 16px 35px
+        rgba(15, 23, 42, 0.10);
+}
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.card-top {
+    padding: 18px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #eef4fb
+        );
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.card-top-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+}
+
+.requirement-title {
+    color: var(--text-dark);
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    margin: 0;
+}
+
+.request-id {
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+/* =========================================================
+   AMOUNT BADGE
+========================================================= */
+
+.amount-badge {
+    flex-shrink: 0;
+
+    padding: 9px 13px;
+
+    border-radius: 11px;
+
+    background:
+        #ecfdf5;
+
+    color:
+        var(--success);
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.card-body {
+    padding: 20px;
+}
+
+/* =========================================================
+   DONOR
+========================================================= */
+
+.info-section {
+    margin-bottom: 18px;
+}
+
+.info-section-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    color: var(--primary);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.info-section-title i {
+    font-size: 17px;
+}
+
+.donor-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    border-radius: 13px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid var(--border);
+}
+
+.donor-avatar {
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+.donor-name {
+    margin: 0;
+
+    color: var(--text-dark);
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.donor-contact {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+}
+
+/* =========================================================
+   DETAIL ROWS
+========================================================= */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.detail-item {
+    padding: 11px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 12px;
+}
+
+.detail-label {
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    margin-bottom: 4px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+}
+
+.detail-value {
+    color: var(--text-dark);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description-box {
+    padding: 13px;
+
+    border-radius: 12px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid var(--border);
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   BLOCKCHAIN SECTION
+========================================================= */
+
+.blockchain-box {
+    margin-top: 18px;
+
+    padding: 14px;
+
+    border-radius: 13px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid var(--border);
+}
+
+.blockchain-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--primary);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+.blockchain-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+}
+
+.blockchain-row:last-child {
+    margin-bottom: 0;
+}
+
+.blockchain-label {
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    flex-shrink: 0;
+}
+
+.blockchain-value {
+    color: var(--text-dark);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-align: right;
+
+    word-break: break-all;
+}
+
+.hash-value {
+    max-width: 230px;
+}
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.card-footer {
+    padding: 14px 20px;
+
+    border-top:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.date-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+.date-box i {
+    color: var(--primary);
+
+    font-size: 17px;
+}
+
+.verified-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background:
+        #ecfdf5;
+
+    color:
+        var(--success);
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-card {
+    grid-column: 1 / -1;
+
+    background: white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 60px 30px;
+
+    text-align: center;
+
+    box-shadow: var(--shadow);
+}
+
+.empty-icon {
+    width: 82px;
+    height: 82px;
+
+    margin:
+        0 auto 18px;
+
+    border-radius: 23px;
+
+    background:
+        #eef4fb;
+
+    color: var(--primary);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 38px;
+}
+
+.empty-card h3 {
+    margin: 0 0 8px;
+
+    color: var(--text-dark);
+
+    font-size: 21px;
+}
+
+.empty-card p {
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .donation-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 850px) {
+
+    .summary-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .page-banner-content {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .donation-page {
+        padding: 16px;
+    }
+
+    .page-banner {
+        padding: 22px;
+    }
+
+    .banner-title {
+        font-size: 22px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-top-row {
+        flex-direction: column;
+    }
+
+    .amount-badge {
+        align-self: flex-start;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+
+<div class="donation-page">
+
+    <!-- =====================================================
+         PAGE BANNER
+    ====================================================== -->
+
+    <div class="page-banner">
+
+        <div class="page-banner-content">
+
+            <div class="banner-left">
+
+                <div class="banner-icon">
+                    <i class="bi bi-cash-coin"></i>
+                </div>
+
+                <div>
+
+                    <h1 class="banner-title">
+                        Donations
+                    </h1>
+
+                    <p class="banner-subtitle">
+                        View donations received for your relief camp requirements
+                    </p>
+
+                </div>
+
+            </div>
+
+            <a
+                href="/myapp/camp_coordinator_home/"
+                class="banner-button"
+            >
+                <i class="bi bi-house-fill"></i>
+                Back to Home
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div class="summary-info">
+
+                <span>
+                    Total Donations
+                </span>
+
+                <strong>
+                    {{ data|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card amount">
+
+            <div class="summary-icon">
+                <i class="bi bi-currency-rupee"></i>
+            </div>
+
+            <div class="summary-info">
+
+                <span>
+                    Donation Records
+                </span>
+
+                <strong>
+                    {{ data|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card requirement">
+
+            <div class="summary-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div class="summary-info">
+
+                <span>
+                    Camp Requirements
+                </span>
+
+                <strong>
+                    {{ data|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SECTION HEADER
+    ====================================================== -->
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <i class="bi bi-wallet2"></i>
+
+            <h3>
+                Donation Records
+            </h3>
+
+        </div>
+
+        <div class="section-count">
+
+            {{ data|length }} Records
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DONATION CARDS
+    ====================================================== -->
+
+    <div class="donation-grid">
+
+        {% if data %}
+
+            {% for item in data %}
+
+                <div class="donation-card">
+
+                    <!-- CARD TOP -->
+
+                    <div class="card-top">
+
+                        <div class="card-top-row">
+
+                            <div>
+
+                                <h3 class="requirement-title">
+
+                                    {{ item.title }}
+
+                                </h3>
+
+                                <div class="request-id">
+
+                                    Request ID:
+                                    #{{ item.request_id }}
+
+                                </div>
+
+                            </div>
+
+                            <div class="amount-badge">
+
+                                ₹ {{ item.amount }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CARD BODY -->
+
+                    <div class="card-body">
+
+
+                        <!-- DONOR -->
+
+                        <div class="info-section">
+
+                            <div class="info-section-title">
+
+                                <i class="bi bi-person-circle"></i>
+
+                                Donor Information
+
+                            </div>
+
+
+                            <div class="donor-box">
+
+                                <div class="donor-avatar">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="donor-name">
+
+                                        {{ item.donor_name }}
+
+                                    </p>
+
+                                    <div class="donor-contact">
+
+                                        {{ item.donor_email }}
+
+                                        {% if item.donor_phone != "-" %}
+
+                                            · {{ item.donor_phone }}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- REQUIREMENT -->
+
+                        <div class="info-section">
+
+                            <div class="info-section-title">
+
+                                <i class="bi bi-box-seam"></i>
+
+                                Requirement
+
+                            </div>
+
+
+                            <div class="details-grid">
+
+                                <div class="detail-item">
+
+                                    <div class="detail-label">
+                                        Required Quantity
+                                    </div>
+
+                                    <div class="detail-value">
+
+                                        {{ item.needquantity }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-item">
+
+                                    <div class="detail-label">
+                                        Camp
+                                    </div>
+
+                                    <div class="detail-value">
+
+                                        {{ item.campname }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-item">
+
+                                    <div class="detail-label">
+                                        Location
+                                    </div>
+
+                                    <div class="detail-value">
+
+                                        {{ item.place }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-item">
+
+                                    <div class="detail-label">
+                                        Donation Date
+                                    </div>
+
+                                    <div class="detail-value">
+
+                                        {{ item.date }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DETAILS -->
+
+                        <div class="info-section">
+
+                            <div class="info-section-title">
+
+                                <i class="bi bi-card-text"></i>
+
+                                Requirement Details
+
+                            </div>
+
+                            <div class="description-box">
+
+                                {{ item.details }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BLOCKCHAIN -->
+
+                        {% comment %} <div class="blockchain-box">
+
+                            <div class="blockchain-header">
+
+                                <i class="bi bi-shield-check"></i>
+
+                                Blockchain Verification
+
+                            </div>
+
+
+                            <div class="blockchain-row">
+
+                                <span class="blockchain-label">
+                                    Blockchain ID
+                                </span>
+
+                                <span class="blockchain-value">
+
+                                    #{{ item.bc_id }}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="blockchain-row">
+
+                                <span class="blockchain-label">
+                                    User ID
+                                </span>
+
+                                <span class="blockchain-value">
+
+                                    {{ item.user_id }}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="blockchain-row">
+
+                                <span class="blockchain-label">
+                                    Transaction Hash
+                                </span>
+
+                                <span class="blockchain-value hash-value">
+
+                                    {{ item.hash }}
+
+                                </span>
+
+                            </div>
+
+                        </div> {% endcomment %}
+
+                    </div>
+
+
+                    <!-- CARD FOOTER -->
+
+                    <div class="card-footer">
+
+                        <div class="date-box">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            {{ item.date }}
+
+                        </div>
+
+
+                        <div class="verified-badge">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Blockchain Verified
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <!-- EMPTY -->
+
+            <div class="empty-card">
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-wallet2"></i>
+
+                </div>
+
+                <h3>
+                    No Donations Yet
+                </h3>
+
+                <p>
+                    No blockchain donations have been received
+                    for your camp requirements.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

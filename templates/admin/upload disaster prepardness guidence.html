@@ -1,0 +1,372 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --navy: #102a43;
+    --blue: #1d6fa5;
+    --bg: #f5f7fb;
+    --white: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+.guideline-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 35px 60px;
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-label {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    margin-bottom: 7px;
+}
+
+.page-title {
+    margin: 0;
+    color: var(--navy);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.page-description {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.form-label i {
+    color: var(--blue);
+    margin-right: 5px;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    background: #f8fafc;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: .2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: white;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,111,165,.10);
+}
+
+textarea.form-control {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 22px;
+    border-top: 1px solid #edf2f7;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.btn-primary {
+    border: none;
+    background: var(--navy);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--blue);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--navy);
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+}
+
+@media(max-width:700px) {
+
+    .guideline-page {
+        padding: 25px 15px 45px;
+    }
+
+    .page-title {
+        font-size: 27px;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="guideline-page">
+
+    <div class="page-header">
+
+        <div class="page-label">
+            <i class="bi bi-shield-check"></i>
+            DISASTER MANAGEMENT
+        </div>
+
+        <h1 class="page-title">
+            Add Preparedness Guideline
+        </h1>
+
+        <p class="page-description">
+            Create safety instructions and emergency preparedness guidelines for disaster situations.
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <form
+            method="POST"
+            action="/myapp/admin_add_preparedness_guideline_post/">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+
+                <!-- TITLE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        <i class="bi bi-card-heading"></i>
+                        Guideline Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        class="form-control"
+                        placeholder="Enter guideline title"
+                        required>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        <i class="bi bi-tags-fill"></i>
+                        Category
+                    </label>
+
+                    <select
+                        name="category"
+                        class="form-select"
+                        required>
+
+                        <option value="">Select category</option>
+
+                        <option value="Flood">
+                            Flood
+                        </option>
+
+                        <option value="Earthquake">
+                            Earthquake
+                        </option>
+
+                        <option value="Landslide">
+                            Landslide
+                        </option>
+
+                        <option value="Cyclone">
+                            Cyclone
+                        </option>
+
+                        <option value="Fire">
+                            Fire
+                        </option>
+
+                        <option value="General">
+                            General Disaster Preparedness
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group full-width">
+
+                    <label class="form-label">
+                        <i class="bi bi-info-circle-fill"></i>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        class="form-control"
+                        placeholder="Enter the preparedness guideline description..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- PRECAUTIONS -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        <i class="bi bi-shield-fill-check"></i>
+                        Precautions
+                    </label>
+
+                    <textarea
+                        name="precautions"
+                        class="form-control"
+                        placeholder="Enter safety precautions..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- EMERGENCY STEPS -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Emergency Steps
+                    </label>
+
+                    <textarea
+                        name="emergency_steps"
+                        class="form-control"
+                        placeholder="Enter emergency steps..."
+                        required></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a
+                    href="/myapp/admin_view_preparedness_guidelines/"
+                    class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    <i class="bi bi-check-lg"></i>
+                    Save Guideline
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

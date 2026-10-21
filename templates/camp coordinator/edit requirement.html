@@ -1,0 +1,614 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --red: #dc3545;
+}
+
+
+/* PAGE */
+
+.edit-page {
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    margin: auto;
+
+    padding: 40px 30px 60px;
+}
+
+
+/* HEADER */
+
+.edit-header {
+
+    margin-bottom: 28px;
+}
+
+
+.edit-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+}
+
+
+.edit-title {
+
+    margin: 6px 0 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+
+.edit-description {
+
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* CARD */
+
+.edit-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(15,23,42,.05);
+}
+
+
+/* TOP */
+
+.edit-card-top {
+
+    padding: 25px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #102a43,
+            #163b68
+        );
+
+    color: white;
+}
+
+
+.edit-card-top h3 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+.edit-card-top p {
+
+    margin: 6px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+}
+
+
+/* BODY */
+
+.edit-body {
+
+    padding: 32px;
+}
+
+
+/* CAMP */
+
+.camp-reference {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 27px;
+
+    padding: 14px;
+
+    border-radius: 11px;
+
+    background: #eef4f8;
+
+    border: 1px solid #dce8f0;
+}
+
+
+.camp-reference i {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: var(--navy);
+
+    color: white;
+}
+
+
+.camp-reference strong {
+
+    display: block;
+
+    color: var(--navy);
+
+    font-size: 14px;
+}
+
+
+.camp-reference span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+/* LABEL */
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.required {
+
+    color: var(--red);
+}
+
+
+/* INPUT */
+
+.form-input {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+
+.form-input:focus {
+
+    border-color: var(--navy-light);
+
+    box-shadow:
+        0 0 0 3px rgba(29,111,165,.09);
+}
+
+
+textarea.form-input {
+
+    min-height: 125px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+/* ACTIONS */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.cancel-btn,
+.update-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 44px;
+
+    padding: 11px 21px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.cancel-btn {
+
+    border: 1px solid var(--border);
+
+    background: white;
+
+    color: #475569;
+}
+
+
+.update-btn {
+
+    border: none;
+
+    background: var(--navy);
+
+    color: white;
+}
+
+
+.update-btn:hover {
+
+    background: var(--navy-light);
+}
+
+
+/* FOOTER */
+
+.footer {
+
+    margin-top: 35px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+    .edit-page {
+
+        padding: 25px 15px 45px;
+    }
+
+    .edit-title {
+
+        font-size: 27px;
+    }
+
+    .edit-body {
+
+        padding: 22px;
+    }
+
+    .form-actions {
+
+        flex-direction: column-reverse;
+    }
+
+    .cancel-btn,
+    .update-btn {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="edit-page">
+
+
+    <div class="edit-header">
+
+        <div class="edit-label">
+
+            <i class="bi bi-pencil-square me-1"></i>
+
+            CAMP REQUIREMENTS
+
+        </div>
+
+        <h1 class="edit-title">
+
+            Edit Requirement
+
+        </h1>
+
+        <p class="edit-description">
+
+            Update the requirement information for this relief camp.
+
+        </p>
+
+    </div>
+
+
+    <form
+        method="POST"
+        action="/myapp/edit_requirement_post/">
+
+        {% csrf_token %}
+
+
+        <div class="edit-card">
+
+
+            <div class="edit-card-top">
+
+                <h3>
+
+                    <i class="bi bi-pencil-square me-2"></i>
+
+                    Update Requirement
+
+                </h3>
+
+                <p>
+
+                    Modify the existing resource requirement details.
+
+                </p>
+
+            </div>
+
+
+            <div class="edit-body">
+
+
+                <div class="camp-reference">
+
+                    <i class="bi bi-house-heart-fill"></i>
+
+                    <div>
+
+                        <strong>
+
+                            {{ camp.campname }}
+
+                        </strong>
+
+                        <span>
+
+                            {{ camp.place }}, {{ camp.district }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4">
+
+
+                    <!-- DATE -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Required Date
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="needdate"
+                            class="form-input"
+                            value="{{ data.date|date:'Y-m-d' }}"
+                            required>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Requirement Title
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-input"
+                            value="{{ data.title }}"
+                            maxlength="150"
+                            required>
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Required Quantity
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="needquantity"
+                            class="form-input"
+                            value="{{ data.needquantity }}"
+                            maxlength="150"
+                            required>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+
+                            Requirement Details
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <textarea
+                            name="details"
+                            class="form-input"
+                            maxlength="150"
+                            required>{{ data.details }}</textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-actions">
+
+
+                    <a
+                        href="/myapp/view_requirements/{{ camp.id }}/"
+                        class="cancel-btn">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="update-btn">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Update Requirement
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <div class="footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

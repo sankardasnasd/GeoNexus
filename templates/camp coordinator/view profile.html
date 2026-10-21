@@ -1,0 +1,1074 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+/* =====================================================
+   PROFILE PAGE
+===================================================== */
+
+.profile-page {
+    padding: 28px 30px 45px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.profile-page-header {
+    margin-bottom: 25px;
+}
+
+.profile-page-header .small-title {
+    color: #dc3545;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.profile-page-header h1 {
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #102a43;
+}
+
+.profile-page-header p {
+    margin: 7px 0 0;
+    color: #718096;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   PROFILE HERO
+===================================================== */
+
+.profile-hero {
+    background:
+        linear-gradient(
+            120deg,
+            #102a43,
+            #155d82,
+            #167d83
+        );
+
+    border-radius: 22px;
+
+    padding: 30px 34px;
+
+    color: white;
+
+    position: relative;
+
+    overflow: hidden;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 15px 40px rgba(16,42,67,.15);
+}
+
+.profile-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    border-radius: 50%;
+
+    right: -90px;
+    top: -140px;
+
+    background: rgba(255,255,255,.07);
+}
+
+.profile-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    border-radius: 50%;
+
+    right: 180px;
+    bottom: -120px;
+
+    background: rgba(255,255,255,.05);
+}
+
+.profile-hero-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+}
+
+
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
+
+.profile-photo-wrapper {
+    width: 120px;
+    height: 120px;
+
+    flex-shrink: 0;
+
+    border-radius: 24px;
+
+    padding: 5px;
+
+    background:
+        rgba(255,255,255,.20);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.12);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 19px;
+
+    object-fit: cover;
+
+    background: #e2e8f0;
+}
+
+
+/* =====================================================
+   PROFILE HERO TEXT
+===================================================== */
+
+.profile-hero-info h2 {
+    margin: 0 0 7px;
+
+    font-family:
+        "Plus Jakarta Sans",
+        sans-serif;
+
+    font-size: 27px;
+
+    font-weight: 800;
+}
+
+.profile-hero-info p {
+    margin: 0 0 14px;
+
+    color: #d8e8f2;
+
+    font-size: 13px;
+}
+
+.role-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        8px 14px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.11);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   PROFILE CARDS
+===================================================== */
+
+.profile-card {
+    background: white;
+
+    border:
+        1px solid #e6edf3;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    box-shadow:
+        0 6px 24px rgba(16,42,67,.045);
+
+    transition:
+        .25s ease;
+}
+
+.profile-card:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(16,42,67,.08);
+}
+
+
+/* =====================================================
+   CARD HEADING
+===================================================== */
+
+.card-heading {
+    padding:
+        21px 24px;
+
+    border-bottom:
+        1px solid #e6edf3;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.card-heading-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 12px;
+
+    background:
+        #e9f5fb;
+
+    color: #1d6fa5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+.card-heading h5 {
+    margin: 0;
+
+    color: #102a43;
+
+    font-family:
+        "Plus Jakarta Sans",
+        sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+.card-heading span {
+    display: block;
+
+    color: #718096;
+
+    font-size: 10px;
+
+    margin-top: 4px;
+}
+
+
+/* =====================================================
+   PROFILE DETAILS
+===================================================== */
+
+.profile-details {
+    padding:
+        8px 24px 22px;
+}
+
+.detail-row {
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        16px 0;
+
+    border-bottom:
+        1px solid #f1f5f9;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-icon {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    border-radius: 11px;
+
+    background:
+        #f8fafc;
+
+    color: #102a43;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 14px;
+
+    font-size: 17px;
+}
+
+.detail-label {
+    font-size: 10px;
+
+    color: #718096;
+
+    margin-bottom: 4px;
+
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 14px;
+
+    color: #172b3a;
+
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   LOCATION CARD
+===================================================== */
+
+.location-box {
+    padding: 24px;
+}
+
+.location-main {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding: 19px;
+
+    border-radius: 14px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid #eef2f7;
+}
+
+.location-icon {
+    width: 47px;
+    height: 47px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        #fff0f1;
+
+    color: #dc3545;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.location-main strong {
+    display: block;
+
+    font-size: 14px;
+
+    color: #172b3a;
+
+    margin-bottom: 6px;
+}
+
+.location-main span {
+    display: block;
+
+    color: #718096;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-box {
+    margin-top: 16px;
+
+    padding: 17px;
+
+    border-radius: 14px;
+
+    background:
+        #eaf8f0;
+
+    border:
+        1px solid #d6f2e2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.status-check {
+    width: 41px;
+    height: 41px;
+
+    min-width: 41px;
+
+    border-radius: 11px;
+
+    background:
+        #d9f7e6;
+
+    color: #198754;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+.status-box strong {
+    display: block;
+
+    color: #166534;
+
+    font-size: 12px;
+
+    margin-bottom: 3px;
+}
+
+.status-box span {
+    color: #4b7a5b;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.profile-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.btn-edit {
+    border: none;
+
+    padding:
+        11px 18px;
+
+    border-radius: 10px;
+
+    background:
+        #102a43;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition:
+        .2s ease;
+}
+
+.btn-edit:hover {
+    background:
+        #1d6fa5;
+
+    color: white;
+
+    transform:
+        translateY(-1px);
+}
+
+.btn-back {
+    border:
+        1px solid #e6edf3;
+
+    padding:
+        11px 18px;
+
+    border-radius: 10px;
+
+    background:
+        white;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition:
+        .2s ease;
+}
+
+.btn-back:hover {
+    background:
+        #f8fafc;
+
+    color: #102a43;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.profile-footer {
+    text-align: center;
+
+    padding:
+        28px 0 5px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 950px) {
+
+    .profile-page {
+        padding:
+            22px 20px 35px;
+    }
+
+}
+
+
+@media(max-width: 650px) {
+
+    .profile-page {
+        padding:
+            20px 15px 30px;
+    }
+
+    .profile-page-header h1 {
+        font-size: 24px;
+    }
+
+    .profile-page-header p {
+        font-size: 11px;
+    }
+
+    .profile-hero {
+        padding: 24px;
+    }
+
+    .profile-hero-content {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .profile-photo-wrapper {
+        width: 110px;
+        height: 110px;
+    }
+
+    .profile-hero-info h2 {
+        font-size: 22px;
+    }
+
+    .profile-hero-info p {
+        font-size: 11px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .btn-edit,
+    .btn-back {
+        text-align: center;
+
+        width: 100%;
+    }
+
+    .detail-row {
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+<div class="profile-page">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="profile-page-header">
+
+        <div class="small-title">
+            Camp Coordinator
+        </div>
+
+        <h1>
+            My Profile
+        </h1>
+
+        <p>
+            View and manage your personal and coordinator information.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         PROFILE HERO
+    ================================================== -->
+
+    <div class="profile-hero">
+
+        <div class="profile-hero-content">
+
+
+            <!-- PROFILE PHOTO -->
+
+            <div class="profile-photo-wrapper">
+
+                {% if data.photo %}
+
+                    <img
+                        src="{{ data.photo.url }}"
+                        class="profile-photo"
+                        alt="Profile Photo">
+
+                {% else %}
+
+                    <div
+                        class="profile-photo d-flex align-items-center justify-content-center">
+
+                        <i
+                            class="bi bi-person-fill text-secondary"
+                            style="font-size:45px;">
+                        </i>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PROFILE INFORMATION -->
+
+            <div class="profile-hero-info">
+
+                <h2>
+                    {{ data.name }}
+                </h2>
+
+                <p>
+                    Camp Coordinator · {{ data.place }}
+                </p>
+
+                <span class="role-badge">
+
+                    <i class="bi bi-patch-check-fill"></i>
+
+                    Verified Camp Coordinator
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MAIN PROFILE CONTENT
+    ================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- =================================================
+             PERSONAL INFORMATION
+        ================================================== -->
+
+        <div class="col-lg-7">
+
+            <div class="profile-card">
+
+
+                <div class="card-heading">
+
+                    <div class="card-heading-icon">
+
+                        <i class="bi bi-person-vcard-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5>
+                            Personal Information
+                        </h5>
+
+                        <span>
+                            Basic details of the camp coordinator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-details">
+
+
+                    <!-- NAME -->
+
+                    <div class="detail-row">
+
+                        <div class="detail-icon">
+
+                            <i class="bi bi-person-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="detail-label">
+                                Full Name
+                            </div>
+
+                            <div class="detail-value">
+                                {{ data.name }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="detail-row">
+
+                        <div class="detail-icon">
+
+                            <i class="bi bi-envelope-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="detail-label">
+                                Email Address
+                            </div>
+
+                            <div class="detail-value">
+                                {{ data.email }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="detail-row">
+
+                        <div class="detail-icon">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="detail-label">
+                                Phone Number
+                            </div>
+
+                            <div class="detail-value">
+                                {{ data.phone }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- GENDER -->
+
+                    <div class="detail-row">
+
+                        <div class="detail-icon">
+
+                            <i class="bi bi-gender-ambiguous"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="detail-label">
+                                Gender
+                            </div>
+
+                            <div class="detail-value">
+                                {{ data.gender }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE OF BIRTH -->
+
+                    <div class="detail-row">
+
+                        <div class="detail-icon">
+
+                            <i class="bi bi-calendar3"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="detail-label">
+                                Date of Birth
+                            </div>
+
+                            <div class="detail-value">
+                                {{ data.dob|date:"d M Y" }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOCATION INFORMATION
+        ================================================== -->
+
+        <div class="col-lg-5">
+
+            <div class="profile-card">
+
+
+                <div class="card-heading">
+
+                    <div class="card-heading-icon">
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5>
+                            Location Details
+                        </h5>
+
+                        <span>
+                            Registered coordinator location
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="location-box">
+
+
+                    <!-- LOCATION -->
+
+                    <div class="location-main">
+
+                        <div class="location-icon">
+
+                            <i class="bi bi-geo-alt-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                {{ data.place }}
+                            </strong>
+
+                            <span>
+
+                                {{ data.post }}<br>
+
+                                {{ data.district }}<br>
+
+                                PIN: {{ data.pin }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="status-box">
+
+                        <div class="status-check">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Coordinator Account Active
+                            </strong>
+
+                            <span>
+                                You can manage assigned disaster
+                                relief operations.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="profile-actions">
+
+                        <a
+                            href="/myapp/camp_coordinator_editprofile/"
+                            class="btn-edit">
+
+                            <i class="bi bi-pencil-square me-1"></i>
+
+                            Edit Profile
+
+                        </a>
+
+
+                        <a
+                            href="/myapp/camp_coordinator_home/"
+                            class="btn-back">
+
+                            <i class="bi bi-arrow-left me-1"></i>
+
+                            Back to Dashboard
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <div class="profile-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

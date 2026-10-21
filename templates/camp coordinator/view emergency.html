@@ -1,0 +1,699 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+    :root {
+        --primary: #09203f;
+        --primary-dark: #061a33;
+        --primary-light: #163b68;
+        --background: #f4f7fb;
+        --white: #ffffff;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --success: #16a34a;
+        --success-dark: #15803d;
+        --danger: #ef4444;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text-dark);
+    }
+
+    .content-wrapper {
+        padding: 30px;
+        width: 100%;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(110deg, #09203f, #163b68);
+        border-radius: 18px;
+        padding: 28px 30px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(9, 32, 63, 0.15);
+    }
+
+    .page-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .page-title-section {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .page-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 15px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        margin: 5px 0 0;
+        color: rgba(255,255,255,0.78);
+        font-size: 14px;
+    }
+
+    /* Summary */
+    .summary-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px 22px;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .summary-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 13px;
+        background: rgba(239, 68, 68, 0.10);
+        color: var(--danger);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .summary-info h4 {
+        margin: 0;
+        font-size: 23px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .summary-info span {
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* Table Card */
+    .table-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .table-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .table-card-header h3 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .table-card-header p {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    /* Search */
+    .search-box {
+        position: relative;
+        min-width: 260px;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 14px 10px 36px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 14px;
+        color: var(--text-dark);
+        background: #f8fafc;
+        outline: none;
+    }
+
+    .search-box input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 .2rem rgba(9,32,63,.10);
+        background: white;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .volunteer-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 950px;
+    }
+
+    .volunteer-table thead {
+        background: #f8fafc;
+    }
+
+    .volunteer-table th {
+        padding: 16px 18px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .volunteer-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #edf1f5;
+        font-size: 14px;
+        color: #334155;
+        vertical-align: middle;
+    }
+
+    .volunteer-table tbody tr {
+        transition: .2s ease;
+    }
+
+    .volunteer-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .volunteer-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* User Profile */
+    .volunteer-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .volunteer-photo {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e2e8f0;
+        background: #f1f5f9;
+    }
+
+    .volunteer-name {
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 3px;
+    }
+
+    .volunteer-email {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    /* Location / Date Badges */
+    .camp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(9, 32, 63, 0.08);
+        color: var(--primary);
+        padding: 7px 11px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .time-text {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    /* Status */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-emergency {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #a16207;
+    }
+
+    .status-resolved {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-other {
+        background: #e2e8f0;
+        color: #475569;
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #dc2626;
+        animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+        0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55); }
+        70%  { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    }
+
+    /* Action Buttons */
+    .action-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .chat-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: linear-gradient(110deg, #09203f, #163b68);
+        color: white !important;
+        text-decoration: none !important;
+        padding: 9px 15px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        transition: .2s ease;
+        white-space: nowrap;
+    }
+
+    .chat-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(9, 32, 63, 0.22);
+        color: white !important;
+    }
+
+    .map-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: linear-gradient(110deg, #16a34a, #15803d);
+        color: white !important;
+        text-decoration: none !important;
+        padding: 9px 15px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        transition: .2s ease;
+        white-space: nowrap;
+    }
+
+    .map-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(22, 163, 74, 0.28);
+        color: white !important;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 60px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        border-radius: 18px;
+        background: rgba(9, 32, 63, 0.07);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .empty-state h4 {
+        color: var(--primary);
+        font-size: 18px;
+        margin-bottom: 7px;
+    }
+
+    .empty-state p {
+        color: var(--text-muted);
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+
+        .content-wrapper {
+            padding: 18px;
+        }
+
+        .page-header {
+            padding: 22px;
+        }
+
+        .page-header-content {
+            align-items: flex-start;
+        }
+
+        .page-header h2 {
+            font-size: 22px;
+        }
+
+        .page-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+        }
+
+        .table-card-header {
+            padding: 17px;
+        }
+
+        .search-box {
+            min-width: 100%;
+        }
+    }
+</style>
+
+
+<div class="content-wrapper">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+
+            <div class="page-title-section">
+
+                <div class="page-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+
+                <div>
+                    <h2>Emergency Alerts</h2>
+                    <p>Monitor SOS alerts sent by users and respond quickly</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Count Card -->
+    <div class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-bell"></i>
+        </div>
+
+        <div class="summary-info">
+            <h4>{{ data|length }}</h4>
+            <span>Total Emergency Alerts</span>
+        </div>
+
+    </div>
+
+
+    <!-- Alerts Table -->
+    <div class="table-card">
+
+        <div class="table-card-header">
+
+            <div>
+                <h3>Received SOS Alerts</h3>
+                <p>View the location of each alert and contact the user</p>
+            </div>
+
+            {% if data %}
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input
+                    type="text"
+                    id="alertSearch"
+                    placeholder="Search by name, phone or status..."
+                    onkeyup="filterAlerts()">
+            </div>
+            {% endif %}
+
+        </div>
+
+
+        {% if data %}
+
+        <div class="table-responsive">
+
+            <table class="volunteer-table" id="alertTable">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Date &amp; Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for i in data %}
+
+                    <tr>
+
+                        <!-- Number -->
+                        <td>
+                            <strong>{{ forloop.counter }}</strong>
+                        </td>
+
+
+                        <!-- User -->
+                        <td>
+
+                            <div class="volunteer-profile">
+
+                                {% if i.USER.photo %}
+                                    <img
+                                        src="{{ i.USER.photo.url }}"
+                                        class="volunteer-photo"
+                                        alt="User">
+                                {% else %}
+                                    <div class="volunteer-photo d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-user" style="color:#64748b;"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div>
+
+                                    <div class="volunteer-name">
+                                        {% if i.USER %}{{ i.USER.name }}{% else %}Unknown User{% endif %}
+                                    </div>
+
+                                    <div class="volunteer-email">
+                                        {{ i.USER.email|default:"-" }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Phone -->
+                        <td>
+                            {{ i.USER.phone|default:"-" }}
+                        </td>
+
+
+                        <!-- Location -->
+                        <td>
+
+                            <span class="camp-badge">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {{ i.latitude|floatformat:5 }}, {{ i.longitude|floatformat:5 }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Date & Time -->
+                        <td>
+                            <div>{{ i.date|date:"d M Y" }}</div>
+                            <div class="time-text">
+                                <i class="far fa-clock"></i>
+                                {{ i.time|time:"h:i A" }}
+                            </div>
+                        </td>
+
+
+                        <!-- Status -->
+                        <td>
+
+                            {% if i.status|lower == "emergency" %}
+                                <span class="status-badge status-emergency">
+                                    <span class="pulse-dot"></span>
+                                    {{ i.status }}
+                                </span>
+                            {% elif i.status|lower == "pending" %}
+                                <span class="status-badge status-pending">
+                                    <i class="fas fa-hourglass-half"></i>
+                                    {{ i.status }}
+                                </span>
+                            {% elif i.status|lower == "resolved" %}
+                                <span class="status-badge status-resolved">
+                                    <i class="fas fa-check-circle"></i>
+                                    {{ i.status }}
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-other">
+                                    {{ i.status }}
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Actions -->
+                        <td>
+
+                            <div class="action-group">
+
+                                <a
+                                    href="https://www.google.com/maps?q={{ i.latitude }},{{ i.longitude }}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="map-btn">
+
+                                    <i class="fas fa-location-arrow"></i>
+                                    View Map
+
+                                </a>
+
+                                {% if i.USER.LOGIN %}
+                                <a
+                                    href="/myapp/chat/{{ i.USER.LOGIN.id }}"
+                                    class="chat-btn">
+
+                                    <i class="fas fa-comment-dots"></i>
+                                    Chat
+
+                                </a>
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty State -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+
+            <h4>No Emergency Alerts</h4>
+
+            <p>
+                There are currently no SOS alerts from users.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function filterAlerts() {
+
+        const query = document.getElementById("alertSearch").value.toLowerCase();
+        const rows = document.querySelectorAll("#alertTable tbody tr");
+
+        rows.forEach(function (row) {
+            row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
+        });
+
+    }
+
+</script>
+
+{% endblock %}

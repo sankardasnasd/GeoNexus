@@ -1,0 +1,951 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+    --soft-navy: #eef4f8;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --danger: #dc3545;
+    --danger-light: #fff5f5;
+
+}
+
+
+/* PAGE */
+
+.inventory-page {
+
+    width: 100%;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 40px 35px 60px;
+}
+
+
+/* HEADER */
+
+.inventory-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 28px;
+}
+
+.header-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    margin-bottom: 7px;
+}
+
+.header-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+.header-description {
+
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* HEADER BUTTON */
+
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    color: var(--navy);
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+.back-btn:hover {
+
+    background: #f8fafc;
+
+    color: var(--navy-light);
+}
+
+
+/* SUMMARY */
+
+.summary-bar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 16px 19px;
+
+    margin-bottom: 22px;
+}
+
+.summary-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.summary-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--soft-navy);
+
+    color: var(--navy);
+
+    font-size: 18px;
+}
+
+.summary-title {
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.summary-subtitle {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.summary-count {
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #dcfce7;
+
+    color: #166534;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* GRID */
+
+.inventory-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 22px;
+}
+
+
+/* CARD */
+
+.inventory-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 23px;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,.035);
+
+    transition: .2s ease;
+}
+
+.inventory-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 32px rgba(15,23,42,.07);
+}
+
+
+/* CARD TOP */
+
+.card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.item-icon {
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: var(--soft-navy);
+
+    color: var(--navy);
+
+    font-size: 20px;
+}
+
+.item-date {
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* ITEM NAME */
+
+.item-name {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 20px;
+
+    line-height: 1.35;
+
+    font-weight: 800;
+
+    word-break: break-word;
+}
+
+
+/* CAMP */
+
+.camp-name {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.camp-name i {
+
+    color: var(--navy-light);
+
+    margin-top: 2px;
+}
+
+
+/* QUANTITY */
+
+.quantity-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 17px;
+
+    padding: 13px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf2f7;
+
+    border-radius: 10px;
+}
+
+.quantity-icon {
+
+    color: var(--navy-light);
+
+    font-size: 17px;
+}
+
+.quantity-label {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+.quantity-value {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+
+/* DETAILS */
+
+.details-box {
+
+    margin-top: 14px;
+
+    padding: 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf2f7;
+
+    border-radius: 11px;
+}
+
+.details-label {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+}
+
+.details-text {
+
+    margin: 6px 0 0;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    word-break: break-word;
+}
+
+
+/* ACTIONS */
+
+.card-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 18px;
+}
+
+.edit-btn,
+.delete-btn {
+
+    min-height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+
+    background: var(--navy);
+
+    color: white;
+}
+
+.edit-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* DELETE */
+
+.delete-form {
+
+    margin: 0;
+}
+
+.delete-btn {
+
+    width: 100%;
+
+    border: 1px solid #f1c6cb;
+
+    background: var(--danger-light);
+
+    color: #c92a3a;
+}
+
+.delete-btn:hover {
+
+    background: var(--danger);
+
+    border-color: var(--danger);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* EMPTY */
+
+.empty-state {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 70px 25px;
+
+    text-align: center;
+}
+
+.empty-icon {
+
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: var(--soft-navy);
+
+    color: #6b8ba6;
+
+    font-size: 30px;
+}
+
+.empty-state h3 {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.empty-state p {
+
+    margin: 8px 0 20px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* ADD BUTTON */
+
+.add-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+.add-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+}
+
+
+/* FOOTER */
+
+.page-footer {
+
+    margin-top: 40px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .inventory-grid {
+
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px) {
+
+    .inventory-page {
+
+        padding: 28px 16px 45px;
+    }
+
+    .inventory-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .inventory-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .summary-bar {
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+
+<div class="inventory-page">
+
+
+    <!-- HEADER -->
+
+    <div class="inventory-header">
+
+        <div>
+
+            <div class="header-label">
+
+                <i class="bi bi-box-seam-fill"></i>
+
+                CAMP INVENTORY
+
+            </div>
+
+            <h1 class="header-title">
+
+                Inventory Management
+
+            </h1>
+
+            <p class="header-description">
+
+                View, update and manage inventory items registered for your relief camps.
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="/myapp/manage_relief_camp/"
+            class="back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Camps
+
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-bar">
+
+        <div class="summary-left">
+
+            <div class="summary-icon">
+
+                <i class="bi bi-boxes"></i>
+
+            </div>
+
+            <div>
+
+                <div class="summary-title">
+
+                    Inventory Records
+
+                </div>
+
+                <div class="summary-subtitle">
+
+                    Resources currently registered under your camps
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-count">
+
+            {{ data|length }} Item{{ data|length|pluralize }}
+
+        </div>
+
+    </div>
+
+
+    {% if data %}
+
+        <div class="inventory-grid">
+
+
+            {% for item in data %}
+
+
+                <div class="inventory-card">
+
+
+                    <div class="card-top">
+
+                        <div class="item-icon">
+
+                            <i class="bi bi-box-seam-fill"></i>
+
+                        </div>
+
+                        <div class="item-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            {{ item.date|date:"d M Y" }}
+
+                        </div>
+
+                    </div>
+
+
+                    <h2 class="item-name">
+
+                        {{ item.name }}
+
+                    </h2>
+
+
+                    <div class="camp-name">
+
+                        <i class="bi bi-house-heart-fill"></i>
+
+                        <span>
+
+                            {{ item.CAMP.campname }}<br>
+
+                            {{ item.CAMP.place }}, {{ item.CAMP.district }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="quantity-box">
+
+                        <div class="quantity-icon">
+
+                            <i class="bi bi-stack"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="quantity-label">
+
+                                QUANTITY
+
+                            </span>
+
+                            <span class="quantity-value">
+
+                                {{ item.quantity }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="details-box">
+
+                        <div class="details-label">
+
+                            INVENTORY DETAILS
+
+                        </div>
+
+                        <p class="details-text">
+
+                            {{ item.details }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- EDIT + DELETE SAME ROW -->
+
+                    <div class="card-actions">
+
+
+                        <a
+                            href="/myapp/edit_inventory/{{ item.id }}/"
+                            class="edit-btn">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            Edit
+
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="/myapp/delete_inventory/{{ item.id }}/"
+                            class="delete-form"
+                            onsubmit="return confirm('Are you sure you want to delete this inventory item?');">
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="delete-btn">
+
+                                <i class="bi bi-trash3-fill"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <h3>
+
+                No Inventory Added
+
+            </h3>
+
+            <p>
+
+                There are no inventory records available for your camps.
+
+            </p>
+
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="page-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

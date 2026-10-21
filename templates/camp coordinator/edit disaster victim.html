@@ -1,0 +1,453 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --navy:#102a43;
+    --blue:#1d6fa5;
+    --text:#0f172a;
+    --muted:#64748b;
+    --border:#e2e8f0;
+}
+
+.edit-page {
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:40px 35px 60px;
+}
+
+.header-label {
+    color:var(--blue);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.4px;
+    margin-bottom:7px;
+}
+
+.page-title {
+    margin:0;
+    color:var(--navy);
+    font-size:32px;
+    font-weight:800;
+}
+
+.page-description {
+    margin:8px 0 28px;
+    color:var(--muted);
+    font-size:14px;
+}
+
+.edit-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(15,23,42,.05);
+}
+
+.current-photo {
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.current-photo img {
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid #eef4f8;
+}
+
+.form-grid {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.form-group {
+    display:flex;
+    flex-direction:column;
+}
+
+.full {
+    grid-column:1/-1;
+}
+
+.form-label {
+    color:#334155;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.form-control,
+.form-select {
+    width:100%;
+    box-sizing:border-box;
+    min-height:45px;
+    padding:11px 13px;
+    border:1px solid #dbe3eb;
+    border-radius:9px;
+    color:var(--text);
+    font-size:13px;
+    outline:none;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(29,111,165,.10);
+}
+
+textarea.form-control {
+    min-height:110px;
+    resize:vertical;
+}
+
+.section-title {
+    color:var(--navy);
+    font-size:17px;
+    font-weight:800;
+    margin:5px 0 20px;
+    padding-bottom:12px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.form-actions {
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:28px;
+    padding-top:20px;
+    border-top:1px solid #edf2f7;
+}
+
+.btn {
+    min-height:44px;
+    padding:11px 20px;
+    border-radius:9px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+    border:none;
+    cursor:pointer;
+}
+
+.btn-back {
+    background:white;
+    color:var(--navy);
+    border:1px solid var(--border);
+}
+
+.btn-update {
+    background:var(--navy);
+    color:white;
+}
+
+.btn-update:hover {
+    background:var(--blue);
+}
+
+.photo-input {
+    padding:10px;
+    border:1px dashed #cbd5e1;
+    border-radius:9px;
+    background:#f8fafc;
+}
+
+@media(max-width:700px) {
+
+    .edit-page {
+        padding:25px 15px 45px;
+    }
+
+    .edit-card {
+        padding:20px;
+    }
+
+    .form-grid {
+        grid-template-columns:1fr;
+    }
+
+    .full {
+        grid-column:auto;
+    }
+
+    .form-actions {
+        flex-direction:column;
+    }
+
+    .btn {
+        width:100%;
+    }
+
+    .page-title {
+        font-size:27px;
+    }
+}
+
+</style>
+
+
+<div class="edit-page">
+
+
+    <div class="header-label">
+        <i class="bi bi-pencil-square"></i>
+        DISASTER MANAGEMENT
+    </div>
+
+
+    <h1 class="page-title">
+        Edit Disaster Victim
+    </h1>
+
+
+    <p class="page-description">
+        Update the registered disaster victim information.
+    </p>
+
+
+    <form
+        method="POST"
+        action="/myapp/edit_disaster_victim_post/{{ data.id }}/"
+        enctype="multipart/form-data"
+        class="edit-card">
+
+        {% csrf_token %}
+
+
+        <div class="section-title">
+            <i class="bi bi-person-vcard-fill"></i>
+            Victim Information
+        </div>
+
+
+        {% if data.photo %}
+
+        <div class="current-photo">
+
+            <img
+                src="{{ data.photo.url }}"
+                alt="{{ data.name }}">
+
+            <div>
+
+                <strong>
+                    Current Photo
+                </strong>
+
+                <div style="color:#64748b;font-size:12px;margin-top:3px;">
+                    Upload a new photo below if required.
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    value="{{ data.name }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    value="{{ data.email }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Gender
+                </label>
+
+                <select
+                    name="gender"
+                    class="form-select"
+                    required>
+
+                    <option value="Male"
+                        {% if data.gender == "Male" %}selected{% endif %}>
+                        Male
+                    </option>
+
+                    <option value="Female"
+                        {% if data.gender == "Female" %}selected{% endif %}>
+                        Female
+                    </option>
+
+                    <option value="Other"
+                        {% if data.gender == "Other" %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Date of Birth
+                </label>
+
+                <input
+                    type="date"
+                    name="dob"
+                    class="form-control"
+                    value="{{ data.dob|date:'Y-m-d' }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Phone Number
+                </label>
+
+                <input
+                    type="number"
+                    name="phone"
+                    class="form-control"
+                    value="{{ data.phone }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    New Photo
+                </label>
+
+                <input
+                    type="file"
+                    name="photo"
+                    class="photo-input"
+                    accept="image/*">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Place
+                </label>
+
+                <input
+                    type="text"
+                    name="place"
+                    class="form-control"
+                    value="{{ data.place }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    District
+                </label>
+
+                <input
+                    type="text"
+                    name="district"
+                    class="form-control"
+                    value="{{ data.district }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label class="form-label">
+                    Disaster Details
+                </label>
+
+                <textarea
+                    name="disasterdetails"
+                    class="form-control"
+                    required>{{ data.disasterdetails }}</textarea>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <a
+                href="/myapp/manage_disaster_victim/"
+                class="btn btn-back">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Cancel
+
+            </a>
+
+
+            <button
+                type="submit"
+                class="btn btn-update">
+
+                <i class="bi bi-check2-circle"></i>
+
+                Update Victim
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}

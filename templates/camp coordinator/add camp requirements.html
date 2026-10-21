@@ -1,0 +1,796 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+
+    --bg: #f5f7fb;
+    --white: #ffffff;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --red: #dc3545;
+    --red-light: #fff5f5;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.requirement-page {
+
+    width: 100%;
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 40px 35px 60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.requirement-header {
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+.header-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+}
+
+
+.header-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+
+.header-description {
+
+    margin: 9px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 12px 18px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--navy);
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+}
+
+
+.back-btn:hover {
+
+    background: #f8fafc;
+
+    color: var(--navy-light);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CAMP INFO
+========================================================= */
+
+.camp-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 17px 20px;
+
+    margin-bottom: 22px;
+
+    background: #eef4f8;
+
+    border: 1px solid #dce8f0;
+
+    border-radius: 13px;
+}
+
+
+.camp-info-icon {
+
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: var(--navy);
+
+    color: white;
+
+    font-size: 19px;
+}
+
+
+.camp-info-label {
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+.camp-info-name {
+
+    margin-top: 3px;
+
+    color: var(--navy);
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+.camp-info-location {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.requirement-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(15,23,42,.05);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.card-heading {
+
+    padding: 25px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #102a43,
+            #163b68
+        );
+
+    color: white;
+}
+
+
+.card-heading h3 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+.card-heading p {
+
+    margin: 6px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FORM BODY
+========================================================= */
+
+.form-body {
+
+    padding: 32px;
+}
+
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.required {
+
+    color: var(--red);
+}
+
+
+.form-control-custom {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: white;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition: .2s ease;
+}
+
+
+.form-control-custom:hover {
+
+    border-color: #cbd5e1;
+}
+
+
+.form-control-custom:focus {
+
+    border-color: var(--navy-light);
+
+    box-shadow:
+        0 0 0 3px rgba(29,111,165,.09);
+}
+
+
+textarea.form-control-custom {
+
+    min-height: 125px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.field-help {
+
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   FOOTER BUTTONS
+========================================================= */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    padding-top: 23px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.cancel-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 12px 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.save-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 12px 22px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.save-btn:hover {
+
+    background: var(--navy-light);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.page-footer {
+
+    margin-top: 35px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:700px) {
+
+    .requirement-page {
+
+        padding: 25px 16px 45px;
+    }
+
+    .requirement-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .header-title {
+
+        font-size: 27px;
+    }
+
+    .form-body {
+
+        padding: 22px;
+    }
+
+    .form-actions {
+
+        flex-direction: column-reverse;
+    }
+
+    .cancel-btn,
+    .save-btn {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="requirement-page">
+
+
+    <!-- HEADER -->
+
+    <div class="requirement-header">
+
+        <div>
+
+            <div class="header-label">
+
+                <i class="bi bi-box-seam-fill me-1"></i>
+
+                CAMP OPERATIONS
+
+            </div>
+
+            <h1 class="header-title">
+
+                Add Requirement
+
+            </h1>
+
+            <p class="header-description">
+
+                Add a new resource or supply requirement for this relief camp.
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="/myapp/view_requirements/"
+            class="back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+
+            View Requirements
+
+        </a>
+
+    </div>
+
+
+    <!-- CAMP INFORMATION -->
+
+    <div class="camp-info">
+
+        <div class="camp-info-icon">
+
+            <i class="bi bi-house-heart-fill"></i>
+
+        </div>
+
+        <div>
+
+            <div class="camp-info-label">
+
+                Requirement For
+
+            </div>
+
+            <div class="camp-info-name">
+
+                {{ camp.campname }}
+
+            </div>
+
+            <div class="camp-info-location">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                {{ camp.place }}, {{ camp.district }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form
+        method="POST"
+        action="/myapp/add_requirements_post/">
+
+        {% csrf_token %}
+
+
+        <div class="requirement-card">
+
+
+            <div class="card-heading">
+
+                <h3>
+
+                    <i class="bi bi-clipboard-plus-fill me-2"></i>
+
+                    Requirement Information
+
+                </h3>
+
+                <p>
+
+                    Enter the required item, quantity and additional details.
+
+                </p>
+
+            </div>
+
+
+            <div class="form-body">
+
+
+                <div class="row g-4">
+
+
+                    <!-- DATE -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Required Date
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="needdate"
+                            id="needdate"
+                            class="form-control-custom"
+                            required>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Requirement Title
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control-custom"
+                            maxlength="150"
+                            placeholder="Example: Drinking Water"
+                            required>
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Required Quantity
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="needquantity"
+                            class="form-control-custom"
+                            maxlength="150"
+                            placeholder="Example: 500 litres"
+                            required>
+
+                        <div class="field-help">
+
+                            Mention quantity along with the unit if required.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+
+                            Requirement Details
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <textarea
+                            name="details"
+                            class="form-control-custom"
+                            maxlength="150"
+                            placeholder="Provide additional information about this requirement..."
+                            required></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-actions">
+
+                    <a
+                        href="/myapp/view_requirements/"
+                        class="cancel-btn">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Add Requirement
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <div class="page-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+<script>
+    // Prevent selecting a required date before today
+    (function () {
+        var dateInput = document.getElementById('needdate');
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var dd = String(today.getDate()).padStart(2, '0');
+        var todayStr = `${yyyy}-${mm}-${dd}`;
+        dateInput.setAttribute('min', todayStr);
+    })();
+</script>
+
+{% endblock %}

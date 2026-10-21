@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoNexus | Camp Coordinator Registration</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --night:#071326; --plum:#10294a; --blue:#2b7fe0; --sky:#4aa3ff; --lav:#7cc4ff;
+    --coral:#ff5d4d; --green:#22c55e;
+    --ink:#0e1c30; --muted:#5f7591; --line:#dce6f2;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+    min-height:100vh;font-family:'Manrope',sans-serif;color:var(--ink);
+    background:linear-gradient(170deg,#0b1d38 0%,var(--night) 60%,#050d1b 100%);
+}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif}
+
+#rain{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+.page{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:36px 20px}
+
+.card{
+    width:100%;max-width:1120px;display:grid;grid-template-columns:5fr 7fr;border-radius:26px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);border:1px solid rgba(124,196,255,.18);
+}
+
+.side{
+    position:relative;padding:46px 40px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;gap:36px;
+    background:linear-gradient(160deg,rgba(16,41,74,.62),rgba(7,19,38,.78));
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.brand{display:flex;align-items:center;gap:13px;margin-bottom:44px}
+.brand-icon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:23px;
+    background:linear-gradient(135deg,var(--blue),var(--lav));box-shadow:0 10px 26px rgba(43,127,224,.5)}
+.brand h3{margin:0;font-size:23px;font-weight:800}
+.brand span{display:block;margin-top:2px;font-size:12px;color:#9fb6d1}
+.side h1{margin:0 0 16px;font-size:36px;line-height:1.2;font-weight:800;letter-spacing:-.5px}
+.side-lead{margin:0;max-width:400px;font-size:15px;line-height:1.8;color:#cfe0f2}
+.benefits{margin-top:34px;display:grid;gap:20px}
+.benefit{display:flex;gap:14px;align-items:flex-start}
+.benefit i{width:42px;height:42px;min-width:42px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(124,196,255,.14);color:var(--lav)}
+.benefit strong{display:block;margin-bottom:3px;font-size:14.5px}
+.benefit span{font-size:13px;line-height:1.6;color:#9fb6d1}
+.side-foot{font-size:12.5px;line-height:1.7;color:#9fb6d1}
+.side-foot i{margin-right:6px;color:var(--lav)}
+
+.main{background:#fff;padding:44px 46px}
+.main-head h2{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px;color:var(--plum)}
+.main-head p{margin:0 0 22px;font-size:14px;line-height:1.6;color:var(--muted)}
+
+/* Progress */
+.progress{display:flex;gap:10px;margin-bottom:28px}
+.step-dot{
+    flex:1;height:6px;border-radius:99px;background:#e8eef6;position:relative;overflow:hidden;
+}
+.step-dot.active{background:linear-gradient(90deg,var(--blue),var(--sky))}
+.step-dot.done{background:var(--green)}
+.step-labels{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--muted)}
+.step-labels span.active{color:var(--blue)}
+.step-labels span.done{color:var(--green)}
+
+.sec{display:flex;align-items:center;gap:11px;margin:0 0 16px}
+.sec b{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:800;background:rgba(43,127,224,.12);color:var(--blue)}
+.sec h4{margin:0;font-size:16px;font-weight:800;color:var(--plum)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.field{margin-bottom:12px}
+.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:700;color:#2c3e57}
+.field label em{font-style:normal;color:var(--coral)}
+.box{position:relative}
+.box > i.ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:#8aa2c0;pointer-events:none}
+.box input,.box select{
+    width:100%;height:48px;padding:0 14px 0 42px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;
+    font-family:inherit;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.box select{appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%235f7591' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center}
+.box input::placeholder{color:#9aabc0}
+.box input:focus,.box select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(43,127,224,.14)}
+.box.bad input,.box.bad select{border-color:var(--coral);box-shadow:0 0 0 4px rgba(255,93,77,.1)}
+.box.good input,.box.good select{border-color:var(--green)}
+.err{display:none;margin-top:6px;font-size:12.5px;font-weight:600;color:#b8321f}
+.field.bad .err{display:block}
+.pw{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:none;border-radius:10px;background:transparent;color:#8aa2c0;font-size:16px;cursor:pointer}
+.pw:hover{background:#eef4fb;color:var(--blue)}
+.box input.has-toggle{padding-right:48px}
+
+.photo{display:flex;align-items:center;gap:16px;padding:14px;border:1.5px dashed #b9cde4;border-radius:14px;background:#f5f9fe;min-height:98px}
+.field.bad .photo{border-color:var(--coral)}
+.thumb{width:72px;height:72px;min-width:72px;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:#e3ecf6;color:#8aa2c0;font-size:28px}
+.thumb img{width:100%;height:100%;object-fit:cover;display:none}
+.photo strong{display:block;font-size:13.5px;color:var(--plum)}
+.photo small{display:block;margin:3px 0 7px;font-size:12.5px;color:var(--muted)}
+.photo input[type=file]{width:100%;font-size:12.5px;color:var(--muted)}
+.photo input[type=file]::file-selector-button{margin-right:10px;padding:6px 12px;border:none;border-radius:8px;background:rgba(43,127,224,.12);color:var(--blue);font-weight:700;font-family:inherit;cursor:pointer}
+
+.terms{display:flex;gap:11px;align-items:flex-start;margin-top:10px;font-size:13px;line-height:1.6;color:var(--muted)}
+.terms input{width:18px;height:18px;margin-top:2px;accent-color:var(--blue);flex-shrink:0}
+.field.terms-field.bad .terms{color:#b8321f}
+
+/* Navigation buttons */
+.nav-row{display:flex;gap:12px;margin-top:24px}
+.btn{
+    height:52px;padding:0 22px;border:none;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;
+}
+.btn-back{background:#eef4fb;color:var(--plum)}
+.btn-back:hover{background:#e0eaf6}
+.btn-next,.btn-submit{
+    flex:1;color:#fff;background:linear-gradient(135deg,var(--blue),var(--sky));
+    box-shadow:0 12px 26px rgba(43,127,224,.35);
+}
+.btn-next:hover,.btn-submit:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(43,127,224,.45)}
+.btn-submit:disabled{opacity:.75;cursor:wait;transform:none}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+:focus-visible{outline:3px solid #f5a524;outline-offset:2px}
+
+@media(max-width:960px){
+    .card{grid-template-columns:1fr}
+    .side{padding:34px 28px;gap:24px}
+    .brand{margin-bottom:28px}
+    .side h1{font-size:30px}
+    .benefits{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+    .page{padding:14px;align-items:flex-start}
+    .card{border-radius:20px}
+    .main{padding:30px 20px}
+    .grid{grid-template-columns:1fr}
+    .benefits{grid-template-columns:1fr}
+    .main-head h2{font-size:24px}
+    .nav-row{flex-direction:column-reverse}
+    .btn-back{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+
+<body>
+
+<canvas id="rain" aria-hidden="true"></canvas>
+
+<div class="page">
+<div class="card">
+
+    <!-- LEFT -->
+    <aside class="side">
+        <div>
+            <div class="brand">
+                <div class="brand-icon"><i class="bi bi-shield-fill-check"></i></div>
+                <div>
+                    <h3>GeoNexus</h3>
+                    <span>Disaster management system</span>
+                </div>
+            </div>
+
+            <h1>Run a relief camp when it matters most</h1>
+            <p class="side-lead">
+                Register as a camp coordinator to organise shelters, relief supplies
+                and volunteers during floods and other disasters.
+            </p>
+
+            <div class="benefits">
+                <div class="benefit"><i class="bi bi-house-heart-fill"></i>
+                    <div><strong>Manage relief camps</strong><span>Coordinate shelter and daily camp activities.</span></div></div>
+                <div class="benefit"><i class="bi bi-people-fill"></i>
+                    <div><strong>Coordinate volunteers</strong><span>Work with volunteers and rescue teams.</span></div></div>
+                <div class="benefit"><i class="bi bi-broadcast-pin"></i>
+                    <div><strong>Respond faster</strong><span>Support organised disaster response.</span></div></div>
+            </div>
+        </div>
+
+        <div class="side-foot">
+            <i class="bi bi-shield-check"></i>
+            The administrator reviews every registration before approval.
+        </div>
+    </aside>
+
+    <!-- RIGHT -->
+    <section class="main">
+
+        <div class="main-head">
+            <h2>Camp coordinator registration</h2>
+            <p>Complete the 3 steps below to create your coordinator account.</p>
+        </div>
+
+        <!-- Progress -->
+        <div class="step-labels">
+            <span id="label1" class="active">01 Personal</span>
+            <span id="label2">02 Address</span>
+            <span id="label3">03 Login</span>
+        </div>
+        <div class="progress">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
+        </div>
+
+        <form method="POST" action="/myapp/registration_post/" enctype="multipart/form-data" id="registrationForm" novalidate>
+            {% csrf_token %}
+
+            <!-- ========== STEP 1 ========== -->
+            <div class="step-panel active" id="step1">
+                <div class="sec"><b>01</b><h4>Personal information</h4></div>
+                <div class="grid">
+
+                    <div class="field">
+                        <label for="name">Full name <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-person"></i>
+                            <input type="text" name="textfield" id="name" placeholder="Enter full name" maxlength="150" autocomplete="name"></div>
+                        <div class="err">Name should contain letters and spaces only.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email address <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-envelope"></i>
+                            <input type="email" name="textfield9" id="email" placeholder="example@gmail.com" maxlength="150" autocomplete="email"></div>
+                        <div class="err">Enter a valid email address.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone number <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-telephone"></i>
+                            <input type="text" name="textfield8" id="phone" placeholder="10 digit phone number" maxlength="10" inputmode="numeric" autocomplete="tel"></div>
+                        <div class="err">Enter a 10 digit number starting with 6, 7, 8 or 9.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="dob">Date of birth <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-calendar3"></i>
+                            <input type="date" name="dob" id="dob"></div>
+                        <div class="err">You must be at least 18 years old.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="gender">Gender <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-gender-ambiguous"></i>
+                            <select name="radiobutton" id="gender">
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select></div>
+                        <div class="err">Select a gender.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="photo">Profile photo <em>*</em></label>
+                        <div class="photo">
+                            <div class="thumb">
+                                <i class="bi bi-person-bounding-box" id="photoIcon"></i>
+                                <img id="photoPreview" src="" alt="Photo preview">
+                            </div>
+                            <div style="flex:1;min-width:0">
+                                <strong>Upload photo</strong>
+                                <small>JPG, JPEG or PNG</small>
+                                <input type="file" name="photo" id="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                            </div>
+                        </div>
+                        <div class="err">Upload a JPG, JPEG or PNG photo.</div>
+                    </div>
+                </div>
+
+                <div class="nav-row">
+                    <button type="button" class="btn btn-next" id="next1">
+                        Next <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========== STEP 2 ========== -->
+            <div class="step-panel" id="step2">
+                <div class="sec"><b>02</b><h4>Address information</h4></div>
+                <div class="grid">
+
+                    <div class="field">
+                        <label for="place">Place <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-geo-alt"></i>
+                            <input type="text" name="textfield2" id="place" placeholder="Enter place" maxlength="150"></div>
+                        <div class="err">Place should contain letters only.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="post">Post office <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-mailbox"></i>
+                            <input type="text" name="textfield3" id="post" placeholder="Enter post office" maxlength="150"></div>
+                        <div class="err">Post office should contain letters only.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="district">District <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-map"></i>
+                            <select name="district" id="district">
+                                <option value="">Select district</option>
+                                <option>Alappuzha</option><option>Ernakulam</option><option>Idukki</option>
+                                <option>Kannur</option><option>Kasaragod</option><option>Kollam</option>
+                                <option>Kottayam</option><option>Kozhikode</option><option>Malappuram</option>
+                                <option>Palakkad</option><option>Pathanamthitta</option><option>Thiruvananthapuram</option>
+                                <option>Thrissur</option><option>Wayanad</option>
+                            </select></div>
+                        <div class="err">Select a district.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="pin">PIN code <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-pin-map"></i>
+                            <input type="text" name="textfield4" id="pin" placeholder="6 digit PIN" maxlength="6" inputmode="numeric"></div>
+                        <div class="err">PIN code must contain exactly 6 digits.</div>
+                    </div>
+                </div>
+
+                <div class="nav-row">
+                    <button type="button" class="btn btn-back" id="back2">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="btn btn-next" id="next2">
+                        Next <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========== STEP 3 ========== -->
+            <div class="step-panel" id="step3">
+                <div class="sec"><b>03</b><h4>Login credentials</h4></div>
+                <div class="grid">
+
+                    <div class="field">
+                        <label for="username">Username <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-person-circle"></i>
+                            <input type="text" name="username" id="username" placeholder="Create username" maxlength="50" autocomplete="username"></div>
+                        <div class="err">Use 4 or more letters, numbers or underscores.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-lock"></i>
+                            <input type="password" name="password" id="password" class="has-toggle" placeholder="Create password" autocomplete="new-password">
+                            <button type="button" class="pw" data-target="password" aria-label="Show password"><i class="bi bi-eye"></i></button></div>
+                        <div class="err">Password must be at least 6 characters.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="confirm_password">Confirm password <em>*</em></label>
+                        <div class="box"><i class="ic bi bi-lock-fill"></i>
+                            <input type="password" name="confirm_password" id="confirm_password" class="has-toggle" placeholder="Confirm password" autocomplete="new-password">
+                            <button type="button" class="pw" data-target="confirm_password" aria-label="Show password"><i class="bi bi-eye"></i></button></div>
+                        <div class="err">Passwords do not match.</div>
+                    </div>
+                </div>
+
+                <div class="field terms-field">
+                    <label class="terms" for="terms">
+                        <input type="checkbox" id="terms">
+                        <span>I confirm that the information provided is correct and I agree to the DisasterSafe registration terms.</span>
+                    </label>
+                    <div class="err">Accept the terms to continue.</div>
+                </div>
+
+                <div class="nav-row">
+                    <button type="button" class="btn btn-back" id="back3">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <button type="submit" class="btn btn-submit" id="registerButton">
+                        <i class="bi bi-person-plus-fill"></i> Create camp coordinator account
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </section>
+
+</div>
+</div>
+
+<script>
+/* ============================ RAIN ============================ */
+(function(){
+    const canvas = document.getElementById("rain");
+    const ctx = canvas.getContext("2d");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let w, h, dpr, drops = [], splashes = [];
+
+    function resize(){
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.round(Math.min(220, Math.max(70, w * h / 9000)));
+        drops = Array.from({length: count}, makeDrop);
+    }
+    function makeDrop(){
+        const depth = Math.random();
+        return {
+            x: Math.random() * (w + 80) - 40,
+            y: Math.random() * h,
+            len: 10 + depth * 22,
+            speed: 6 + depth * 12,
+            alpha: .12 + depth * .38,
+            width: .6 + depth * 1.1
+        };
+    }
+    const WIND = 1.6;
+
+    function frame(){
+        ctx.clearRect(0, 0, w, h);
+        ctx.lineCap = "round";
+
+        for (const d of drops){
+            ctx.strokeStyle = "rgba(150,205,255," + d.alpha + ")";
+            ctx.lineWidth = d.width;
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(d.x - d.len * .12 * WIND, d.y + d.len);
+            ctx.stroke();
+
+            d.y += d.speed;
+            d.x -= d.speed * .12 * WIND;
+
+            if (d.y > h){
+                if (d.width > 1.1 && splashes.length < 40){
+                    splashes.push({x: d.x, y: h - 2, r: 1, a: .45});
+                }
+                Object.assign(d, makeDrop(), {y: -d.len, x: Math.random() * (w + 80) - 40 + 40});
+            }
+        }
+
+        for (let i = splashes.length - 1; i >= 0; i--){
+            const s = splashes[i];
+            ctx.strokeStyle = "rgba(150,205,255," + s.a + ")";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.ellipse(s.x, s.y, s.r * 2.2, s.r * .7, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            s.r += .5; s.a -= .02;
+            if (s.a <= 0) splashes.splice(i, 1);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    if (!reduce) requestAnimationFrame(frame);
+})();
+
+/* ============================ FORM + STEPS ============================ */
+const $ = (id) => document.getElementById(id);
+const form = $("registrationForm");
+let currentStep = 1;
+
+const emailRe = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+function age(value){
+    const t = new Date(), d = new Date(value);
+    let a = t.getFullYear() - d.getFullYear();
+    const m = t.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && t.getDate() < d.getDate())) a--;
+    return a;
+}
+
+const rules = {
+    name:             (v) => /^[A-Za-z]+(?: [A-Za-z]+)*$/.test(v.trim()),
+    email:            (v) => emailRe.test(v.trim()),
+    phone:            (v) => /^[6-9]\d{9}$/.test(v),
+    dob:              (v) => v !== "" && age(v) >= 18,
+    gender:           (v) => v !== "",
+    photo:            ()  => { const f = $("photo").files[0]; return !!f && ["image/jpeg","image/png"].includes(f.type); },
+    place:            (v) => /^[A-Za-z ]+$/.test(v.trim()),
+    post:             (v) => /^[A-Za-z ]+$/.test(v.trim()),
+    district:         (v) => v !== "",
+    pin:              (v) => /^\d{6}$/.test(v),
+    username:         (v) => /^[A-Za-z0-9_]{4,50}$/.test(v),
+    password:         (v) => v.length >= 6,
+    confirm_password: (v) => v !== "" && v === $("password").value,
+    terms:            ()  => $("terms").checked
+};
+
+const stepFields = {
+    1: ["name","email","phone","dob","gender","photo"],
+    2: ["place","post","district","pin"],
+    3: ["username","password","confirm_password","terms"]
+};
+
+function check(id){
+    const el = $(id);
+    const ok = rules[id](el.type === "checkbox" ? "" : el.value);
+    const field = el.closest(".field");
+    const box = el.closest(".box");
+    field.classList.toggle("bad", !ok);
+    if (box){ box.classList.toggle("bad", !ok); box.classList.toggle("good", ok); }
+    return ok;
+}
+
+function validateStep(step){
+    let firstBad = null;
+    stepFields[step].forEach(id => {
+        if (!check(id) && !firstBad) firstBad = $(id);
+    });
+    if (firstBad){
+        firstBad.scrollIntoView({behavior: "smooth", block: "center"});
+        if (firstBad.focus) firstBad.focus({preventScroll: true});
+        return false;
+    }
+    return true;
+}
+
+function goToStep(step){
+    // hide all
+    document.querySelectorAll(".step-panel").forEach(p => p.classList.remove("active"));
+    // show target
+    $("step" + step).classList.add("active");
+
+    // update progress
+    for (let i = 1; i <= 3; i++){
+        const dot = $("dot" + i);
+        const label = $("label" + i);
+        dot.classList.remove("active","done");
+        label.classList.remove("active","done");
+        if (i < step){ dot.classList.add("done"); label.classList.add("done"); }
+        else if (i === step){ dot.classList.add("active"); label.classList.add("active"); }
+    }
+    currentStep = step;
+    window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+/* Live filters */
+const strip = (id, re, max) => $(id).addEventListener("input", function(){
+    this.value = this.value.replace(re, "");
+    if (max) this.value = this.value.slice(0, max);
+});
+strip("name",  /[^A-Za-z ]/g);
+strip("place", /[^A-Za-z ]/g);
+strip("post",  /[^A-Za-z ]/g);
+strip("phone", /\D/g, 10);
+strip("pin",   /\D/g, 6);
+strip("username", /[^A-Za-z0-9_]/g);
+
+/* Validate on blur / change */
+Object.keys(rules).forEach(function(id){
+    const el = $(id);
+    const evt = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "file" || el.type === "date") ? "change" : "blur";
+    el.addEventListener(evt, () => check(id));
+    el.addEventListener("input", function(){
+        if (el.closest(".field").classList.contains("bad")) check(id);
+    });
+});
+$("password").addEventListener("input", function(){
+    if ($("confirm_password").value) check("confirm_password");
+});
+
+/* DOB max */
+(function(){
+    const t = new Date();
+    const m = new Date(t.getFullYear() - 18, t.getMonth(), t.getDate());
+    $("dob").max = m.getFullYear() + "-" + String(m.getMonth() + 1).padStart(2, "0") + "-" + String(m.getDate()).padStart(2, "0");
+})();
+
+/* Photo preview */
+$("photo").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    const img = $("photoPreview"), icon = $("photoIcon");
+    if (!file || !["image/jpeg","image/png"].includes(file.type)){
+        img.style.display = "none"; icon.style.display = "block";
+        if (file) e.target.value = "";
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => { img.src = ev.target.result; img.style.display = "block"; icon.style.display = "none"; };
+    reader.readAsDataURL(file);
+});
+
+/* Password toggle */
+document.querySelectorAll(".pw").forEach(function(btn){
+    btn.addEventListener("click", function(){
+        const input = $(btn.dataset.target);
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        btn.innerHTML = '<i class="bi ' + (show ? "bi-eye-slash" : "bi-eye") + '"></i>';
+        btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    });
+});
+
+/* Step navigation */
+$("next1").addEventListener("click", () => { if (validateStep(1)) goToStep(2); });
+$("next2").addEventListener("click", () => { if (validateStep(2)) goToStep(3); });
+$("back2").addEventListener("click", () => goToStep(1));
+$("back3").addEventListener("click", () => goToStep(2));
+
+/* Final submit */
+form.addEventListener("submit", function(event){
+    if (!validateStep(3)){
+        event.preventDefault();
+        return;
+    }
+    const btn = $("registerButton");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> Creating account...';
+});
+</script>
+
+</body>
+</html>

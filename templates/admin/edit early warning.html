@@ -1,0 +1,487 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+    :root {
+        --primary: #09203f;
+        --primary-dark: #061a33;
+        --primary-light: #163b68;
+        --danger: #ef4444;
+        --danger-dark: #dc2626;
+        --background: #f4f7fb;
+        --white: #ffffff;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --success: #16a34a;
+    }
+
+    .notification-page {
+        min-height: calc(100vh - 76px);
+        background: var(--background);
+        padding: 35px;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+        background: linear-gradient(110deg, var(--primary), var(--primary-light));
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 28px;
+        color: white;
+        box-shadow: 0 10px 25px rgba(9, 32, 63, .14);
+    }
+
+    .page-header-content {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .header-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 17px;
+        background: rgba(255, 255, 255, .13);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 29px;
+        flex-shrink: 0;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        margin: 6px 0 0;
+        color: rgba(255,255,255,.75);
+        font-size: 14px;
+    }
+
+    /* FORM CARD */
+    .form-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, .06);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        padding: 24px 30px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .form-card-header .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: #eef4fb;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .form-card-header h4 {
+        margin: 0;
+        color: var(--text-dark);
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .form-card-header span {
+        display: block;
+        margin-top: 3px;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .form-body {
+        padding: 32px;
+    }
+
+    /* FORM GROUP */
+    .form-group {
+        margin-bottom: 23px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--text-dark);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .required {
+        color: var(--danger);
+        margin-left: 3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary);
+        font-size: 18px;
+        pointer-events: none;
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 52px;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: #fbfcfe;
+        color: var(--text-dark);
+        padding: 13px 16px 13px 48px;
+        font-size: 14px;
+        outline: none;
+        transition: all .2s ease;
+        box-sizing: border-box;
+    }
+
+    textarea.form-control {
+        min-height: 145px;
+        resize: vertical;
+        line-height: 1.6;
+        padding-top: 15px;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-light);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(22, 59, 104, .08);
+    }
+
+    .date-control {
+        color-scheme: light;
+    }
+
+    /* INFO BOX */
+    .info-box {
+        display: flex;
+        gap: 12px;
+        padding: 15px 17px;
+        margin-top: 5px;
+        margin-bottom: 25px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+    }
+
+    .info-box i {
+        color: var(--primary-light);
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .info-box p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* BUTTONS */
+    .button-section {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+    }
+
+    .btn-custom {
+        min-width: 145px;
+        min-height: 48px;
+        padding: 11px 22px;
+        border-radius: 12px;
+        border: none;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all .2s ease;
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+        color: var(--text-dark);
+    }
+
+    .btn-update {
+        background: linear-gradient(110deg, var(--primary), var(--primary-light));
+        color: white;
+        box-shadow: 0 7px 16px rgba(9, 32, 63, .18);
+    }
+
+    .btn-update:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(9, 32, 63, .25);
+        color: white;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+
+        .notification-page {
+            padding: 20px 15px;
+        }
+
+        .page-header {
+            padding: 22px;
+        }
+
+        .page-header h2 {
+            font-size: 21px;
+        }
+
+        .header-icon {
+            width: 52px;
+            height: 52px;
+        }
+
+        .form-body {
+            padding: 23px;
+        }
+
+        .form-card-header {
+            padding: 20px 23px;
+        }
+
+        .button-section {
+            flex-direction: column-reverse;
+        }
+
+        .btn-custom {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="notification-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="page-header">
+
+        <div class="page-header-content">
+
+            <div class="header-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+
+            <div>
+                <h2>Edit Early Warning</h2>
+                <p>
+                    Update the emergency warning notification
+                    and keep users informed.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <div class="form-card">
+
+        <div class="form-card-header">
+
+            <div class="icon-box">
+                <i class="fas fa-bell"></i>
+            </div>
+
+            <div>
+                <h4>Notification Details</h4>
+                <span>
+                    Modify the information below and save the changes.
+                </span>
+            </div>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="/myapp/admin_edit_notification_post/"
+        >
+
+            {% csrf_token %}
+
+            <div class="form-body">
+
+                <!-- =================================================
+                     TITLE
+                ================================================== -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Warning Title
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fas fa-heading input-icon"></i>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control"
+                            value="{{ data.title }}"
+                            placeholder="Enter warning title"
+                            maxlength="150"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                ================================================== -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Warning Description
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fas fa-align-left input-icon"
+                           style="top: 25px; transform: none;">
+                        </i>
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            placeholder="Enter detailed emergency warning message"
+                            maxlength="300"
+                            required
+                        >{{ data.description }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE
+                ================================================== -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Warning Date
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fas fa-calendar-alt input-icon"></i>
+
+                        <input
+                            type="date"
+                            name="date"
+                            class="form-control date-control"
+                            value="{{ data.date|date:'Y-m-d' }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     INFORMATION
+                ================================================== -->
+
+                <div class="info-box">
+
+                    <i class="fas fa-circle-info"></i>
+
+                    <p>
+                        Make sure the warning information is accurate
+                        before updating it. The updated notification
+                        can be displayed to users through the disaster
+                        management system.
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     BUTTON SECTION
+                ================================================== -->
+
+                <div class="button-section">
+
+                    <a
+                        href="/myapp/admin_view_notifications/"
+                        class="btn-custom btn-cancel"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn-custom btn-update"
+                    >
+                        <i class="fas fa-save"></i>
+                        Update Warning
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

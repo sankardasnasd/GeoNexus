@@ -1,0 +1,132 @@
+{% extends "camp coordinator/home copy.html" %}
+{% block body %}
+
+<style>
+:root{
+    --primary:#09203F;
+    --primary2:#163B68;
+    --danger:#EF4444;
+    --bg:#F4F7FB;
+    --text:#0F172A;
+    --muted:#64748B;
+    --border:#E2E8F0;
+}
+body{
+    background:var(--bg);
+    font-family:'Inter',sans-serif;
+}
+.page{
+    padding:30px;
+}
+.banner{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:25px;
+}
+.banner h2{
+    font-size:30px;
+    font-weight:800;
+}
+.form-card{
+    max-width:700px;
+    margin:auto;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+.form-label{
+    font-size:15px;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:8px;
+}
+.form-control,.form-select{
+    height:55px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    font-size:15px;
+}
+.btn-save{
+    width:100%;
+    height:55px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+}
+.btn-back{
+    width:100%;
+    height:55px;
+    border-radius:12px;
+    border:2px solid var(--primary);
+    color:var(--primary);
+    background:#fff;
+    font-weight:700;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+</style>
+
+<div class="page">
+
+    <div class="banner">
+        <h2>Assign Volunteer</h2>
+        <p>Select a volunteer from your assigned camp and allocate the goods delivery task.</p>
+    </div>
+
+    <div class="form-card">
+
+        <form method="post" action="/myapp/admin_assigntask_volunteer_post/">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label class="form-label">Select Volunteer</label>
+                <select class="form-select" name="volunteer" required>
+
+                    <option value="">Choose Volunteer</option>
+
+                    {% for i in camps %}
+                    <option value="{{ i.VOLUNTEER.id }}">
+                        {{ i.VOLUNTEER.name }} • {{ i.VOLUNTEER.phone }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Task Status</label>
+                <input type="text" class="form-control" value="Task Assigned" readonly>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <a href="/myapp/view_goods_donations/" class="btn-back">
+                        Back
+                    </a>
+                </div>
+
+                <div class="col-md-6">
+                    <button class="btn-save" type="submit">
+                        Assign Task
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

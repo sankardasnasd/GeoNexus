@@ -1,0 +1,651 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+    --navy:#102a43;
+    --blue:#1d6fa5;
+    --bg:#f5f7fb;
+    --white:#fff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --danger:#dc3545;
+}
+
+.victim-page {
+    width:100%;
+    max-width:1450px;
+    margin:auto;
+    padding:38px 35px 60px;
+}
+
+/* HEADER */
+
+.page-header {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:28px;
+}
+
+.header-label {
+    color:var(--blue);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.4px;
+    margin-bottom:7px;
+}
+
+.page-title {
+    margin:0;
+    color:var(--navy);
+    font-size:32px;
+    font-weight:800;
+}
+
+.page-description {
+    margin:8px 0 0;
+    color:var(--muted);
+    font-size:14px;
+}
+
+.add-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:12px 18px;
+    border-radius:10px;
+    background:var(--navy);
+    color:white;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+}
+
+.add-btn:hover {
+    background:var(--blue);
+    color:white;
+}
+
+/* SUMMARY */
+
+.summary-bar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 20px;
+    margin-bottom:22px;
+}
+
+.summary-title {
+    color:var(--text);
+    font-size:15px;
+    font-weight:800;
+}
+
+.summary-count {
+    padding:7px 12px;
+    border-radius:20px;
+    background:#f0fdf4;
+    color:#166534;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* GRID */
+
+.victim-grid {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+}
+
+/* CARD */
+
+.victim-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 6px 22px rgba(15,23,42,.04);
+    transition:.2s ease;
+}
+
+.victim-card:hover {
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(15,23,42,.08);
+}
+
+/* TOP */
+
+.victim-top {
+    background:linear-gradient(135deg,#102a43,#163b68);
+    padding:23px;
+    color:white;
+    position:relative;
+}
+
+.victim-profile {
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.victim-photo {
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(255,255,255,.25);
+    background:#fff;
+}
+
+.no-photo {
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.12);
+    font-size:25px;
+}
+
+.victim-name {
+    margin:0;
+    color:white;
+    font-size:18px;
+    font-weight:800;
+}
+
+.victim-location {
+    margin-top:5px;
+    color:#cbd5e1;
+    font-size:11px;
+}
+
+/* BODY */
+
+.victim-body {
+    padding:21px;
+}
+
+.info-item {
+    display:flex;
+    align-items:flex-start;
+    gap:11px;
+    padding-bottom:14px;
+    margin-bottom:14px;
+    border-bottom:1px solid #f1f5f9;
+}
+
+.info-icon {
+    width:36px;
+    height:36px;
+    flex-shrink:0;
+    border-radius:9px;
+    background:#f8fafc;
+    color:var(--navy);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+}
+
+.info-label {
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:700;
+    margin-bottom:3px;
+}
+
+.info-value {
+    display:block;
+    color:var(--text);
+    font-size:12px;
+    font-weight:700;
+    line-height:1.5;
+    word-break:break-word;
+}
+
+.details-box {
+    padding:13px;
+    background:#f8fafc;
+    border:1px solid #edf2f7;
+    border-radius:10px;
+}
+
+.details-label {
+    color:var(--muted);
+    font-size:9px;
+    font-weight:800;
+}
+
+.details-text {
+    margin:6px 0 0;
+    color:#475569;
+    font-size:11px;
+    line-height:1.6;
+}
+
+/* ACTIONS */
+
+.card-actions {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:18px;
+}
+
+.edit-btn,
+.delete-btn {
+    min-height:42px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:800;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.edit-btn {
+    background:var(--navy);
+    color:white;
+}
+
+.edit-btn:hover {
+    background:var(--blue);
+    color:white;
+}
+
+.delete-btn {
+    width:100%;
+    border:1px solid #f1c6cb;
+    background:#fff5f5;
+    color:#c92a3a;
+}
+
+.delete-btn:hover {
+    background:var(--danger);
+    color:white;
+}
+
+.delete-form {
+    margin:0;
+}
+
+/* EMPTY */
+
+.empty-state {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:70px 25px;
+    text-align:center;
+}
+
+.empty-icon {
+    width:70px;
+    height:70px;
+    margin:0 auto 17px;
+    border-radius:18px;
+    background:#eef4f8;
+    color:#6b8ba6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+}
+
+.empty-state h3 {
+    margin:0;
+    color:var(--navy);
+    font-size:20px;
+    font-weight:800;
+}
+
+.empty-state p {
+    color:var(--muted);
+    font-size:12px;
+    margin:8px 0 20px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1150px) {
+    .victim-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px) {
+
+    .victim-page {
+        padding:25px 15px 45px;
+    }
+
+    .page-header {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .add-btn {
+        width:100%;
+    }
+
+    .victim-grid {
+        grid-template-columns:1fr;
+    }
+
+    .page-title {
+        font-size:27px;
+    }
+}
+
+</style>
+
+
+<div class="victim-page">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="header-label">
+                <i class="bi bi-person-heart"></i>
+                DISASTER MANAGEMENT
+            </div>
+
+            <h1 class="page-title">
+                Disaster Victims
+            </h1>
+
+            <p class="page-description">
+                View and manage disaster victims registered under your coordination.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/myapp/add_disaster_victim/"
+            class="add-btn">
+
+            <i class="bi bi-person-plus-fill"></i>
+
+            Add Disaster Victim
+
+        </a>
+
+    </div>
+
+
+    {% if data %}
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-bar">
+
+        <div class="summary-title">
+            Registered Disaster Victims
+        </div>
+
+        <div class="summary-count">
+            {{ data|length }} Victim{{ data|length|pluralize }}
+        </div>
+
+    </div>
+
+
+    <!-- GRID -->
+
+    <div class="victim-grid">
+
+
+        {% for victim in data %}
+
+
+        <div class="victim-card">
+
+
+            <!-- TOP -->
+
+            <div class="victim-top">
+
+                <div class="victim-profile">
+
+
+                    {% if victim.photo %}
+
+                        <img
+                            src="{{ victim.photo.url }}"
+                            class="victim-photo"
+                            alt="{{ victim.name }}">
+
+                    {% else %}
+
+                        <div class="no-photo">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <h3 class="victim-name">
+                            {{ victim.name }}
+                        </h3>
+
+                        <div class="victim-location">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            {{ victim.place }}, {{ victim.district }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="victim-body">
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">
+                            EMAIL
+                        </span>
+
+                        <span class="info-value">
+                            {{ victim.email }}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">
+                            PHONE
+                        </span>
+
+                        <span class="info-value">
+                            {{ victim.phone }}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">
+                            GENDER
+                        </span>
+
+                        <span class="info-value">
+                            {{ victim.gender }}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-calendar-heart-fill"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">
+                            DATE OF BIRTH
+                        </span>
+
+                        <span class="info-value">
+                            {{ victim.dob|date:"d M Y" }}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="details-box">
+
+                    <div class="details-label">
+                        DISASTER DETAILS
+                    </div>
+
+                    <p class="details-text">
+                        {{ victim.disasterdetails }}
+                    </p>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="card-actions">
+
+
+                    <a
+                        href="/myapp/edit_disaster_victim/{{ victim.id }}/"
+                        class="edit-btn">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit
+
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="/myapp/delete_disaster_victim/{{ victim.id }}/"
+                        class="delete-form"
+                        onsubmit="return confirm('Are you sure you want to delete this disaster victim?');">
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="delete-btn">
+
+                            <i class="bi bi-trash3-fill"></i>
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- EMPTY -->
+
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            <i class="bi bi-person-heart"></i>
+        </div>
+
+        <h3>
+            No Disaster Victims Registered
+        </h3>
+
+        <p>
+            No disaster victims have been registered under your coordination yet.
+        </p>
+
+        <a
+            href="/myapp/add_disaster_victim/"
+            class="add-btn">
+
+            <i class="bi bi-person-plus-fill"></i>
+
+            Add First Victim
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

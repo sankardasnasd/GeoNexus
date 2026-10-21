@@ -1,0 +1,2132 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<!-- =========================================================
+     LEAFLET CSS
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-geosearch@4.2.0/dist/geosearch.css"
+/>
+
+
+<style>
+
+:root {
+    --navy: #102a43;
+    --blue: #1d6fa5;
+    --bg: #f5f7fb;
+    --white: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.victim-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 35px 60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.victim-header {
+    margin-bottom: 28px;
+}
+
+.header-label {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.header-title {
+    margin: 0;
+    color: var(--navy);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.header-description {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.form-section {
+    margin-bottom: 28px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf2f7;
+    margin-bottom: 20px;
+}
+
+.section-title i {
+    color: var(--blue);
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form-control,
+.form-select {
+
+    width: 100%;
+    box-sizing: border-box;
+
+    min-height: 45px;
+
+    padding: 11px 13px;
+
+    border: 1px solid #dbe3eb;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: .2s ease;
+}
+
+textarea.form-control {
+    min-height: 105px;
+    resize: vertical;
+}
+
+.form-control:focus,
+.form-select:focus {
+
+    border-color: var(--blue);
+
+    box-shadow:
+        0 0 0 3px rgba(29,111,165,.10);
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+.photo-box {
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 11px;
+
+    padding: 18px;
+
+    background: #f8fafc;
+}
+
+.photo-box input {
+
+    width: 100%;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LOCATION SECTION
+========================================================= */
+
+.location-section {
+
+    margin-top: 15px;
+
+    margin-bottom: 30px;
+}
+
+.camp-section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--navy);
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #edf2f7;
+
+    margin-bottom: 15px;
+}
+
+.camp-section-title i {
+
+    color: var(--blue);
+}
+
+
+/* =========================================================
+   LOCATION INFO
+========================================================= */
+
+.location-info {
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 15px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.location-info i {
+
+    color: var(--blue);
+
+    margin-right: 6px;
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+#camp-map {
+
+    width: 100%;
+
+    height: 430px;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    border: 1px solid #dbe3eb;
+
+    margin-bottom: 12px;
+
+    z-index: 1;
+}
+
+
+/*
+   IMPORTANT:
+
+   We are NOT using:
+
+   https://{s}.tile.openstreetmap.org/
+
+   because the OSM tile server is returning 403.
+
+   We are also NOT using:
+
+   https://{s}.basemaps.cartocdn.com/
+
+   because CARTO now requires an API key for
+   basemap tiles.
+
+   Tiles are served from Esri's World Street Map,
+   which is free to use without an API key.
+*/
+
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
+
+.leaflet-control-geosearch {
+
+    z-index: 1000;
+}
+
+.leaflet-control-geosearch form {
+
+    min-width: 300px;
+}
+
+.leaflet-control-geosearch input {
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MAP HELP
+========================================================= */
+
+.map-help {
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin-bottom: 22px;
+}
+
+.map-help i {
+
+    color: var(--blue);
+
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   COORDINATE FIELD
+========================================================= */
+
+.camp-field {
+
+    margin-bottom: 18px;
+}
+
+.camp-label {
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 7px;
+
+    display: block;
+}
+
+.required {
+
+    color: #dc2626;
+}
+
+.coordinate-wrapper {
+
+    position: relative;
+}
+
+.coordinate-icon {
+
+    position: absolute;
+
+    left: 13px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--blue);
+
+    z-index: 2;
+}
+
+.camp-input {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 11px 13px 11px 38px;
+
+    border: 1px solid #dbe3eb;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    box-sizing: border-box;
+}
+
+.camp-input:focus {
+
+    outline: none;
+
+    border-color: var(--blue);
+}
+
+.field-help {
+
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   LOCATION STATUS
+========================================================= */
+
+.location-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: #fff7ed;
+
+    color: #c2410c;
+
+    border: 1px solid #fed7aa;
+
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+}
+
+.location-status.success {
+
+    background: #f0fdf4;
+
+    color: #15803d;
+
+    border-color: #bbf7d0;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #edf2f7;
+}
+
+.btn {
+
+    min-height: 44px;
+
+    padding: 11px 20px;
+
+    border-radius: 9px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.btn-cancel {
+
+    background: white;
+
+    color: var(--navy);
+
+    border: 1px solid var(--border);
+}
+
+.btn-cancel:hover {
+
+    background: #f8fafc;
+}
+
+.btn-save {
+
+    background: var(--navy);
+
+    color: white;
+
+    border: none;
+}
+
+.btn-save:hover {
+
+    background: var(--blue);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:700px) {
+
+    .victim-page {
+
+        padding: 25px 15px 45px;
+    }
+
+    .form-card {
+
+        padding: 20px;
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+
+        grid-column: auto;
+    }
+
+    .header-title {
+
+        font-size: 27px;
+    }
+
+    .form-actions {
+
+        flex-direction: column;
+    }
+
+    .btn {
+
+        width: 100%;
+    }
+
+    #camp-map {
+
+        height: 350px;
+    }
+
+    .leaflet-control-geosearch form {
+
+        min-width: 220px;
+    }
+}
+
+</style>
+
+
+<div class="victim-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="victim-header">
+
+        <div class="header-label">
+
+            <i class="bi bi-person-heart"></i>
+
+            DISASTER VICTIM MANAGEMENT
+
+        </div>
+
+
+        <h1 class="header-title">
+
+            Add Disaster Victim
+
+        </h1>
+
+
+        <p class="header-description">
+
+            Register disaster victims and maintain their
+            personal and disaster-related information.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+
+        method="POST"
+
+        action="/myapp/add_disaster_victim_post/"
+
+        enctype="multipart/form-data"
+
+        class="form-card"
+
+        id="victim-form">
+
+        {% csrf_token %}
+
+
+
+        <!-- =================================================
+             PERSONAL INFORMATION
+        ================================================== -->
+
+        <div class="form-section">
+
+
+            <div class="section-title">
+
+                <i class="bi bi-person-vcard-fill"></i>
+
+                Personal Information
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Full Name
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        name="name"
+
+                        class="form-control"
+
+                        placeholder="Enter victim name"
+
+                        required>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Email
+
+                    </label>
+
+
+                    <input
+
+                        type="email"
+
+                        name="email"
+
+                        class="form-control"
+
+                        placeholder="Enter email address"
+
+                        required>
+
+                </div>
+
+
+
+                <!-- GENDER -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Gender
+
+                    </label>
+
+
+                    <select
+
+                        name="gender"
+
+                        class="form-select"
+
+                        required>
+
+                        <option value="">
+
+                            Select Gender
+
+                        </option>
+
+                        <option value="Male">
+
+                            Male
+
+                        </option>
+
+                        <option value="Female">
+
+                            Female
+
+                        </option>
+
+                        <option value="Other">
+
+                            Other
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- DOB -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Date of Birth
+
+                    </label>
+
+
+                    <input
+
+                        type="date"
+
+                        name="dob"
+
+                        class="form-control"
+
+                        required>
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Phone Number
+
+                    </label>
+
+
+                    <input
+
+                        type="tel"
+
+                        name="phone"
+
+                        class="form-control"
+
+                        placeholder="Enter phone number"
+
+                        required>
+
+                </div>
+
+
+
+                <!-- PHOTO -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Victim Photo
+
+                    </label>
+
+
+                    <div class="photo-box">
+
+                        <input
+
+                            type="file"
+
+                            name="photo"
+
+                            accept="image/*"
+
+                            required>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             LOCATION INFORMATION
+        ================================================== -->
+
+        <div class="form-section">
+
+
+            <div class="section-title">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                Location Information
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <!-- PLACE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Place
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        id="place"
+
+                        name="place"
+
+                        class="form-control"
+
+                        placeholder="Select location from map"
+
+                        required>
+
+                </div>
+
+
+
+                <!-- DISTRICT -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        District
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        id="district"
+
+                        name="district"
+
+                        class="form-control"
+
+                        placeholder="Select location from map"
+
+                        required>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             DISASTER INFORMATION
+        ================================================== -->
+
+        <div class="form-section">
+
+
+            <div class="section-title">
+
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                Disaster Information
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+
+                        Disaster Details
+
+                    </label>
+
+
+                    <textarea
+
+                        name="disasterdetails"
+
+                        class="form-control"
+
+                        placeholder="Describe the disaster situation or victim details..."
+
+                        required></textarea>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             VICTIM LOCATION
+        ================================================== -->
+
+        <div class="location-section">
+
+
+            <div class="camp-section-title">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                Victim Location
+
+            </div>
+
+
+
+            <div class="location-info">
+
+                <i class="bi bi-pin-map-fill"></i>
+
+                Search for the victim location or click
+                directly on the map to select the location.
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MAP
+            ================================================== -->
+
+            <div id="camp-map"></div>
+
+
+
+            <!-- =================================================
+                 MAP HELP
+            ================================================== -->
+
+            <div class="map-help">
+
+                <i class="bi bi-info-circle-fill"></i>
+
+                Search for a place using the search box,
+                click anywhere on the map, or use the
+                current location button.
+
+                Latitude and longitude will be automatically
+                filled.
+
+            </div>
+
+
+
+            <!-- =================================================
+                 COORDINATES
+            ================================================== -->
+
+            <div class="row g-4">
+
+
+                <!-- LATITUDE -->
+
+                <div class="col-md-6">
+
+                    <div class="camp-field">
+
+
+                        <label class="camp-label">
+
+                            Latitude
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+
+                        <div class="coordinate-wrapper">
+
+                            <i
+                                class="bi bi-compass-fill coordinate-icon">
+                            </i>
+
+
+                            <input
+
+                                type="text"
+
+                                id="latitude"
+
+                                name="latitude"
+
+                                class="camp-input"
+
+                                placeholder="Select location on map"
+
+                                readonly
+
+                                required>
+
+                        </div>
+
+
+
+                        <div class="field-help">
+
+                            Automatically generated from
+                            selected map location.
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LONGITUDE -->
+
+                <div class="col-md-6">
+
+                    <div class="camp-field">
+
+
+                        <label class="camp-label">
+
+                            Longitude
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+
+                        <div class="coordinate-wrapper">
+
+                            <i
+                                class="bi bi-compass-fill coordinate-icon">
+                            </i>
+
+
+                            <input
+
+                                type="text"
+
+                                id="longitude"
+
+                                name="longitude"
+
+                                class="camp-input"
+
+                                placeholder="Select location on map"
+
+                                readonly
+
+                                required>
+
+                        </div>
+
+
+
+                        <div class="field-help">
+
+                            Automatically generated from
+                            selected map location.
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
+
+            <div
+
+                id="location-status"
+
+                class="location-status">
+
+                <i class="bi bi-exclamation-circle-fill"></i>
+
+                Please select the victim location from the map.
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="form-actions">
+
+
+            <a
+
+                href="/myapp/manage_disaster_victim/"
+
+                class="btn btn-cancel">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Cancel
+
+            </a>
+
+
+
+            <button
+
+                type="submit"
+
+                class="btn btn-save">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                Add Disaster Victim
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+<!-- =========================================================
+     LEAFLET JS
+========================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<!-- =========================================================
+     GEOSEARCH JS
+========================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet-geosearch@4.2.0/dist/bundle.min.js">
+</script>
+
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           INITIAL MAP
+        ===================================================== */
+
+        const map = L.map(
+            "camp-map"
+        ).setView(
+            [10.8505, 76.2711],
+            8
+        );
+
+
+        /* =====================================================
+           MAP TILE LAYER
+
+           IMPORTANT:
+
+           DO NOT USE:
+
+           https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
+           because the OSM tile server is returning 403.
+
+           DO NOT USE:
+
+           https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
+
+           because CARTO now requires an API key for its
+           basemap tiles ("API KEY REQUIRED" watermark).
+
+           Using Esri's World Street Map instead — free to
+           use for standard-volume apps, no API key needed.
+        ===================================================== */
+
+        L.tileLayer(
+
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+
+            {
+
+                maxZoom: 19,
+
+                minZoom: 2,
+
+                attribution:
+                    'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+
+            }
+
+        ).addTo(map);
+
+
+
+        /* =====================================================
+           SEARCH PROVIDER
+           
+           This is only for SEARCH / REVERSE GEOCODING.
+           
+           It is NOT used for map tiles.
+        ===================================================== */
+
+        const provider =
+
+            new GeoSearch.OpenStreetMapProvider({
+
+                params: {
+
+                    countrycodes: "in",
+
+                    "accept-language": "en"
+
+                }
+
+            });
+
+
+
+        /* =====================================================
+           SEARCH CONTROL
+        ===================================================== */
+
+        const searchControl =
+
+            new GeoSearch.GeoSearchControl({
+
+                provider: provider,
+
+                style: "bar",
+
+                showMarker: false,
+
+                autoClose: true,
+
+                retainZoomLevel: false,
+
+                searchLabel:
+                    "Search victim place / address",
+
+                position: "topright",
+
+                animateZoom: true,
+
+                autoComplete: true,
+
+                autoCompleteDelay: 250,
+
+                keepResult: true
+
+            });
+
+
+
+        map.addControl(
+            searchControl
+        );
+
+
+
+        /* =====================================================
+           VARIABLES
+        ===================================================== */
+
+        let marker = null;
+
+
+
+        /* =====================================================
+           INPUT ELEMENTS
+        ===================================================== */
+
+        const latitudeInput =
+
+            document.getElementById(
+                "latitude"
+            );
+
+
+        const longitudeInput =
+
+            document.getElementById(
+                "longitude"
+            );
+
+
+        const placeInput =
+
+            document.getElementById(
+                "place"
+            );
+
+
+        const districtInput =
+
+            document.getElementById(
+                "district"
+            );
+
+
+        const locationStatus =
+
+            document.getElementById(
+                "location-status"
+            );
+
+
+
+        /* =====================================================
+           LOCATION STATUS
+        ===================================================== */
+
+        function showLocationStatus(
+
+            success,
+
+            message
+
+        ) {
+
+            locationStatus.classList.toggle(
+
+                "success",
+
+                success
+
+            );
+
+
+            locationStatus.innerHTML =
+
+                success
+
+                ?
+
+                '<i class="bi bi-check-circle-fill"></i> '
+                + message
+
+                :
+
+                '<i class="bi bi-exclamation-circle-fill"></i> '
+                + message;
+
+        }
+
+
+
+        /* =====================================================
+           REVERSE GEOCODING
+        ===================================================== */
+
+        async function fetchAddressDetails(
+
+            lat,
+
+            lng
+
+        ) {
+
+            try {
+
+
+                const url =
+
+                    "https://nominatim.openstreetmap.org/reverse"
+
+                    + "?format=json"
+
+                    + "&lat=" +
+                    encodeURIComponent(lat)
+
+                    + "&lon=" +
+                    encodeURIComponent(lng)
+
+                    + "&zoom=18"
+
+                    + "&addressdetails=1";
+
+
+                const response =
+
+                    await fetch(
+
+                        url,
+
+                        {
+
+                            headers: {
+
+                                "Accept-Language":
+                                    "en"
+
+                            }
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Reverse geocoding failed"
+                    );
+
+                }
+
+
+                const data =
+
+                    await response.json();
+
+
+
+                if (
+
+                    data &&
+
+                    data.address
+
+                ) {
+
+
+                    const address =
+
+                        data.address;
+
+
+
+                    /* =========================================
+                       PLACE
+                    ========================================== */
+
+                    const place =
+
+                        address.village ||
+
+                        address.town ||
+
+                        address.city ||
+
+                        address.municipality ||
+
+                        address.suburb ||
+
+                        address.hamlet ||
+
+                        address.locality ||
+
+                        "";
+
+
+
+                    /* =========================================
+                       DISTRICT
+                    ========================================== */
+
+                    const district =
+
+                        address.state_district ||
+
+                        address.district ||
+
+                        address.county ||
+
+                        "";
+
+
+
+                    placeInput.value =
+                        place;
+
+
+                    districtInput.value =
+                        district;
+
+
+
+                    if (
+
+                        place &&
+
+                        district
+
+                    ) {
+
+                        showLocationStatus(
+
+                            true,
+
+                            "Victim location selected. Place and district filled automatically."
+
+                        );
+
+                    }
+
+                    else if (place) {
+
+                        showLocationStatus(
+
+                            true,
+
+                            "Location selected. Please verify the district."
+
+                        );
+
+                    }
+
+                    else {
+
+                        showLocationStatus(
+
+                            true,
+
+                            "Coordinates selected. Please enter the place and district manually."
+
+                        );
+
+                    }
+
+
+                }
+
+                else {
+
+                    showLocationStatus(
+
+                        true,
+
+                        "Coordinates selected. Please enter the place and district manually."
+
+                    );
+
+                }
+
+
+            }
+
+            catch(error) {
+
+
+                console.error(
+
+                    "Reverse geocoding error:",
+
+                    error
+
+                );
+
+
+                showLocationStatus(
+
+                    true,
+
+                    "Coordinates selected. Please verify the place and district."
+
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           UPDATE LOCATION
+        ===================================================== */
+
+        function updateLocation(
+
+            lat,
+
+            lng,
+
+            zoomMap = true
+
+        ) {
+
+
+            lat = Number(lat);
+
+            lng = Number(lng);
+
+
+
+            if (
+
+                Number.isNaN(lat) ||
+
+                Number.isNaN(lng)
+
+            ) {
+
+                return;
+
+            }
+
+
+
+            /* ================================================
+               FORMAT
+            ================================================= */
+
+            const latFixed =
+
+                lat.toFixed(6);
+
+
+            const lngFixed =
+
+                lng.toFixed(6);
+
+
+
+            /* ================================================
+               FILL COORDINATES
+            ================================================= */
+
+            latitudeInput.value =
+                latFixed;
+
+
+            longitudeInput.value =
+                lngFixed;
+
+
+
+            /* ================================================
+               REMOVE OLD MARKER
+            ================================================= */
+
+            if(marker) {
+
+                map.removeLayer(
+                    marker
+                );
+
+            }
+
+
+
+            /* ================================================
+               NEW MARKER
+            ================================================= */
+
+            marker =
+
+                L.marker(
+
+                    [lat, lng]
+
+                )
+
+                .addTo(map);
+
+
+
+            /* ================================================
+               POPUP
+            ================================================= */
+
+            marker.bindPopup(
+
+                `
+
+                <div style="
+                    font-family:Arial,sans-serif;
+                    font-size:12px;
+                    line-height:1.6;
+                ">
+
+                    <strong>
+                        Disaster Victim Location
+                    </strong>
+
+                    <br>
+
+                    Latitude:
+                    ${latFixed}
+
+                    <br>
+
+                    Longitude:
+                    ${lngFixed}
+
+                </div>
+
+                `
+
+            ).openPopup();
+
+
+
+            /* ================================================
+               CENTER MAP
+            ================================================= */
+
+            if(zoomMap) {
+
+                map.setView(
+
+                    [lat, lng],
+
+                    15
+
+                );
+
+            }
+
+
+
+            /* ================================================
+               STATUS
+            ================================================= */
+
+            showLocationStatus(
+
+                true,
+
+                "Coordinates selected. Finding place and district..."
+
+            );
+
+
+
+            /* ================================================
+               REVERSE GEOCODING
+            ================================================= */
+
+            fetchAddressDetails(
+
+                lat,
+
+                lng
+
+            );
+
+        }
+
+
+
+        /* =====================================================
+           MAP CLICK
+        ===================================================== */
+
+        map.on(
+
+            "click",
+
+            function(e) {
+
+
+                updateLocation(
+
+                    e.latlng.lat,
+
+                    e.latlng.lng
+
+                );
+
+            }
+
+        );
+
+
+
+        /* =====================================================
+           SEARCH RESULT
+        ===================================================== */
+
+        map.on(
+
+            "geosearch/showlocation",
+
+            function(e) {
+
+
+                if (
+
+                    e &&
+
+                    e.location
+
+                ) {
+
+
+                    const lat =
+
+                        e.location.y;
+
+
+                    const lng =
+
+                        e.location.x;
+
+
+
+                    updateLocation(
+
+                        lat,
+
+                        lng
+
+                    );
+
+                }
+
+            }
+
+        );
+
+
+
+        /* =====================================================
+           CURRENT LOCATION
+        ===================================================== */
+
+        if (
+
+            navigator.geolocation
+
+        ) {
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+
+                    const lat =
+
+                        position.coords.latitude;
+
+
+                    const lng =
+
+                        position.coords.longitude;
+
+
+
+                    /*
+                     * Only use automatically
+                     * when inside India.
+                     */
+
+                    if (
+
+                        lat >= 8 &&
+
+                        lat <= 37 &&
+
+                        lng >= 68 &&
+
+                        lng <= 98
+
+                    ) {
+
+
+                        updateLocation(
+
+                            lat,
+
+                            lng
+
+                        );
+
+                    }
+
+                },
+
+
+                function(error) {
+
+
+                    console.warn(
+
+                        "Current location unavailable:",
+
+                        error.message
+
+                    );
+
+                },
+
+
+                {
+
+                    enableHighAccuracy: true,
+
+                    timeout: 10000,
+
+                    maximumAge: 60000
+
+                }
+
+            );
+
+        }
+
+
+
+        /* =====================================================
+           FORM VALIDATION
+        ===================================================== */
+
+        document
+
+            .getElementById(
+                "victim-form"
+            )
+
+            .addEventListener(
+
+                "submit",
+
+                function(e) {
+
+
+                    if (
+
+                        !latitudeInput.value ||
+
+                        !longitudeInput.value
+
+                    ) {
+
+
+                        e.preventDefault();
+
+
+
+                        showLocationStatus(
+
+                            false,
+
+                            "Please select the victim location from the map before submitting."
+
+                        );
+
+
+
+                        document
+
+                            .getElementById(
+                                "camp-map"
+                            )
+
+                            .scrollIntoView({
+
+                                behavior:
+                                    "smooth",
+
+                                block:
+                                    "center"
+
+                            });
+
+                    }
+
+                }
+
+            );
+
+
+
+        /* =====================================================
+           MAP SIZE FIX
+        ===================================================== */
+
+        setTimeout(
+
+            function() {
+
+                map.invalidateSize();
+
+            },
+
+            500
+
+        );
+
+    }
+
+);
+
+</script>
+
+{% endblock %}

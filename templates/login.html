@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoNexus | Sign in</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --sky1:#071326;      /* monsoon night */
+    --sky2:#10294a;
+    --rain:#7cc4ff;      /* rain / data blue */
+    --amber:#ffb23e;     /* warning */
+    --coral:#ff5d4d;     /* danger */
+    --safe:#37d6a0;
+    --glass:rgba(12,26,48,.62);
+    --edge:rgba(160,205,255,.18);
+    --text:#e8f1fb;
+    --soft:#93a9c4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+    font-family:'Manrope',sans-serif;color:var(--text);
+    background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 70%,#17365f 100%);
+    min-height:100vh;overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif}
+
+/* ---------- scene ---------- */
+.scene{position:fixed;inset:0;z-index:0;overflow:hidden}
+.rain{position:absolute;inset:0}
+.drop{position:absolute;top:-80px;width:1.5px;height:60px;
+    background:linear-gradient(transparent,rgba(124,196,255,.55));
+    animation:fall linear infinite}
+@keyframes fall{to{transform:translate3d(-40px,115vh,0)}}
+
+.hills{position:absolute;left:0;bottom:0;width:100%;height:46%}
+.hills path{transition:none}
+.mist{position:absolute;left:-20%;width:140%;bottom:8%;height:180px;
+    background:radial-gradient(ellipse at center,rgba(170,205,240,.22),transparent 70%);
+    filter:blur(18px);animation:mist 22s ease-in-out infinite alternate}
+.mist.two{bottom:22%;animation-duration:30s;animation-direction:alternate-reverse;opacity:.7}
+@keyframes mist{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+
+/* sensor beacons on the hills */
+.beacon{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--amber)}
+.beacon::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--amber);
+    animation:pulse 2.2s ease-out infinite}
+.beacon.b2{background:var(--safe)}.beacon.b2::after{border-color:var(--safe);animation-delay:.8s}
+.beacon.b3{background:var(--coral)}.beacon.b3::after{border-color:var(--coral);animation-delay:1.4s}
+@keyframes pulse{from{transform:scale(1);opacity:.9}to{transform:scale(4);opacity:0}}
+
+/* ---------- layout ---------- */
+.page{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;padding:28px 40px}
+
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#2b7fe0,#7cc4ff);box-shadow:0 8px 24px rgba(60,150,255,.35)}
+.logo svg{width:24px;height:24px}
+.brand b{font-family:'Bricolage Grotesque';font-size:22px;font-weight:700}
+.status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--soft);
+    padding:8px 14px;border:1px solid var(--edge);border-radius:99px;background:rgba(255,255,255,.04)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--safe);box-shadow:0 0 0 0 rgba(55,214,160,.6);animation:live 2s infinite}
+@keyframes live{70%{box-shadow:0 0 0 8px rgba(55,214,160,0)}100%{box-shadow:0 0 0 0 rgba(55,214,160,0)}}
+
+.center{flex:1;display:grid;place-items:center;padding:30px 0}
+
+.card-g{
+    width:100%;max-width:440px;padding:38px 36px 30px;border-radius:26px;
+    background:var(--glass);border:1px solid var(--edge);
+    backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);
+    box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
+    animation:in .8s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes in{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+
+.card-g h2{font-size:30px;font-weight:800;margin:0 0 6px;letter-spacing:-.4px}
+.card-g .sub{margin:0 0 26px;color:var(--soft);font-size:14.5px;line-height:1.55}
+
+.lbl{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:#c5d6ea}
+.field{position:relative;margin-bottom:18px}
+.field > svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:var(--soft);transition:color .2s}
+.field:focus-within > svg{color:var(--rain)}
+.form-control{
+    height:54px;padding:0 48px 0 46px;border-radius:14px;font-size:15px;
+    background:rgba(255,255,255,.06);border:1.5px solid rgba(160,205,255,.16);color:#fff;
+    transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.form-control::placeholder{color:#6f87a6}
+.form-control:focus{background:rgba(255,255,255,.1);border-color:var(--rain);color:#fff;
+    box-shadow:0 0 0 4px rgba(124,196,255,.16)}
+.form-control:-webkit-autofill{-webkit-text-fill-color:#fff;-webkit-box-shadow:0 0 0 40px #12305a inset}
+.eye{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:10px;
+    background:none;color:var(--soft);display:grid;place-items:center;cursor:pointer}
+.eye:hover{color:#fff;background:rgba(255,255,255,.08)}
+.eye svg{width:19px;height:19px}
+
+.form-check-input{width:17px;height:17px;background-color:transparent;border-color:#5f7a9c;cursor:pointer}
+.form-check-input:checked{background-color:var(--rain);border-color:var(--rain)}
+.form-check-label{font-size:13.5px;color:var(--soft);margin-left:4px;cursor:pointer}
+.forgot{font-size:13.5px;font-weight:600;color:var(--rain);text-decoration:none}
+.forgot:hover{color:#fff;text-decoration:underline}
+
+.btn-go{
+    position:relative;overflow:hidden;width:100%;height:54px;margin-top:24px;border:0;border-radius:14px;
+    background:linear-gradient(135deg,#2b7fe0,#4aa3ff);color:#fff;
+    font-family:'Bricolage Grotesque';font-weight:700;font-size:16px;letter-spacing:.2px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 12px 28px rgba(43,127,224,.4);transition:transform .2s,box-shadow .2s;
+}
+.btn-go::before{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn-go:hover::before{left:130%}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(43,127,224,.5)}
+.btn-go svg{width:19px;height:19px}
+.btn-go:focus-visible,.eye:focus-visible,.forgot:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+
+.register{text-align:center;margin-top:20px;font-size:14px;color:var(--soft)}
+.register a{color:var(--amber);font-weight:700;text-decoration:none;margin-left:4px}
+.register a:hover{text-decoration:underline}
+
+.legend{display:flex;justify-content:center;gap:10px;margin-top:22px;padding-top:20px;border-top:1px solid var(--edge);flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--soft);padding:6px 11px;border-radius:99px;background:rgba(255,255,255,.05)}
+.chip i{width:9px;height:9px;border-radius:50%}
+
+.alert{border-radius:12px;font-size:14px}
+
+.foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:#7d94b3}
+.foot .sos{display:flex;align-items:center;gap:8px;color:#ffc9c3}
+.foot .sos svg{width:18px;height:18px;color:var(--coral)}
+
+@media(max-width:600px){
+    .page{padding:20px 16px}
+    .status{display:none}
+    .card-g{padding:30px 22px 24px}
+    .foot{justify-content:center;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rain{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============ ANIMATED SCENE ============ -->
+<div class="scene" aria-hidden="true">
+    <div class="rain" id="rain"></div>
+    <div class="mist two"></div>
+
+    <svg class="hills" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <path fill="#0d2447" d="M0 170 L180 90 L340 160 L520 60 L720 170 L900 80 L1100 170 L1260 100 L1440 160 L1440 400 L0 400Z"/>
+        <path fill="#0a1c38" d="M0 250 L200 170 L380 240 L600 150 L820 250 L1040 160 L1240 250 L1440 190 L1440 400 L0 400Z"/>
+        <path fill="#06142a" d="M0 330 L240 270 L460 330 L700 250 L940 335 L1180 270 L1440 330 L1440 400 L0 400Z"/>
+    </svg>
+    <div class="mist"></div>
+
+    <!-- risk beacons (decorative) -->
+    <span class="beacon b3" style="left:36%;bottom:33%"></span>
+    <span class="beacon"    style="left:62%;bottom:27%"></span>
+    <span class="beacon b2" style="left:80%;bottom:20%"></span>
+</div>
+
+<div class="page">
+
+    <header class="top">
+        <div class="brand">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 20l6-11 4 6 3-4 7 9z"/><path d="M8 4c0 1.5 2 2 2 3.5S8 9 8 9" opacity=".0"/><circle cx="17" cy="5" r="1.8"/>
+                </svg>
+            </div>
+            <b>GeoNexus</b>
+        </div>
+        <div class="status"><i></i>Monitoring active across Kerala</div>
+    </header>
+
+    <main class="center">
+        <div class="card-g">
+
+            <h2>Sign in</h2>
+            <p class="sub">Open the dashboard to see landslide risk, alerts, relief camps and volunteers.</p>
+
+            <form method="POST" action="/myapp/login_post/">
+                {% csrf_token %}
+
+                <label class="lbl" for="username">Username</label>
+                <div class="field">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" autocomplete="username" required>
+                </div>
+
+                <label class="lbl" for="password">Password</label>
+                <div class="field">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+                    <button type="button" class="eye" id="toggleBtn" onclick="togglePassword()" aria-label="Show password">
+                        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    <a href="/myapp/forgot_web/" class="forgot">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-go">
+                    Sign in
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+            </form>
+
+            <div class="register">
+                Not registered as a camp coordinator?
+                <a href="/myapp/registration/">Create account</a>
+            </div>
+
+            {% if messages %}
+            <div class="mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="legend">
+                <span class="chip"><i style="background:var(--safe)"></i>Low risk</span>
+                <span class="chip"><i style="background:var(--amber)"></i>Moderate</span>
+                <span class="chip"><i style="background:var(--coral)"></i>High risk</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="foot">
+        <span>© 2026 GeoNexus. Landslide prediction and disaster management.</span>
+        <span class="sos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+            In immediate danger? Call 112
+        </span>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Rain */
+(function(){
+    const box = document.getElementById("rain");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const n = innerWidth < 600 ? 40 : 90;
+    for (let i = 0; i < n; i++){
+        const d = document.createElement("span");
+        d.className = "drop";
+        d.style.left = Math.random() * 110 + "%";
+        d.style.animationDuration = (0.9 + Math.random() * 0.9) + "s";
+        d.style.animationDelay = (-Math.random() * 2) + "s";
+        d.style.opacity = 0.25 + Math.random() * 0.6;
+        d.style.height = (35 + Math.random() * 45) + "px";
+        box.appendChild(d);
+    }
+})();
+
+/* Password show / hide */
+function togglePassword(){
+    const pw = document.getElementById("password");
+    const btn = document.getElementById("toggleBtn");
+    const show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    document.getElementById("eyeIcon").innerHTML = show
+        ? '<path d="M3 3l18 18"/><path d="M10.6 6.1A10 10 0 0112 5c6 0 10 7 10 7a17 17 0 01-3.2 3.9M6.6 6.6A17 17 0 002 12s4 7 10 7a9.7 9.7 0 004.4-1"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>'
+        : '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+}
+</script>
+</body>
+</html>

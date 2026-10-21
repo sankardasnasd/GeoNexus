@@ -1,0 +1,217 @@
+{% extends "admin/admin home copy.html" %}
+
+{% block body %}
+
+<style>
+/* Scoped to .pe-wrap and prefixed pe- so nothing collides with the base template. */
+.pe-wrap{
+    --pe-navy:var(--night,#071326);
+    --pe-navy2:var(--plum,#10294a);
+    --pe-blue:var(--violet,#2b7fe0);
+    --pe-ink:var(--ink,#0e1c30);
+    --pe-muted:var(--muted,#5f7591);
+    --pe-line:var(--line,#dce6f2);
+    --pe-red:var(--coral,#ff5d4d);
+    padding:28px 30px 40px;
+}
+.pe-wrap *{box-sizing:border-box}
+
+/* Banner */
+.pe-banner{
+    position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;margin-bottom:22px;color:#fff;
+    background:linear-gradient(115deg,var(--pe-navy) 0%,var(--pe-navy2) 55%,#17497f 100%);
+    box-shadow:0 18px 40px rgba(16,41,74,.22);
+}
+.pe-banner::after{content:"";position:absolute;right:-60px;bottom:-140px;width:360px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,93,77,.3),rgba(43,127,224,.12) 50%,transparent 70%)}
+.pe-banner > *{position:relative;z-index:2}
+.pe-banner h3{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.pe-banner p{margin:0;max-width:640px;color:#cfe0f2;font-size:14.5px;line-height:1.7}
+.pe-count{display:inline-flex;align-items:center;gap:9px;margin-top:18px;padding:8px 15px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);font-size:13px;font-weight:600}
+
+/* SOS card */
+.pe-card{position:relative;overflow:hidden;margin-bottom:22px;padding:24px 26px 24px 30px;border-radius:20px;background:#fff;border:1px solid var(--pe-line);box-shadow:0 10px 28px rgba(16,41,74,.05)}
+.pe-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pe-red)}
+
+.pe-top{display:flex;align-items:center;gap:15px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:20px;border-bottom:1px solid var(--pe-line)}
+.pe-sos-icon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:rgba(255,93,77,.12);color:var(--pe-red)}
+.pe-top h5{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;color:var(--pe-ink)}
+.pe-top small{display:block;margin-top:3px;font-size:12.5px;color:var(--pe-muted)}
+.pe-grow{flex:1;min-width:160px}
+.pe-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:700;background:rgba(255,93,77,.13);color:#b8321f;white-space:nowrap}
+
+.pe-cols{display:grid;grid-template-columns:5fr 7fr;gap:20px}
+
+/* User panel */
+.pe-user{height:100%;padding:20px;border-radius:16px;background:#f5f9fe;border:1px solid #e3ecf6}
+.pe-sub{display:flex;align-items:center;gap:9px;margin:0 0 16px;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--pe-ink)}
+.pe-sub i{color:var(--pe-blue)}
+.pe-profile{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+.pe-photo{width:68px;height:68px;min-width:68px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(16,41,74,.15)}
+.pe-photo.ph{display:grid;place-items:center;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--pe-blue),var(--fuchsia,#4aa3ff))}
+.pe-name{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;color:var(--pe-ink)}
+.pe-uid{font-size:12.5px;color:var(--pe-muted)}
+.pe-info{display:flex;align-items:flex-start;gap:11px;margin-bottom:12px;font-size:14px}
+.pe-info:last-child{margin-bottom:0}
+.pe-info > i{width:20px;margin-top:2px;font-size:16px;color:var(--pe-blue)}
+.pe-info small{display:block;font-size:12px;color:var(--pe-muted)}
+.pe-info b{font-weight:600;color:var(--pe-ink);word-break:break-word}
+
+/* Location panel */
+.pe-loc{height:100%;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--pe-line)}
+.pe-loc-head{padding:14px 18px;background:#fff6f5;border-bottom:1px solid #ffd9d4}
+.pe-loc-head h6{margin:0;display:flex;align-items:center;gap:8px;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:#b8321f}
+.pe-coords{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 18px;background:#f5f9fe;border-bottom:1px solid var(--pe-line)}
+.pe-coord{padding:9px 12px;border-radius:10px;background:#fff;border:1px solid var(--pe-line);font-size:13px;color:var(--pe-ink)}
+.pe-coord small{display:flex;align-items:center;gap:6px;margin-bottom:2px;font-size:12px;color:var(--pe-muted)}
+.pe-coord small i{color:var(--pe-red)}
+.pe-map{height:280px;background:#e5ecf4}
+.pe-map iframe{width:100%;height:100%;border:0}
+.pe-map-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--pe-line)}
+.pe-map-foot small{color:var(--pe-muted);font-size:12.5px}
+.pe-map-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:11px;font-size:13.5px;font-weight:700;color:#fff;
+    background:linear-gradient(135deg,var(--pe-blue),var(--fuchsia,#4aa3ff));box-shadow:0 8px 18px rgba(43,127,224,.3);transition:transform .2s,box-shadow .2s}
+.pe-map-btn:hover{color:#fff;transform:translateY(-2px);box-shadow:0 12px 24px rgba(43,127,224,.42)}
+.pe-map-btn:focus-visible{outline:3px solid var(--amber,#f5a524);outline-offset:2px}
+.pe-nomap{height:280px;display:grid;place-items:center;text-align:center;color:var(--pe-muted)}
+.pe-nomap i{display:block;margin-bottom:8px;font-size:42px;color:#b9cde4}
+
+/* Date/time */
+.pe-event{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.pe-event-box{padding:14px 16px;border-radius:14px;background:#f5f9fe;border:1px solid #e3ecf6}
+.pe-event-box small{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:12.5px;color:var(--pe-muted)}
+.pe-event-box small i{color:var(--pe-blue)}
+.pe-event-box b{font-size:15px;font-weight:700;color:var(--pe-ink)}
+
+/* Empty */
+.pe-empty{padding:65px 20px;text-align:center;border-radius:20px;background:#fff;border:1px solid var(--pe-line)}
+.pe-empty i{font-size:54px;color:#b9cde4}
+.pe-empty h5{margin:16px 0 6px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--pe-ink)}
+.pe-empty p{margin:0;font-size:14.5px;color:var(--pe-muted)}
+
+@media(max-width:1000px){.pe-cols{grid-template-columns:1fr}}
+@media(max-width:700px){
+    .pe-wrap{padding:18px 14px 32px}
+    .pe-banner{padding:24px 20px}
+    .pe-banner h3{font-size:22px}
+    .pe-card{padding:20px 18px 20px 22px}
+    .pe-coords,.pe-event{grid-template-columns:1fr}
+    .pe-map,.pe-nomap{height:240px}
+}
+</style>
+
+<div class="pe-wrap">
+
+    <div class="pe-banner">
+        <h3><i class="bi bi-life-preserver me-2"></i>Emergency SOS Alerts</h3>
+        <p>Review incoming SOS requests with the person's details and live location.</p>
+        <span class="pe-count"><i class="bi bi-bell-fill"></i> {{ sos|length }} SOS request{{ sos|length|pluralize }}</span>
+    </div>
+
+    {% if sos %}
+        {% for item in sos %}
+
+        <div class="pe-card">
+
+            <div class="pe-top">
+                <div class="pe-sos-icon"><i class="bi bi-bell-fill"></i></div>
+                <div class="pe-grow">
+                    <h5>Emergency SOS #{{ item.id }}</h5>
+                    <small>Request ID: {{ item.id }}</small>
+                </div>
+                <span class="pe-badge"><i class="bi bi-exclamation-circle-fill"></i> {{ item.status }}</span>
+            </div>
+
+            <div class="pe-cols">
+
+                <!-- USER -->
+                <div class="pe-user">
+                    <h6 class="pe-sub"><i class="bi bi-person-fill"></i> User information</h6>
+
+                    <div class="pe-profile">
+                        {% if item.USER.photo %}
+                            <img src="{{ item.USER.photo.url }}" class="pe-photo" alt="{{ item.USER.name }}">
+                        {% else %}
+                            <div class="pe-photo ph"><i class="bi bi-person-fill"></i></div>
+                        {% endif %}
+                        <div>
+                            <div class="pe-name">{{ item.USER.name }}</div>
+                            <div class="pe-uid">User ID: {{ item.USER.id }}</div>
+                        </div>
+                    </div>
+
+                    <div class="pe-info"><i class="bi bi-envelope-fill"></i>
+                        <div><small>Email</small><b>{{ item.USER.email }}</b></div></div>
+                    <div class="pe-info"><i class="bi bi-telephone-fill"></i>
+                        <div><small>Phone</small><b>{{ item.USER.phone }}</b></div></div>
+                    <div class="pe-info"><i class="bi bi-house-fill"></i>
+                        <div><small>Place</small><b>{{ item.USER.place }}</b></div></div>
+                    <div class="pe-info"><i class="bi bi-geo-alt-fill"></i>
+                        <div><small>District</small><b>{{ item.USER.district }}</b></div></div>
+                    <div class="pe-info"><i class="bi bi-person-vcard-fill"></i>
+                        <div><small>Gender</small><b>{{ item.USER.gender }}</b></div></div>
+                </div>
+
+                <!-- LOCATION -->
+                <div class="pe-loc">
+                    <div class="pe-loc-head">
+                        <h6><i class="bi bi-geo-alt-fill"></i> Emergency location</h6>
+                    </div>
+
+                    <div class="pe-coords">
+                        <div class="pe-coord"><small><i class="bi bi-arrow-down-up"></i> Latitude</small><b>{{ item.latitude }}</b></div>
+                        <div class="pe-coord"><small><i class="bi bi-arrow-left-right"></i> Longitude</small><b>{{ item.longitude }}</b></div>
+                    </div>
+
+                    {% if item.latitude and item.longitude %}
+                        <div class="pe-map">
+                            <iframe
+                                src="https://maps.google.com/maps?q={{ item.latitude }},{{ item.longitude }}&z=16&output=embed"
+                                title="SOS location map"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="pe-map-foot">
+                            <small><i class="bi bi-pin-map-fill"></i> SOS location detected</small>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ item.latitude }},{{ item.longitude }}"
+                               target="_blank" rel="noopener" class="pe-map-btn">
+                                <i class="bi bi-map-fill"></i> Open in Google Maps
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="pe-nomap">
+                            <div><i class="bi bi-geo-alt"></i>Location not available</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="pe-event">
+                <div class="pe-event-box">
+                    <small><i class="bi bi-calendar-event"></i> Emergency date</small>
+                    <b>{{ item.date }}</b>
+                </div>
+                <div class="pe-event-box">
+                    <small><i class="bi bi-clock-fill"></i> Emergency time</small>
+                    <b>{{ item.time }}</b>
+                </div>
+            </div>
+
+        </div>
+
+        {% endfor %}
+    {% else %}
+
+        <div class="pe-empty">
+            <i class="bi bi-shield-check"></i>
+            <h5>No emergency SOS alerts</h5>
+            <p>New SOS requests from users will appear here.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

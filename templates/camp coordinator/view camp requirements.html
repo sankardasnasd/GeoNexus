@@ -1,0 +1,967 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<style>
+
+:root {
+
+    --navy: #102a43;
+    --navy-light: #1d6fa5;
+
+    --bg: #f5f7fb;
+    --white: #ffffff;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+
+    --danger: #dc3545;
+    --danger-light: #fff5f5;
+
+}
+
+
+/* PAGE */
+
+.requirement-page {
+
+    width: 100%;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 40px 35px 60px;
+}
+
+
+/* HEADER */
+
+.requirement-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 28px;
+}
+
+
+.header-label {
+
+    color: var(--navy-light);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    margin-bottom: 7px;
+}
+
+
+.header-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+
+.header-description {
+
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* HEADER BUTTONS */
+
+.header-actions {
+
+    display: flex;
+
+    gap: 9px;
+}
+
+
+.add-btn,
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+
+.add-btn {
+
+    background: var(--navy);
+
+    color: white;
+}
+
+
+.add-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.back-btn {
+
+    border: 1px solid var(--border);
+
+    background: white;
+
+    color: var(--navy);
+}
+
+
+.back-btn:hover {
+
+    background: #f8fafc;
+
+    color: var(--navy-light);
+}
+
+
+/* CAMP BAR */
+
+.camp-bar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 17px 20px;
+
+    margin-bottom: 22px;
+}
+
+
+.camp-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #eef4f8;
+
+    color: var(--navy);
+
+    font-size: 19px;
+}
+
+
+.camp-name {
+
+    color: var(--navy);
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+.camp-location {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* SUMMARY */
+
+.summary {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+.summary-title {
+
+    color: var(--text);
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+.summary-count {
+
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: var(--green-light);
+
+    border: 1px solid #dcfce7;
+
+    color: #166534;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* GRID */
+
+.requirement-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 22px;
+}
+
+
+/* CARD */
+
+.requirement-card {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,.035);
+
+    transition: .2s ease;
+}
+
+
+.requirement-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 13px 30px rgba(15,23,42,.07);
+}
+
+
+/* CARD TOP */
+
+.card-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 19px;
+}
+
+
+.req-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 11px;
+
+    background: #eef4f8;
+
+    color: var(--navy);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+.req-date {
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* TITLE */
+
+.req-title {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+    line-height: 1.35;
+
+    word-break: break-word;
+}
+
+
+/* QUANTITY */
+
+.quantity-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 17px;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf2f7;
+}
+
+
+.quantity-icon {
+
+    color: var(--navy-light);
+
+    font-size: 17px;
+}
+
+
+.quantity-label {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    display: block;
+}
+
+
+.quantity-value {
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    display: block;
+
+    margin-top: 2px;
+}
+
+
+/* DETAILS */
+
+.details-box {
+
+    margin-top: 14px;
+
+    padding: 14px;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf2f7;
+}
+
+
+.details-label {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .4px;
+}
+
+
+.details-text {
+
+    margin: 6px 0 0;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    word-break: break-word;
+}
+
+
+/* ACTIONS */
+
+.card-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 18px;
+}
+
+
+.edit-btn,
+.delete-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    min-height: 42px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+
+    background: var(--navy);
+
+    color: white;
+}
+
+
+.edit-btn:hover {
+
+    background: var(--navy-light);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* DELETE */
+
+.delete-btn {
+
+    width: 100%;
+
+    border: 1px solid #f3c5ca;
+
+    background: var(--danger-light);
+
+    color: #c92a3a;
+}
+
+
+.delete-btn:hover {
+
+    background: var(--danger);
+
+    border-color: var(--danger);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.delete-form {
+
+    margin: 0;
+}
+
+
+/* EMPTY */
+
+.empty-state {
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 70px 25px;
+
+    text-align: center;
+}
+
+
+.empty-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    margin: auto auto 17px;
+
+    border-radius: 18px;
+
+    background: #eef4f8;
+
+    color: #6b8ba6;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+
+.empty-state h3 {
+
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.empty-state p {
+
+    margin: 8px 0 20px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* FOOTER */
+
+.page-footer {
+
+    margin-top: 40px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .requirement-grid {
+
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .requirement-page {
+
+        padding: 25px 15px 45px;
+    }
+
+    .requirement-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .header-title {
+
+        font-size: 27px;
+    }
+
+    .header-actions {
+
+        width: 100%;
+    }
+
+    .add-btn,
+    .back-btn {
+
+        flex: 1;
+    }
+
+    .requirement-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media(max-width:450px) {
+
+    .header-actions {
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+
+<div class="requirement-page">
+
+
+    <!-- HEADER -->
+
+    <div class="requirement-header">
+
+        <div>
+
+            <div class="header-label">
+
+                <i class="bi bi-box-seam-fill me-1"></i>
+
+                CAMP REQUIREMENTS
+
+            </div>
+
+            <h1 class="header-title">
+
+                Requirements
+
+            </h1>
+
+            <p class="header-description">
+
+                Manage the resource and supply requirements for this relief camp.
+
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+{% comment %} 
+            <a
+                href="/myapp/add_requirements/{{ camp.id }}/"
+                class="add-btn">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add Requirement
+
+            </a> {% endcomment %}
+
+
+            <a
+                href="/myapp/manage_relief_camp/"
+                class="back-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Camps
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    {% if data %}
+
+
+        <div class="summary">
+
+          
+            <div class="camp-location">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                {{ camp.place }}, {{ camp.district }}
+
+            </div>
+
+
+            <div class="summary-count">
+
+                {{ data|length }} Requirement{{ data|length|pluralize }}
+
+            </div>
+
+        </div>
+
+<div class="requirement-grid">
+
+    {% for item in data %}
+
+    <div class="requirement-card">
+
+        <!-- Top Section -->
+        <div class="card-top">
+
+            <!-- Icon -->
+            <div class="req-icon">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
+
+            <!-- Camp Information -->
+            <div class="camp-info">
+
+                <div class="summary-title">
+                    Requirement Camp
+                </div>
+
+                <div class="camp-name">
+                    {{ item.CAMP.campname }}
+                </div>
+
+                <div class="camp-location">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ item.CAMP.place }}, {{ item.CAMP.district }}
+                </div>
+
+            </div>
+
+            <!-- Date -->
+            <div class="req-date">
+                <i class="bi bi-calendar3 me-1"></i>
+                {{ item.needdate|date:"d M Y" }}
+            </div>
+
+        </div>
+
+
+        <!-- Requirement Title -->
+        <h3 class="req-title">
+            {{ item.title }}
+        </h3>
+
+
+        <!-- Quantity -->
+        <div class="quantity-box">
+
+            <div class="quantity-icon">
+                <i class="bi bi-stack"></i>
+            </div>
+
+            <div class="quantity-content">
+
+                <span class="quantity-label">
+                    REQUIRED QUANTITY
+                </span>
+
+                <span class="quantity-value">
+                    {{ item.needquantity }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Details -->
+        <div class="details-box">
+
+            <div class="details-label">
+                DETAILS
+            </div>
+
+            <p class="details-text">
+                {{ item.details }}
+            </p>
+
+        </div>
+
+
+        <!-- Actions -->
+        <div class="card-actions">
+
+            <a href="/myapp/edit_requirement/{{ item.id }}/"
+               class="edit-btn">
+
+                <i class="bi bi-pencil-square"></i>
+                Edit
+
+            </a>
+
+
+            <form method="POST"
+                  action="/myapp/delete_requirement/{{ item.id }}/"
+                  class="delete-form"
+                  onsubmit="return confirm('Are you sure you want to delete this requirement?');">
+
+                {% csrf_token %}
+
+                <button type="submit"
+                        class="delete-btn">
+
+                    <i class="bi bi-trash3-fill"></i>
+                    Delete
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+    {% else %}
+
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <h3>
+
+                No Requirements Added
+
+            </h3>
+
+            <p>
+
+                No resource requirements have been added for this camp yet.
+
+            </p>
+
+            {% comment %} <a
+                href="/myapp/add_requirements/{{ camp.id }}/"
+                class="add-btn">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add First Requirement
+
+            </a> {% endcomment %}
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="page-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

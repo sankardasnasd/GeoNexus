@@ -1,0 +1,1223 @@
+{% extends "camp coordinator/home copy.html" %}
+
+{% block body %}
+
+<!-- =====================================================
+     LEAFLET + GEOSEARCH CSS
+===================================================== -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.css" />
+
+<style>
+
+:root {
+    --navy: #09203f;
+    --navy2: #163b68;
+    --red: #ef4444;
+    --red-dark: #dc2626;
+    --bg: #f5f7fb;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.camp-page {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 38px 30px 55px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.camp-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 28px;
+}
+
+.camp-header-text small {
+    display: block;
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.camp-header-text h1 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.camp-header-text p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.camp-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 11px 17px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    transition: all .2s ease;
+}
+
+.camp-back-btn:hover {
+    background: #fff5f5;
+    border-color: #fecaca;
+    color: var(--red-dark);
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.camp-form-card {
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, .05);
+}
+
+
+/* =====================================================
+   FORM HEADER
+===================================================== */
+
+.camp-form-heading {
+    position: relative;
+    overflow: hidden;
+
+    padding: 24px 28px;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--navy),
+            var(--navy2)
+        );
+
+    color: #ffffff;
+}
+
+.camp-form-heading::after {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    border-radius: 50%;
+
+    right: -70px;
+    top: -110px;
+
+    background: rgba(255,255,255,.06);
+}
+
+.camp-form-heading-content {
+    position: relative;
+    z-index: 2;
+}
+
+.camp-form-heading h3 {
+    margin: 0;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.camp-form-heading p {
+    margin: 6px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   FORM BODY
+===================================================== */
+
+.camp-form-body {
+    padding: 30px;
+}
+
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.camp-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 4px 0 20px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--navy);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.camp-section-title i {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #fff1f2;
+    color: var(--red);
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   FORM FIELD
+===================================================== */
+
+.camp-field {
+    margin-bottom: 2px;
+}
+
+.camp-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #475569;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: .15px;
+}
+
+.camp-label .required {
+    color: var(--red);
+    margin-left: 2px;
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.camp-input,
+.camp-textarea {
+    width: 100%;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: var(--text);
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 12px;
+
+    padding: 11px 13px;
+
+    outline: none;
+
+    transition: all .2s ease;
+}
+
+.camp-input {
+    min-height: 46px;
+}
+
+.camp-textarea {
+    min-height: 115px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+.camp-input::placeholder,
+.camp-textarea::placeholder {
+    color: #94a3b8;
+}
+
+.camp-input:hover,
+.camp-textarea:hover {
+    border-color: #cbd5e1;
+}
+
+.camp-input:focus,
+.camp-textarea:focus {
+    border-color: var(--red);
+
+    box-shadow:
+        0 0 0 3px rgba(239,68,68,.08);
+}
+
+.camp-input[readonly] {
+    background: #f8fafc;
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   LOCATION SECTION
+===================================================== */
+
+.location-section {
+    margin-top: 32px;
+}
+
+.location-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: -8px;
+    margin-bottom: 20px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.location-info i {
+    color: var(--red);
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+#camp-map {
+    width: 100%;
+    height: 420px;
+
+    border-radius: 14px;
+
+    border: 1px solid var(--border);
+
+    overflow: hidden;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px rgba(15,23,42,.06);
+}
+
+
+/* Leaflet search control */
+
+.leaflet-control-geosearch form {
+    border-radius: 8px !important;
+}
+
+.leaflet-control-geosearch input {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 12px !important;
+}
+
+
+/* =====================================================
+   MAP HELP
+===================================================== */
+
+.map-help {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 11px 13px;
+
+    margin-bottom: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #eef2f7;
+
+    border-radius: 10px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.map-help i {
+    color: var(--red);
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   COORDINATES
+===================================================== */
+
+.coordinate-wrapper {
+    position: relative;
+}
+
+.coordinate-wrapper .coordinate-icon {
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--red);
+
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+.coordinate-wrapper .camp-input {
+    padding-left: 37px;
+}
+
+
+/* =====================================================
+   LOCATION STATUS
+===================================================== */
+
+.location-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 14px;
+
+    padding: 10px 13px;
+
+    border-radius: 9px;
+
+    background: #fff7ed;
+
+    border: 1px solid #fed7aa;
+
+    color: #9a3412;
+
+    font-size: 10px;
+}
+
+.location-status.success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+
+/* =====================================================
+   FIELD HELP
+===================================================== */
+
+.field-help {
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   FORM FOOTER
+===================================================== */
+
+.form-footer {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 32px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/* =====================================================
+   CANCEL BUTTON
+===================================================== */
+
+.btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-height: 43px;
+
+    padding: 10px 19px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    transition: all .2s ease;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+
+    color: var(--navy);
+
+    border-color: #cbd5e1;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   SAVE BUTTON
+===================================================== */
+
+.btn-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-height: 43px;
+
+    padding: 10px 21px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: var(--red);
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(239,68,68,.18);
+
+    transition: all .2s ease;
+}
+
+.btn-save:hover {
+    background: var(--red-dark);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 22px rgba(239,68,68,.25);
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.camp-footer {
+    text-align: center;
+
+    margin-top: 32px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 900px) {
+
+    .camp-page {
+        padding: 30px 22px 45px;
+    }
+
+    .camp-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .camp-header-text h1 {
+        font-size: 27px;
+    }
+
+}
+
+
+@media(max-width: 600px) {
+
+    .camp-page {
+        padding: 23px 15px 40px;
+    }
+
+    .camp-header-text h1 {
+        font-size: 24px;
+    }
+
+    .camp-form-heading {
+        padding: 20px;
+    }
+
+    .camp-form-body {
+        padding: 20px;
+    }
+
+    #camp-map {
+        height: 350px;
+    }
+
+    .form-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="camp-page">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================= -->
+
+    <div class="camp-header">
+
+        <div class="camp-header-text">
+
+            <small>
+                Camp Operations
+            </small>
+
+            <h1>
+                Add Relief Camp
+            </h1>
+
+            <p>
+                Register a new relief camp with its capacity,
+                location and operational information.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/myapp/manage_relief_camp/"
+            class="camp-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Camps
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =================================================
+         FORM
+    ================================================= -->
+
+    <form
+        method="POST"
+        action="/myapp/add_relief_camp_post/">
+
+        {% csrf_token %}
+
+
+        <div class="camp-form-card">
+
+
+            <!-- FORM HEADER -->
+
+            <div class="camp-form-heading">
+
+                <div class="camp-form-heading-content">
+
+                    <h3>
+
+                        <i class="bi bi-house-heart-fill me-2"></i>
+
+                        Relief Camp Information
+
+                    </h3>
+
+                    <p>
+
+                        Enter the details required to register
+                        the new relief camp.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FORM BODY -->
+
+            <div class="camp-form-body">
+
+
+                <!-- =================================================
+                     CAMP INFORMATION
+                ================================================= -->
+
+                <div class="camp-section-title">
+
+                    <i class="bi bi-info-circle-fill"></i>
+
+                    Camp Information
+
+                </div>
+
+
+                <div class="row g-4">
+
+
+                    <!-- DATE -->
+
+                    <div class="col-md-6">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                Camp Date
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <input
+                                type="date"
+                                name="date"
+                                id="date"
+                                class="camp-input"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CAMP NAME -->
+
+                    <div class="col-md-6">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                Camp Name
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="campname"
+                                class="camp-input"
+                                placeholder="Enter relief camp name"
+                                maxlength="150"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CAPACITY -->
+
+                    <div class="col-md-6">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                Camp Capacity
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <input
+                                type="number"
+                                name="capacity"
+                                class="camp-input"
+                                placeholder="Enter maximum number of people"
+                                min="1"
+                                required>
+
+                            <div class="field-help">
+
+                                Maximum number of people that can be accommodated.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PLACE -->
+
+                    <div class="col-md-6">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                Place
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="place"
+                                id="place"
+                                class="camp-input"
+                                placeholder="Select location from map"
+                                maxlength="150"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DISTRICT -->
+
+                    <div class="col-md-6">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                District
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="district"
+                                id="district"
+                                class="camp-input"
+                                placeholder="Automatically filled from map"
+                                maxlength="150"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DETAILS -->
+
+                    <div class="col-12">
+
+                        <div class="camp-field">
+
+                            <label class="camp-label">
+
+                                Camp Details
+
+                                <span class="required">*</span>
+
+                            </label>
+
+                            <textarea
+                                name="details"
+                                class="camp-textarea"
+                                maxlength="150"
+                                placeholder="Describe camp facilities, food, medical support, accommodation and other arrangements..."
+                                required></textarea>
+
+                            <div class="field-help">
+
+                                Provide important information about the facilities
+                                and arrangements available at the camp.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOCATION
+                ================================================= -->
+
+                <div class="location-section">
+
+                    <div class="camp-section-title">
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        Location
+
+                    </div>
+
+                    <div class="location-info">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Search for a place or click on the map to set the camp's location.
+
+                    </div>
+
+                    <div id="camp-map"></div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="camp-field coordinate-wrapper">
+
+                                <label for="latitude" class="camp-label">
+                                    Latitude
+                                    <span class="required">*</span>
+                                </label>
+
+                                <i class="bi bi-geo-alt coordinate-icon"></i>
+
+                                <input
+                                    type="text"
+                                    class="camp-input"
+                                    id="latitude"
+                                    name="latitude"
+                                    placeholder="Click on map or search to select"
+                                    readonly
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="camp-field coordinate-wrapper">
+
+                                <label for="longitude" class="camp-label">
+                                    Longitude
+                                    <span class="required">*</span>
+                                </label>
+
+                                <i class="bi bi-geo-alt coordinate-icon"></i>
+
+                                <input
+                                    type="text"
+                                    class="camp-input"
+                                    id="longitude"
+                                    name="longitude"
+                                    placeholder="Click on map or search to select"
+                                    readonly
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     BUTTONS
+                ================================================= -->
+
+                <div class="form-footer">
+
+
+                    <a
+                        href="/myapp/manage_relief_camp/"
+                        class="btn-cancel">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn-save">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Add Relief Camp
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="camp-footer">
+
+        © 2026 DisasterSafe · Camp Coordinator Management System
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     LEAFLET + GEOSEARCH JS
+===================================================== -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.umd.js"></script>
+
+<script>
+    // Initialize the map centered on Kerala, India
+    var map = L.map('camp-map').setView([10.8505, 76.2711], 8); // Kerala coordinates, zoom level for state view
+
+    // Add basemap tiles (Esri World Street Map — free to use, no API key required)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Add GeoSearch control with OpenStreetMap provider
+    const provider = new GeoSearch.OpenStreetMapProvider({
+        params: {
+            'accept-language': 'en', // English results
+            countrycodes: 'in' // Limit to India for better relevance
+        }
+    });
+
+    const searchControl = new GeoSearch.GeoSearchControl({
+        provider: provider,
+        style: 'bar',
+        showMarker: true,
+        autoClose: true,
+        searchLabel: 'Enter address or place in Kerala',
+        position: 'topright',
+        autoComplete: true,
+        autoCompleteDelay: 250
+    });
+
+    try {
+        map.addControl(searchControl);
+    } catch (error) {
+        console.error('Error adding GeoSearch control:', error);
+        alert('Search functionality failed to load. You can still click on the map to select a location.');
+    }
+
+    // Add a marker to show the selected location
+    var marker;
+
+    // Function to fetch address details using reverse geocoding
+    function fetchAddressDetails(lat, lng) {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+
+        fetch(url, {
+            headers: {
+                'User-Agent': 'CampCoordinatorApp/1.0' // Nominatim requires a user agent
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.address) {
+                    // Extract address components
+                    const address = data.address;
+
+                    // Populate form fields that actually exist on this form
+                    document.getElementById('place').value =
+                        address.village || address.town || address.city || address.suburb || '';
+                    document.getElementById('district').value =
+                        address.state_district || address.county || '';
+
+                    // Log for debugging
+                    console.log('Address details:', address);
+                } else {
+                    console.warn('No address details found for coordinates:', lat, lng);
+                    alert('Could not fetch address details. Please enter manually or try another location.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching address details:', error);
+                alert('Failed to fetch address details. Please enter manually.');
+            });
+    }
+
+    // Update coordinates and fetch address details
+    function updateCoordinates(lat, lng) {
+        var latFixed = lat.toFixed(6);
+        var lngFixed = lng.toFixed(6);
+        document.getElementById('latitude').value = latFixed;
+        document.getElementById('longitude').value = lngFixed;
+
+        // Remove previous marker if exists
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        // Add new marker and center map
+        marker = L.marker([lat, lng]).addTo(map);
+        map.setView([lat, lng], 13);
+
+        // Fetch address details for the selected coordinates
+        fetchAddressDetails(lat, lng);
+    }
+
+    // Handle map click to set coordinates
+    map.on('click', function(e) {
+        updateCoordinates(e.latlng.lat, e.latlng.lng);
+    });
+
+    // Handle search result selection
+    map.on('geosearch/showlocation', function(e) {
+        try {
+            updateCoordinates(e.location.y, e.location.x);
+        } catch (error) {
+            console.error('Error processing search result:', error);
+            alert('Failed to process search result. Please try another search or click on the map.');
+        }
+    });
+
+    // Prevent selecting a camp date before today
+    (function () {
+        var dateInput = document.getElementById('date');
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var dd = String(today.getDate()).padStart(2, '0');
+        var todayStr = `${yyyy}-${mm}-${dd}`;
+        dateInput.setAttribute('min', todayStr);
+    })();
+
+    // Try to get user's location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                updateCoordinates(lat, lng);
+            },
+            function(error) {
+                console.warn('Geolocation failed:', error.message);
+            }
+        );
+    }
+</script>
+
+{% endblock %}
